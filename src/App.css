@@ -53,3 +53,29 @@ select{
   background-color: #282c34;
   border-radius: 0px;
 }
+
+.editor {
+  display: flex;
+  flex-wrap: nowrap;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.dock {
+  height: 100px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  white-space: nowrap;
+}
+
+.dock-item {
+  display: inline-block;
+  vertical-align: top;
+  transform: scale(0.8);
+  transform-origin: 50% 0;
+}
+
+.container {
+  flex: 1;
+  overflow: hidden;
+}

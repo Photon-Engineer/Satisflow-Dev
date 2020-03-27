@@ -1,14 +1,16 @@
 //Rete
 import Rete from "rete";
+import { setOutputMessage } from '../engine/helpers'
 //Sockets and Controls
 import { itemSocket, numSocket } from '../sockets/AllSockets'
-import { NumControl } from '../controls/NumControl'
 import { DropControl } from '../controls/DropControl'
 import { ores, purity, minerLevel } from '../data/recipes'
+import {MyNode} from '../nodes/ReactNodeTest'
 
 export class Miner extends Rete.Component {
     constructor() {
         super('Miner')
+        this.data.Component = MyNode;
     }
 
     builder(node) {
@@ -47,7 +49,9 @@ export class Miner extends Rete.Component {
         var out = 60 * ptyMulti * minMulti;
         out = inputs['i1'].length ? out * inputs['i1'] : out; 
 
-        const array = new Array(node.data.item, out);
+        const array = [node.data.item, out];
         outputs['o1'] = array;
+
+        setOutputMessage(node,this.editor,'o1',outputs['o1']);
     }
 }

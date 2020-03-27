@@ -11,7 +11,7 @@ export class Overclock extends Rete.Component {
     }
 
     builder(node) {
-        node.addOutput(new Rete.Output("o1", "Output", numSocket, false));
+        node.addOutput(new Rete.Output("o1", "Output", numSocket, true));
         node.addControl(new NumControl(this.editor, "ovc", node, false));
         return node;
     }

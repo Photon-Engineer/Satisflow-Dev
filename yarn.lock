@@ -5821,6 +5821,11 @@ locate-path@^3.0.0:
     p-locate "^3.0.0"
     path-exists "^3.0.0"
 
+lodash-es@^4.17.15:
+  version "4.17.15"
+  resolved "https://registry.yarnpkg.com/lodash-es/-/lodash-es-4.17.15.tgz#21bd96839354412f23d7a10340e5eac6ee455d78"
+  integrity sha512-rlrc3yU3+JNOpZ9zj5pQtxnx2THmvRykwL4Xlxoa8I9lHBlVbbyPhgyPMioxVZ4NqyxaVVtaJnzsyOidQIhyyQ==
+
 lodash._reinterpolate@~3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/lodash._reinterpolate/-/lodash._reinterpolate-3.0.0.tgz#0ccf2d89166af03b3663c796538b75ac6e114d9d"
@@ -8267,6 +8272,14 @@ rete-connection-plugin@0.7.2:
   resolved "https://registry.yarnpkg.com/rete-connection-plugin/-/rete-connection-plugin-0.7.2.tgz#845ecd92f52302300c1927398bb4a63dc0d40f53"
   integrity sha512-AGMto9BGZA2lZMQMcSv3tLSg6a98udFCMBDG5JhZkRfi5Zciry7KUMDX1NmNWsG8FPdPSRdm9nWNjClCejE6dw==
 
+rete-context-menu-plugin@^0.5.2:
+  version "0.5.2"
+  resolved "https://registry.yarnpkg.com/rete-context-menu-plugin/-/rete-context-menu-plugin-0.5.2.tgz#91738dd22384117fad9d8455fcfdfefe39fa3db5"
+  integrity sha512-d632OWLoyTgQa7RX2SSZo4mCGkFMFsfi7Z2T6HV7s7lQKt3GOybPM7zGQ/kVRcv8Y8uCdghxEdhE4g+taEyK7w==
+  dependencies:
+    lodash-es "^4.17.15"
+    vue "^2.5.17"
+
 rete-dock-plugin@^0.2.1:
   version "0.2.1"
   resolved "https://registry.yarnpkg.com/rete-dock-plugin/-/rete-dock-plugin-0.2.1.tgz#d5537568eac539236bbe52bea3491fa85b1b3715"
@@ -9532,6 +9545,11 @@ vm-browserify@0.0.4:
   integrity sha1-XX6kW7755Kb/ZflUOOCofDV9WnM=
   dependencies:
     indexof "0.0.1"
+
+vue@^2.5.17:
+  version "2.6.11"
+  resolved "https://registry.yarnpkg.com/vue/-/vue-2.6.11.tgz#76594d877d4b12234406e84e35275c6d514125c5"
+  integrity sha512-VfPwgcGABbGAue9+sfrD4PuwFar7gPb1yl1UK1MwXoQPAw0BKSqWfoYCT/ThFrdEVWoI51dBuyCoiNU9bZDZxQ==
 
 w3c-hr-time@^1.0.1:
   version "1.0.1"
