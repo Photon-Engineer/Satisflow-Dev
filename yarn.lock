@@ -8267,6 +8267,11 @@ rete-connection-plugin@0.7.2:
   resolved "https://registry.yarnpkg.com/rete-connection-plugin/-/rete-connection-plugin-0.7.2.tgz#845ecd92f52302300c1927398bb4a63dc0d40f53"
   integrity sha512-AGMto9BGZA2lZMQMcSv3tLSg6a98udFCMBDG5JhZkRfi5Zciry7KUMDX1NmNWsG8FPdPSRdm9nWNjClCejE6dw==
 
+rete-dock-plugin@^0.2.1:
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/rete-dock-plugin/-/rete-dock-plugin-0.2.1.tgz#d5537568eac539236bbe52bea3491fa85b1b3715"
+  integrity sha512-o3KGrv7HA2AcnGL/K1VfwZ+yUgmE/wejLGsvhFi6nwJnf8IdiMiEvmISZkiER6lgc/tGmh2Ptyb/cLcCMgFkVQ==
+
 rete-react-render-plugin@0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/rete-react-render-plugin/-/rete-react-render-plugin-0.2.0.tgz#35e74383fc9c12c8a61fc54c74de43e85ac765f7"
