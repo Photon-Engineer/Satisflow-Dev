@@ -1,16 +1,17 @@
 //Rete
 import Rete from "rete";
 import { setOutputMessage } from '../engine/helpers'
+import {StyledNode} from '../engine/StyledNode'
 //Sockets and Controls
 import { itemSocket, numSocket } from '../sockets/AllSockets'
 import { DropControl } from '../controls/DropControl'
 import { ores, purity, minerLevel } from '../data/recipes'
-import {MyNode} from '../nodes/ReactNodeTest'
+
 
 export class Miner extends Rete.Component {
     constructor() {
         super('Miner')
-        this.data.Component = MyNode;
+        this.data.component = MinerStyle;
     }
 
     builder(node) {
@@ -54,4 +55,8 @@ export class Miner extends Rete.Component {
 
         setOutputMessage(node,this.editor,'o1',outputs['o1']);
     }
+}
+
+class MinerStyle extends StyledNode {
+    style={background:"red",borderColor:"green"};
 }

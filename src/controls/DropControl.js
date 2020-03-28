@@ -17,7 +17,6 @@ export class DropControl extends Rete.Control {
         this.component = DropControl.component;
 
         const initial = node.data[key] || items[0];
-
         node.data[key] = initial;
         this.props = {
             readonly,
@@ -59,7 +58,7 @@ class DynamicSelect extends React.Component {
 
         return (
             //name="customSearch" className="custom-search-select"
-            <select onChange={this.handleChange}>
+            <select onChange={this.handleChange} value={this.state.value}>
                 {options}
             </select>
         )

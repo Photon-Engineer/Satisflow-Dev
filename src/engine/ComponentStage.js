@@ -2,12 +2,13 @@
 import { Miner } from '../factory_nodes/Miner'
 import { Smelter } from '../factory_nodes/Smelter'
 import { Constructor } from '../factory_nodes/Constructor'
-import {Splitter} from '../factory_nodes/Splitter'
-import {Merger} from '../factory_nodes/Merger'
+import { Splitter } from '../factory_nodes/StyledSplitter'
+import {Merger} from '../factory_nodes/StyledMerger'
 import { Overclock } from '../factory_nodes/Overclock'
 // Test Components Import
 import { DebugElement } from '../nodes/DebugStarterNode'
 import { DebugOutputElement } from '../nodes/DebugOutputNode'
+
 // END imports
 
 export async function initialize(engine, editor) {
