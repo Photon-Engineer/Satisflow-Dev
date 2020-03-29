@@ -41,7 +41,7 @@ class SplitterNode extends Node {
         const { node, bindSocket, bindControl } = this.props;
         const { outputs, controls, inputs, selected } = this.state;
         return (
-            <div className={`node ${selected}`} style={{ background: "lightgray", width: "160px", height: "160px", borderColor: "orange" }}>
+            <div className={`node ${selected}`} style={{ background: "lightgray", width: "160px", height: "160px", borderColor: "orange", opacity:"0.8"}}>
                 <div className="title" style={{color:"black"}}>
                     {node.name}
                 </div>

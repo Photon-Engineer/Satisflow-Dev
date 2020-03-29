@@ -3,7 +3,7 @@ import { Node, Socket, Control } from 'rete-react-render-plugin';
 
 
 export class StyledNode extends Node {
-    style = {background:"gray",borderColor:"blue"};
+    style = {background:"gray",borderColor:"blue",color: "white"};
     render() {
         const { node, bindSocket, bindControl } = this.props;
         const { outputs, controls, inputs, selected } = this.state;

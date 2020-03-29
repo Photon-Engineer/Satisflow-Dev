@@ -4,7 +4,7 @@ import Rete from "rete";
 import {itemSocket} from '../sockets/AllSockets'
 import {NumControl} from '../controls/NumControl'
 import {DropControl} from '../controls/DropControl'
-import {ores, ingots} from '../data/recipes'
+import {allItems} from '../data/recipes'
 
 export class DebugElement extends Rete.Component {
     constructor() {
@@ -13,7 +13,7 @@ export class DebugElement extends Rete.Component {
 
     builder(node) {
         node.addOutput(new Rete.Output("o1","Output",itemSocket));
-        node.addControl(new DropControl(this.editor,"item",node,false,"item",ores.concat(ingots)));
+        node.addControl(new DropControl(this.editor,"item",node,false,"item",allItems));
         node.addControl(new NumControl(this.editor,"num",node));
         
 

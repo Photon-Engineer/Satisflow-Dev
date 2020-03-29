@@ -1,7 +1,9 @@
+import React from 'react'
 //Rete
 import Rete from "rete";
 import { setOutputMessage } from '../engine/helpers'
 import {StyledNode} from '../engine/StyledNode'
+import { Node, Socket, Control } from 'rete-react-render-plugin';
 //Sockets and Controls
 import { itemSocket, numSocket } from '../sockets/AllSockets'
 import { DropControl } from '../controls/DropControl'
@@ -11,7 +13,7 @@ import { ores, purity, minerLevel } from '../data/recipes'
 export class Miner extends Rete.Component {
     constructor() {
         super('Miner')
-        this.data.component = MinerStyle;
+        this.data.component = MinerNode;
     }
 
     builder(node) {
@@ -53,10 +55,68 @@ export class Miner extends Rete.Component {
         const array = [node.data.item, out];
         outputs['o1'] = array;
 
-        setOutputMessage(node,this.editor,'o1',outputs['o1']);
+        setOutputMessage(node,this.editor,'o1',out,array,false);
     }
 }
 
 class MinerStyle extends StyledNode {
-    style={background:"red",borderColor:"green"};
+    style={background:"slateblue",borderColor:"mediumblue"};
+}
+
+export class MinerNode extends Node {
+    style = { background: "slateblue", borderColor: "mediumblue", opacity:"0.8"};
+    fontStyle = {color:"white"}
+    fontAndPadding = {...this.fontStyle, padding:"0px"};
+    render() {
+        const { node, bindSocket, bindControl } = this.props;
+        const { outputs, controls, inputs, selected } = this.state;
+
+        return (
+            <div className={`node ${selected}`} style={this.style}>
+                <div className="title" style={this.fontStyle}>{node.name}</div>
+                <div className="control" style={this.fontStyle}>{outputs[0].name}</div>
+                <div className="output" key="o1" style={{float:"right"}}>
+                    <Socket
+                        type="output"
+                        socket={outputs[0].socket}
+                        io={outputs[0]}
+                        innerRef={bindSocket}
+                    />
+                </div>
+                <div className="control" style={this.fontAndPadding}>
+                    <Control
+                        className="control"
+                        key={controls[0].key}
+                        control={controls[0]}
+                        innerRef={bindControl}
+                    />
+                </div>
+                <div className="control" style={this.fontAndPadding}>
+                    <Control
+                        className="control"
+                        key={controls[1].key}
+                        control={controls[1]}
+                        innerRef={bindControl}
+                    />
+                </div>
+                <div className="control" style={this.fontAndPadding}>
+                    <Control
+                        className="control"
+                        key={controls[2].key}
+                        control={controls[2]}
+                        innerRef={bindControl}
+                    />
+                </div>
+                <div className="input" key="ovc">
+                    <Socket
+                        type="input"
+                        socket={inputs[0].socket}
+                        io={inputs[0]}
+                        innerRef={bindSocket}
+                    />
+                    <div className="input-title" style={this.fontAndPadding}>{inputs[0].name}</div>
+                </div>
+            </div>
+        );
+    }
 }

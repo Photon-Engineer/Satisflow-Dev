@@ -5,10 +5,12 @@ import { setOutputMessage, setInputMessage } from '../engine/helpers'
 import { itemSocket, numSocket } from '../sockets/AllSockets'
 import { DropControl } from '../controls/DropControl'
 import { smelterRecipes } from '../data/recipes'
+import { ConstructorNode } from './Constructor'
 
 export class Smelter extends Rete.Component {
     constructor() {
         super('Smelter')
+        this.data.component = SmelterNode;
     }
 
     builder(node) {
@@ -23,27 +25,24 @@ export class Smelter extends Rete.Component {
 
     worker(node, inputs, outputs) {
         var multi = inputs['ovc'].length ? inputs['ovc'] : 1;
-
+        var out = 0
         var idx = smelterRecipes.name.findIndex(rec => rec === node.data.rec);
         if(inputs['i1'].length){
             if(smelterRecipes.in[idx] === inputs['i1'][0][0]){
                 var req = smelterRecipes.inppm[idx] * multi;
                 var prc = inputs['i1'][0][1]/req;
-                var out = prc > 1 ? smelterRecipes.outppm[idx] * multi : smelterRecipes.outppm[idx] * multi * prc;
-                // Set outputs
-                outputs['o1'] =[smelterRecipes.out[idx],out];
-
-            } else {
-                // reject connection? 
-                outputs['o1'] = ['<BAD INPUT>',0];
+                out = prc > 1 ? smelterRecipes.outppm[idx] * multi : smelterRecipes.outppm[idx] * multi * prc;
             }
-        } else {
-            outputs['o1'] = ['<NO INPUT>',0];
         }
-
-        const inpt = inputs['i1'].length ? inputs['i1'][0] : ['',0];
+        outputs['o1'] =[smelterRecipes.out[idx],out];
+        const inpt = inputs['i1'].length ? inputs['i1'][0][1] : 0;
         const reqmt = [smelterRecipes.in[idx],smelterRecipes.inppm[idx] * multi];
+        const maxout = [smelterRecipes.out[idx],smelterRecipes.outppm[idx]*multi];
         setInputMessage(node,this.editor,'i1',inpt,reqmt);
-        setOutputMessage(node,this.editor,'o1',outputs['o1']);
+        setOutputMessage(node,this.editor,'o1',out,maxout);
     }
+}
+
+class SmelterNode extends ConstructorNode {
+    style = { background: "lightblue", borderColor: "blue", opacity:"0.8"};
 }

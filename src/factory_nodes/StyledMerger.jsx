@@ -46,7 +46,7 @@ export class Merger extends Rete.Component {
         }
 
         outputs['o1'] = [item,outppm];
-        setOutputMessage(node,this.editor,'o1',outputs['o1']);
+        setOutputMessage(node,this.editor,'o1',outppm,outputs['o1'],false);
     }
 }
 
@@ -55,7 +55,7 @@ class MergerNode extends Node {
         const { node, bindSocket, bindControl } = this.props;
         const { outputs, controls, inputs, selected } = this.state;
         return (
-            <div className={`node ${selected}`} style={{ background: "moccasin", height: "160px", borderColor: "gray" }}>
+            <div className={`node ${selected}`} style={{ background: "moccasin", height: "160px", borderColor: "gray", opacity:"0.8"}}>
                 <div className="title" style={{color:"black"}}>
                     {node.name}
                 </div>
