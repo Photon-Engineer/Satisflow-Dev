@@ -39,7 +39,6 @@ export class Assembler extends Rete.Component {
 
         if(inputs['i1'].length){
             inp1req = mapToRequirement(inputs['i1'][0][0],assemblerRecipes,idx,2)
-            console.log(JSON.stringify(inp1req));
             if(inp1req['position']>=0){
                 reqPpm = inp1req['reqPpm'] * multi;
                 prc1 = inputs['i1'][0][1]/reqPpm;
@@ -109,7 +108,7 @@ export class AssemblerNode extends Node {
                         innerRef={bindControl}
                     />
                 </div>
-                
+                <div className="control" style={this.fontStyle}>{outputs[0].name}</div>
                 <div className="output" key="o1" style={{float:"right"}}>
                     <Socket
                         type="output"
@@ -118,7 +117,6 @@ export class AssemblerNode extends Node {
                         innerRef={bindSocket}
                     />
                 </div>
-                <div className="control" style={this.fontStyle}>{outputs[0].name}</div>
                 <div className="control" style={this.fontStyle}>{inputs[0].name}</div>
                 <div className="input" key="i2" style={{float:"left"}}>
                     <Socket

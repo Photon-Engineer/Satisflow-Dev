@@ -1,5 +1,6 @@
 .App {
   text-align: center;
+  
 }
 
 .App-logo {
@@ -54,13 +55,21 @@ select{
   border-radius: 0px;
 }
 
+.socket .used {
+  background-color: darkgray;
+}
+
 .editor {
   display: flex;
   flex-wrap: nowrap;
   flex-direction: column;
-  height: 100vh;
+  
 }
 
+/*
+background-image: url(resources/blueprint-pattern-css3.png);
+  background-repeat: repeat;
+*/
 .dock {
   height: 100px;
   overflow-x: auto;

@@ -1,5 +1,4 @@
 
-const precision = 1;
 
 export async function setOutputMessage(node, editor, outputKey, itemPpm, outObj, showMaxOutput = true) {
     const thisNode = editor.nodes.find(n => n.id === node.id);
@@ -34,11 +33,13 @@ export function mapToRequirement(inputItem, recipes, idx, nInputs) {
             break;
         case 4:
             reqArray = [recipes.in[idx], recipes.in2[idx], recipes.in3[idx], recipes.in4[idx]];
+            break;
         default:
             reqArray = [recipes.in[idx], recipes.in2[idx]];
+            break;
     }
 
-    var position = reqArray.findIndex(req => req == inputItem); // returns -1 if no match
+    var position = reqArray.findIndex(req => req === inputItem); // returns -1 if no match
 
     var reqItem;
     var reqPpm;

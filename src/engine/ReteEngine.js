@@ -7,13 +7,14 @@ import Rete from "rete";
 // React
 import React, { Component } from "react";
 // Custom Components
-import { initialize } from './ComponentStage'
+import { initialize } from './ComponentStage';
+import '../backgroundStyle.sass';
 //import { } from '../nodes/ReactNodeTest'
 
 class Editor extends Component {
     createEditor = async (container) => {
-        var engine = new Rete.Engine("demo@0.1.0");
-        this.editor = new Rete.NodeEditor("demo@0.1.0", container);
+        this.engine = new Rete.Engine("satisflow@0.5.0");
+        this.editor = new Rete.NodeEditor("satisflow@0.5.0", container);
         this.editor.use(ConnectionPlugin);
         this.editor.use(ReactRenderPlugin);
         this.editor.use(ContextMenuPlugin, {
@@ -22,16 +23,21 @@ class Editor extends Component {
             delay: 100,
         });
 
-        initialize(engine, this.editor); // Register and Create Initial Components
+        container.classList.add('custom-node-editor');
+        const background = document.createElement('div');
+        background.classList = 'background';
+        this.editor.use(AreaPlugin, {background});
+
+        initialize(this.engine, this.editor); // Register and Create Initial Components
 
         this.editor.on(
             "process nodecreated noderemoved connectioncreated connectionremoved",
             async () => {
-                await engine.abort();
-                await engine.process(this.editor.toJSON());
+                await this.engine.abort();
+                await this.engine.process(this.editor.toJSON());
             }
         );
-
+        
         this.editor.view.resize();
         this.editor.trigger("process");
         AreaPlugin.zoomAt(this.editor, this.editor.nodes);
@@ -56,16 +62,77 @@ class Editor extends Component {
                 <div className="dock" ref={ref => this.createDock(ref)} />
             </div>
             */
-            
+
             <div className="App">
-                <div
-                    style={{ width: "100vw", height: "100vh" }}
+                <div className = "editor"
+                    style={{ width: "100vw", height: "80vh"}}
                     ref={ref => this.createEditor(ref)}
                 />
+                <div style={{ height: "90px", backgroundColor: "#212F3D" }}>
+                    <SaveLoadComponent mainEditor={this} />
+                </div>
             </div>
-            
+
         );
     }
 }
+
+
+class SaveLoadComponent extends React.Component {
+
+    constructor(props) {
+        super(props);
+        this.mainEditor = this.props.mainEditor;
+        this.state = { currentEditorState: "Click the Get JSON button to retrieve the current state of the editor." };
+        this.handleLoad = this.handleLoad.bind(this);
+        this.handleStore = this.handleStore.bind(this);
+        this.handleChange = this.handleChange.bind(this);
+    }
+    handleStore() {
+        const text = JSON.stringify(this.mainEditor.editor.toJSON());
+        this.setState({ currentEditorState: text })
+    }
+
+    handleLoad() {
+        var json="";
+        try {
+            json = JSON.parse(this.state.currentEditorState);
+        } catch(err) {
+            alert(err.message);
+        } finally {
+            if(json){
+                this.mainEditor.editor.fromJSON(json);    
+            }
+        }
+    }
+
+    handleChange(event) {
+        this.setState({ currentEditorState: event.target.value })
+    }
+
+    async applyToEditor(thisobj, json) {
+        await thisobj.mainEditor.engine.abort();
+        await thisobj.mainEditor.engine.process(json);
+    }
+
+
+    render() {
+        return (
+            <aside>
+                <div>
+                    <div>
+                        <button onClick={this.handleStore}>Get JSON</button>
+                    </div>
+                    <div>
+                        <button onClick={this.handleLoad}>Load JSON</button>
+                    </div>
+                </div>
+                <textarea rows="4" columns="50" style={{width:"1300px",height:"40px"}} value={this.state.currentEditorState} onChange={this.handleChange} />
+            </aside>
+        )
+    }
+}
+
+
 
 export default Editor;
