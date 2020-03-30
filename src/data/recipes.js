@@ -46,3 +46,13 @@ export const assemblerRecipes = {
     out:["Smart Plating","Versatile Framework","Automated Wiring","Iron Plate","Iron Plate","Wire","Cable","Cable","Concrete","Concrete","Reinforced Iron Plate","Reinforced Iron Plate","Reinforced Iron Plate","Reinforced Iron Plate","Rotor","Rotor","Rotor","Modular Frame","Modular Frame","Modular Frame","Encased Industrial Beam","Encased Industrial Beam","Stator","Stator","Motor","Circuit Board","Circuit Board","Circuit Board","Circuit Board","Computer","Quickwire","Ai Limiter","Fabric","Black Powder","Black Powder","Nobelisk","Compacted Coal","Silica","Alclad Aluminum Sheet","Heat Sink","Heat Sink","Uranium Cell","Em Control Rod","Em Control Rod"],
     outppm:[2,5,2.5,75,45,90,100,27.5,25,45,5,15,5.625,3.75,4,5,11.25,2,5,3,6,4,5,8,5,7.5,12.5,8.75,5,2.8125,90,5,15,7.5,15,3,25,26.25,30,10,13.125,10,4,10],
 }
+
+export const foundryRecipes = {
+    name:["Alternate: Iron Alloy Ingot","Alternate: Copper Alloy Ingot","Steel Ingot","Alternate: Solid Steel Ingot","Alternate: Compacted Steel Ingot","Alternate: Coke Steel Ingot","Aluminum Ingot"],
+    in:["Iron Ore","Copper Ore","Iron Ore","Iron Ingot","Iron Ore","Iron Ore","Aluminum Scrap"],
+    inppm:[20,50,45,40,22.5,75,240],
+    in2:["Copper Ore","Iron Ore","Coal","Coal","Compacted Coal","Petroleum Coke","Silica"],
+    inppm2:[20,25,45,40,11.25,75,140],
+    out:["Iron Ingot","Copper Ingot","Steel Ingot","Steel Ingot","Steel Ingot","Steel Ingot","Aluminum Ingot"],
+    outppm:[50,100,45,60,37.5,100,80],
+}

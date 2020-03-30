@@ -36,7 +36,7 @@ export class Storage extends Rete.Component {
     }
 }
 
-class StorageNode extends Node {
+export class StorageNode extends Node {
     style = { background: "lightgray", borderColor: "gray", opacity:"0.8"};
     fontStyle = {color:"black"}
     fontAndPadding = {...this.fontStyle, padding:"0px"};

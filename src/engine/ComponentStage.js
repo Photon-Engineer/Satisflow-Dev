@@ -3,18 +3,20 @@ import { Miner } from '../factory_nodes/Miner'
 import { Smelter } from '../factory_nodes/Smelter'
 import { Constructor } from '../factory_nodes/Constructor'
 import { Assembler } from '../factory_nodes/Assembler'
+import { Foundry } from '../factory_nodes/Foundry'
+import { Extractor } from '../factory_nodes/Extractor'
 import { Splitter } from '../factory_nodes/StyledSplitter'
 import {Merger} from '../factory_nodes/StyledMerger'
 import {Storage} from '../factory_nodes/Storage'
+import {FluidStorage} from '../factory_nodes/FluidStorage'
 import { Overclock } from '../factory_nodes/Overclock'
 // Test Components Import
 import { DebugElement } from '../nodes/DebugStarterNode'
-import { DebugOutputElement } from '../nodes/DebugOutputNode'
 
 // END imports
 
 export async function initialize(engine, editor) {
-    const components = [new DebugElement(), new DebugOutputElement(), new Miner(), new Smelter(), new Constructor(), new Assembler(), new Splitter(), new Merger(), new Storage(), new Overclock()];
+    const components = [new DebugElement(), new Miner(), new Smelter(), new Constructor(), new Assembler(), new Foundry(), new Extractor(), new Splitter(), new Merger(), new Storage(), new FluidStorage(), new Overclock()];
     // Register Components with the engine
     components.map(c => {
         editor.register(c);
@@ -22,12 +24,7 @@ export async function initialize(engine, editor) {
         return null;
     });
 
-    // Generate starting point
+    // Generate starting point 
 
-    /*
-    for (var i = 0; i < components.length; i++) {
-        const node = await components[i].createNode();
-        editor.addNode(node);
-    }
-    */
+
 }

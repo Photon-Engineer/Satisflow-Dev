@@ -1,6 +1,7 @@
 // Rete and Plugins
 import ReactRenderPlugin from "rete-react-render-plugin";
 import ConnectionPlugin from "rete-connection-plugin";
+import DockPlugin from "rete-dock-plugin"
 import AreaPlugin from "rete-area-plugin";
 import ContextMenuPlugin, { Menu, Item, Search } from 'rete-context-menu-plugin';
 import Rete from "rete";
@@ -22,11 +23,16 @@ class Editor extends Component {
             searchKeep: title => true, // leave item when searching, optional. For example, title => ['Refresh'].includes(title)
             delay: 100,
         });
+        this.editor.use(DockPlugin,{
+            container: document.querySelector('.left-sidebar'),
+            itemClass: 'dock-item',
+            plugins: [ReactRenderPlugin]
+        });
 
         container.classList.add('custom-node-editor');
         const background = document.createElement('div');
         background.classList = 'background';
-        this.editor.use(AreaPlugin, {background});
+        this.editor.use(AreaPlugin, { background });
 
         initialize(this.engine, this.editor); // Register and Create Initial Components
 
@@ -42,37 +48,17 @@ class Editor extends Component {
         this.editor.trigger("process");
         AreaPlugin.zoomAt(this.editor, this.editor.nodes);
     }
-    /*  dock plugin attempt... didn't work
-    createDock = async (container) => {
-        this.editor.use(DockPlugin, {
-            container: container,
-            itemClass: 'dock-item',
-            plugins: [ReactRenderPlugin],
-        });
-    }
-    */
+
 
     render() {
         return (
-            /* dock plugin attempt... didn't work
-            <div className="editor">
-                <div className="container">
-                    <div ref={ref => this.createEditor(ref)} />
-                </div>
-                <div className="dock" ref={ref => this.createDock(ref)} />
+            <div className="wrapper">
+                <div className="header">Satisflow v0.6.0</div>
+                <div className="left-sidebar"></div>
+                <div className="content" ref={ref => this.createEditor(ref)} />
+                <div className="right-sidebar"><SaveLoadComponent mainEditor={this} /></div>
+                <div className="footer">Note: Only tested on Chrome browser version 80.0... as of 3/30/2020.</div>
             </div>
-            */
-
-            <div className="App">
-                <div className = "editor"
-                    style={{ width: "100vw", height: "80vh"}}
-                    ref={ref => this.createEditor(ref)}
-                />
-                <div style={{ height: "90px", backgroundColor: "#212F3D" }}>
-                    <SaveLoadComponent mainEditor={this} />
-                </div>
-            </div>
-
         );
     }
 }
@@ -87,6 +73,7 @@ class SaveLoadComponent extends React.Component {
         this.handleLoad = this.handleLoad.bind(this);
         this.handleStore = this.handleStore.bind(this);
         this.handleChange = this.handleChange.bind(this);
+        this.handleRefresh = this.handleRefresh.bind(this);
     }
     handleStore() {
         const text = JSON.stringify(this.mainEditor.editor.toJSON());
@@ -94,14 +81,14 @@ class SaveLoadComponent extends React.Component {
     }
 
     handleLoad() {
-        var json="";
+        var json = "";
         try {
             json = JSON.parse(this.state.currentEditorState);
-        } catch(err) {
+        } catch (err) {
             alert(err.message);
         } finally {
-            if(json){
-                this.mainEditor.editor.fromJSON(json);    
+            if (json) {
+                this.mainEditor.editor.fromJSON(json);
             }
         }
     }
@@ -115,24 +102,37 @@ class SaveLoadComponent extends React.Component {
         await thisobj.mainEditor.engine.process(json);
     }
 
+    handleRefresh(){
+        //this.mainEditor.editor.fromJSON(this.mainEditor.editor.toJSON());
+        alert('refreshed?')
+        this.mainEditor.editor.view.resize();
+    }
 
     render() {
         return (
-            <aside>
-                <div>
-                    <div>
-                        <button onClick={this.handleStore}>Get JSON</button>
-                    </div>
-                    <div>
-                        <button onClick={this.handleLoad}>Load JSON</button>
-                    </div>
+            <div style={{padding:"10px"}}>
+                <div style={{padding:"10px"}}>
+                    <button onClick={this.handleStore}>Get JSON</button>
                 </div>
-                <textarea rows="4" columns="50" style={{width:"1300px",height:"40px"}} value={this.state.currentEditorState} onChange={this.handleChange} />
-            </aside>
+                <textarea rows="4" columns="50" style={{ width: "150px", height: "600px" }} value={this.state.currentEditorState} onChange={this.handleChange} />
+                <div style={{padding:"10px"}}>
+                    <button onClick={this.handleLoad}>Load JSON</button>
+                    <button onClick={this.handleRefresh}>Refresh Editor</button>
+                </div>
+            </div>
         )
     }
 }
 
+
+class Dock extends React.Component {
+    constructor(props){
+        super(props);
+        this.mainEditor = this.props.editor;
+    }
+
+    
+}
 
 
 export default Editor;

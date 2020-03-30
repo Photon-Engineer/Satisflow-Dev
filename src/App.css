@@ -55,21 +55,15 @@ select{
   border-radius: 0px;
 }
 
+.socket.pipe {
+  background-color: coral;
+  border-color: rgb(65, 65, 65);
+  border-width: 5px;
+}
 .socket .used {
   background-color: darkgray;
 }
 
-.editor {
-  display: flex;
-  flex-wrap: nowrap;
-  flex-direction: column;
-  
-}
-
-/*
-background-image: url(resources/blueprint-pattern-css3.png);
-  background-repeat: repeat;
-*/
 .dock {
   height: 100px;
   overflow-x: auto;
@@ -87,4 +81,42 @@ background-image: url(resources/blueprint-pattern-css3.png);
 .container {
   flex: 1;
   overflow: hidden;
+}
+
+
+.header {
+  grid-area: header;
+  background-color: #61dafb;
+}
+.footer {
+  grid-area: footer;
+  background-color: #61dafb;
+  height: 40px;
+}
+
+.left-sidebar {
+  grid-area: lsidebar;
+  background-color: lightcyan;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+.right-sidebar {
+  grid-area: rsidebar;
+  background-color: lightcyan;
+}
+.content {
+  grid-area: content;
+  position: relative;
+}
+
+.wrapper {
+  width:78vw;
+  height:92vh;
+  display: grid;
+  grid-template-columns: 200px auto 200px;
+  grid-template-rows: auto auto auto;
+  grid-template-areas:
+    'header header header'
+    'lsidebar content rsidebar'
+    'footer footer footer';
 }
