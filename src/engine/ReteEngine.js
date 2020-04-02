@@ -36,6 +36,8 @@ class Editor extends Component {
 
         initialize(this.engine, this.editor); // Register and Create Initial Components
 
+        this.editor.on('error',err=>alert(err));
+
         this.editor.on(
             "process nodecreated noderemoved connectioncreated connectionremoved",
             async () => {
@@ -74,6 +76,7 @@ class SaveLoadComponent extends React.Component {
         this.handleStore = this.handleStore.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.handleRefresh = this.handleRefresh.bind(this);
+        this.handleClear = this.handleClear.bind(this);
     }
     handleStore() {
         const text = JSON.stringify(this.mainEditor.editor.toJSON());
@@ -104,8 +107,18 @@ class SaveLoadComponent extends React.Component {
 
     handleRefresh(){
         //this.mainEditor.editor.fromJSON(this.mainEditor.editor.toJSON());
-        alert('refreshed?')
-        this.mainEditor.editor.view.resize();
+        var thisJson = this.mainEditor.editor.toJSON();
+        var storedJson = JSON.stringify(thisJson);
+        thisJson.nodes = {}
+        this.mainEditor.editor.fromJSON(thisJson);
+        alert('Refreshing editor.')
+        this.mainEditor.editor.fromJSON(JSON.parse(storedJson));
+    }
+
+    handleClear(){
+        var thisJson = this.mainEditor.editor.toJSON();
+        thisJson.nodes = {}
+        this.mainEditor.editor.fromJSON(thisJson);
     }
 
     render() {
@@ -118,6 +131,7 @@ class SaveLoadComponent extends React.Component {
                 <div style={{padding:"10px"}}>
                     <button onClick={this.handleLoad}>Load JSON</button>
                     <button onClick={this.handleRefresh}>Refresh Editor</button>
+                    <button onClick={this.handleClear}>Clear Editor</button>
                 </div>
             </div>
         )

@@ -34,8 +34,6 @@ export class Foundry extends Rete.Component {
         var prc2 = 0;
         var reqPpm;
         var mappedInputPpm = [0, 0]
-        var in1complete = false;
-        var in2complete = false;
 
         if(inputs['i1'].length){
             inp1req = mapToRequirement(inputs['i1'][0][0],foundryRecipes,idx,2)

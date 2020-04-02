@@ -3,7 +3,7 @@ import React from 'react'
 import Rete from "rete";
 import { Node, Socket, Control } from 'rete-react-render-plugin';
 //Sockets and Controls
-import { itemSocket } from '../sockets/AllSockets'
+import { anySocket } from '../sockets/AllSockets'
 
 export class Splitter extends Rete.Component {
     constructor() {
@@ -12,10 +12,10 @@ export class Splitter extends Rete.Component {
     }
 
     builder(node) {
-        node.addOutput(new Rete.Output("o1", "Output-1", itemSocket, false));
-        node.addOutput(new Rete.Output("o2", "Output-2", itemSocket, false));
-        node.addOutput(new Rete.Output("o3", "Output-3", itemSocket, false));
-        node.addInput(new Rete.Input("i1", "Input", itemSocket, false));
+        node.addOutput(new Rete.Output("o1", "Output-1", anySocket, false));
+        node.addOutput(new Rete.Output("o2", "Output-2", anySocket, false));
+        node.addOutput(new Rete.Output("o3", "Output-3", anySocket, false));
+        node.addInput(new Rete.Input("i1", "Input", anySocket, false));
 
         return node;
     }

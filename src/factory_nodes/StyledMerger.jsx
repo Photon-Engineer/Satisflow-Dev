@@ -4,7 +4,7 @@ import Rete from "rete";
 import { setOutputMessage } from '../engine/helpers'
 import { Node, Socket, Control } from 'rete-react-render-plugin';
 //Sockets and Controls
-import { itemSocket } from '../sockets/AllSockets'
+import { anySocket } from '../sockets/AllSockets'
 
 export class Merger extends Rete.Component {
     constructor() {
@@ -13,11 +13,11 @@ export class Merger extends Rete.Component {
     }
 
     builder(node) {
-        node.addOutput(new Rete.Output("o1", "Output-1", itemSocket, false));
+        node.addOutput(new Rete.Output("o1", "Output-1", anySocket, false));
 
-        node.addInput(new Rete.Input("i1", "Input-1", itemSocket, false));
-        node.addInput(new Rete.Input("i2", "Input-2", itemSocket, false));
-        node.addInput(new Rete.Input("i3", "Input-3", itemSocket, false));
+        node.addInput(new Rete.Input("i1", "Input-1", anySocket, false));
+        node.addInput(new Rete.Input("i2", "Input-2", anySocket, false));
+        node.addInput(new Rete.Input("i3", "Input-3", anySocket, false));
 
         return node;
     }

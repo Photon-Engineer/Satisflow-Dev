@@ -60,6 +60,12 @@ select{
   border-color: rgb(65, 65, 65);
   border-width: 5px;
 }
+.socket.any {
+  background-color: aliceblue;
+  border-color: #282c34;
+  border-width: 2px;
+  border-radius: 8px;
+}
 .socket .used {
   background-color: darkgray;
 }

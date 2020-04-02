@@ -56,3 +56,9 @@ export const foundryRecipes = {
     out:["Iron Ingot","Copper Ingot","Steel Ingot","Steel Ingot","Steel Ingot","Steel Ingot","Aluminum Ingot"],
     outppm:[50,100,45,60,37.5,100,80],
 }
+
+export const refineryRecipes = {
+    name:["Plastic","Rubber","Fuel","Residual Plastic","Residual Rubber","Petroleum Coke","Residual Fuel"],
+    in:[[["Crude Oil",30,"fluid"]],[["Crude Oil",30,"fluid"]],[["Crude Oil",60,"fluid"]],[["Polymer",60,"item"],["Water",20,"fluid"]],[["Polymer",40,"item"],["Water",40,"fluid"]],[["Heavy Oil",40,"fluid"]],[["Heavy Oil",60,"fluid"]]],
+    out:[[["Plastic",20,"item"],["Heavy Oil",10,"fluid"]],[["Rubber",20,"item"],["Heavy Oil",20,"fluid"]],[["Polymer",30,"item"],["Fuel",40,"fluid"]],[["Plastic",20,"item"]],[["Rubber",20,"item"]],[["Petroleum Coke",120,"item"]],[["Fuel",40,"fluid"]]],
+}

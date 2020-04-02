@@ -18,7 +18,7 @@ export class Extractor extends Rete.Component {
     builder(node) {
         const out = new Rete.Output("o1", "Output", pipeSocket, false);
         node.addOutput(out);
-        node.addControl(new DropControl(this.editor, "item", node, false, "Fluid", ["Water", "Oil"]));
+        node.addControl(new DropControl(this.editor, "item", node, false, "Fluid", ["Water", "Crude Oil"]));
         node.addControl(new DropControl(this.editor, "pty", node, false,  "Purity", purity));
         node.addInput(new Rete.Input("i1","Overclock",numSocket,false));
         return node;
@@ -37,7 +37,7 @@ export class Extractor extends Rete.Component {
                 ptyMulti = 1; break;
         }
 
-        var out = 60 * ptyMulti;
+        var out = 120 * ptyMulti;
         out = inputs['i1'].length ? out * inputs['i1'] : out; 
 
         const array = [node.data.item, out];

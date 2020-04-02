@@ -1,7 +1,7 @@
 //Rete
 import Rete from "rete";
 //Sockets and Controls
-import {itemSocket} from '../sockets/AllSockets'
+import {anySocket} from '../sockets/AllSockets'
 import {NumControl} from '../controls/NumControl'
 import {DropControl} from '../controls/DropControl'
 import {allItems} from '../data/recipes'
@@ -12,7 +12,7 @@ export class DebugElement extends Rete.Component {
     }
 
     builder(node) {
-        node.addOutput(new Rete.Output("o1","Output",itemSocket));
+        node.addOutput(new Rete.Output("o1","Output",anySocket));
         node.addControl(new DropControl(this.editor,"item",node,false,"item",allItems));
         node.addControl(new NumControl(this.editor,"num",node));
         

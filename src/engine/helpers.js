@@ -67,3 +67,36 @@ export function mapToRequirement(inputItem, recipes, idx, nInputs) {
     return {position: position, reqItem: reqItem, reqPpm: reqPpm};
 
 }
+
+export function mapToRequirement2(inputItem,recipes,idx){
+    var reqArray;
+    var ppmArray;
+    for(var i=0;i<recipes.in[idx].length;i++){
+        reqArray[i] = recipes.in[idx][i][0];
+        ppmArray[i] = recipes.in[idx][i][1];
+    }
+    var position = reqArray.findIndex(req => req === inputItem); // returns -1 if no match
+
+    return {position:position, reqItem:reqArray[position], reqPpm:ppmArray[position]};
+}
+
+
+//readTextFile("file:///C:/your/path/to/file.txt");
+//readTextFile('Properties/version.txt');
+export function readTextFile(file)
+{
+    var rawFile = new XMLHttpRequest();
+    rawFile.open("GET", file, true);
+    rawFile.onreadystatechange = function ()
+    {
+        if(rawFile.readyState === 4)
+        {
+            if(rawFile.status === 200 || rawFile.status == 0)
+            {
+                var allText = rawFile.responseText;
+                alert(allText);
+            }
+        }
+    }
+    rawFile.send(null);
+}

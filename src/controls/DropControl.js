@@ -58,7 +58,7 @@ class DynamicSelect extends React.Component {
 
         return (
             //name="customSearch" className="custom-search-select"
-            <select onChange={this.handleChange} value={this.state.value}>
+            <select onChange={this.handleChange} value={this.state.value} onPointerMove={e => e.stopPropagation()} onPointerMoveCapture={e => e.stopPropagation()}>
                 {options}
             </select>
         )
