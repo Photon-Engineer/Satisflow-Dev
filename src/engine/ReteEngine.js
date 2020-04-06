@@ -77,16 +77,21 @@ class SaveLoadComponent extends React.Component {
         this.handleChange = this.handleChange.bind(this);
         this.handleRefresh = this.handleRefresh.bind(this);
         this.handleClear = this.handleClear.bind(this);
+        this.abort = this.abort.bind(this);
     }
+
     handleStore() {
-        const text = JSON.stringify(this.mainEditor.editor.toJSON());
+        const YAML = require('yamljs');
+        const text = YAML.stringify(this.mainEditor.editor.toJSON());
+        //const text = JSON.stringify(this.mainEditor.editor.toJSON());
         this.setState({ currentEditorState: text })
     }
 
     handleLoad() {
         var json = "";
+        const YAML = require('yamljs');
         try {
-            json = JSON.parse(this.state.currentEditorState);
+            json = YAML.parse(this.state.currentEditorState);
         } catch (err) {
             alert(err.message);
         } finally {
@@ -105,6 +110,10 @@ class SaveLoadComponent extends React.Component {
         await thisobj.mainEditor.engine.process(json);
     }
 
+    async abort(){
+        await this.mainEditor.engine.abort();
+    }
+
     handleRefresh(){
         //this.mainEditor.editor.fromJSON(this.mainEditor.editor.toJSON());
         var thisJson = this.mainEditor.editor.toJSON();
@@ -116,6 +125,7 @@ class SaveLoadComponent extends React.Component {
     }
 
     handleClear(){
+        this.abort();
         var thisJson = this.mainEditor.editor.toJSON();
         thisJson.nodes = {}
         this.mainEditor.editor.fromJSON(thisJson);

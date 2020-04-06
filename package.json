@@ -13,7 +13,8 @@
     "rete-connection-plugin": "0.7.2",
     "rete-context-menu-plugin": "^0.5.2",
     "rete-dock-plugin": "^0.2.1",
-    "rete-react-render-plugin": "0.2.0"
+    "rete-react-render-plugin": "0.2.0",
+    "yamljs": "^0.3.0"
   },
   "scripts": {
     "start": "react-scripts start",

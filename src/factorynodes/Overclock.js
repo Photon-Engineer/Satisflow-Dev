@@ -25,15 +25,15 @@ export class Overclock extends Rete.Component {
 }
 
 class OverclockNode extends Node {
-    style = { background: "lightgray", borderColor: "gray", opacity:"0.8"};
-    fontStyle = {color:"black"}
+    fontStyle = {color:"white"}
     fontAndPadding = {...this.fontStyle, padding:"0px"};
     render() {
         const { node, bindSocket, bindControl } = this.props;
         const { outputs, controls, inputs, selected } = this.state;
 
         return (
-            <div className={`node ${selected}`} style={this.style}>
+            <div className={`node ${selected}`}>
+                <div className="two-letter-label">&nbsp;OC</div>
                 <div className="title" style={this.fontStyle}>{node.name}</div>
                 <div className="output" key="o1" style={{float:"right"}}>
                     <Socket

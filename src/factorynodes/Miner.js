@@ -2,26 +2,29 @@ import React from 'react'
 //Rete
 import Rete from "rete";
 import { setOutputMessage } from '../engine/helpers'
-import {StyledNode} from '../engine/StyledNode'
 import { Node, Socket, Control } from 'rete-react-render-plugin';
 //Sockets and Controls
 import { itemSocket, numSocket } from '../sockets/AllSockets'
 import { DropControl } from '../controls/DropControl'
-import { ores, purity, minerLevel } from '../data/recipes'
+import { ObjectDropControl } from '../controls/ObjectDropControl'
+import { getItemsByCat, CATS } from '../data/Items'
 
 
 export class Miner extends Rete.Component {
     constructor() {
         super('Miner')
         this.data.component = MinerNode;
+        this.purity = ["Impure","Normal","Pure"]
+        this.minerLevel = ["Mk.1","Mk.2","Mk.3"]
     }
 
     builder(node) {
         const out = new Rete.Output("o1", "Output", itemSocket, false);
+        const ores = getItemsByCat(CATS.ORE);
         node.addOutput(out);
-        node.addControl(new DropControl(this.editor, "item", node, false, "Item", ores));
-        node.addControl(new DropControl(this.editor, "pty", node, false,  "Purity", purity));
-        node.addControl(new DropControl(this.editor, "min", node, false, "Level", minerLevel));
+        node.addControl(new ObjectDropControl(this.editor, "item", node, false, "Item", ores));
+        node.addControl(new DropControl(this.editor, "pty", node, false,  "Purity", this.purity));
+        node.addControl(new DropControl(this.editor, "min", node, false, "Level", this.minerLevel));
         node.addInput(new Rete.Input("i1","Overclock",numSocket,false));
         return node;
     }
@@ -29,22 +32,22 @@ export class Miner extends Rete.Component {
     worker(node, inputs, outputs) {
         var ptyMulti;
         switch (node.data.pty) {
-            case purity[0]:
+            case this.purity[0]:
                 ptyMulti = 0.5; break;
-            case purity[1]:
+            case this.purity[1]:
                 ptyMulti = 1; break;
-            case purity[2]:
+            case this.purity[2]:
                 ptyMulti = 2; break;
             default:
                 ptyMulti = 1; break;
         }
         var minMulti;
         switch (node.data.min) {
-            case minerLevel[0]:
+            case this.minerLevel[0]:
                 minMulti = 1; break;
-            case minerLevel[1]:
+            case this.minerLevel[1]:
                 minMulti = 2; break;
-            case minerLevel[2]:
+            case this.minerLevel[2]:
                 minMulti = 3; break;
                 default:
                     minMulti = 1; break;
@@ -59,12 +62,7 @@ export class Miner extends Rete.Component {
     }
 }
 
-class MinerStyle extends StyledNode {
-    style={background:"slateblue",borderColor:"mediumblue"};
-}
-
 export class MinerNode extends Node {
-    style = { background: "slateblue", borderColor: "mediumblue", opacity:"0.8"};
     fontStyle = {color:"white"}
     fontAndPadding = {...this.fontStyle, padding:"0px"};
     render() {
@@ -72,8 +70,9 @@ export class MinerNode extends Node {
         const { outputs, controls, inputs, selected } = this.state;
 
         return (
-            <div className={`node ${selected}`} style={this.style}>
-                <div className="title" style={this.fontStyle}>{node.name}</div>
+            <div className={`node ${selected}`}>
+                <div style={{float:"left",fontSize:"30px",color:"white",fontFamily:"Impact"}}>&nbsp;Mi</div>
+                <div className="title-extractor title" style={this.fontStyle}>{node.name}</div>
                 <div className="control" style={this.fontStyle}>{outputs[0].name}</div>
                 <div className="output" key="o1" style={{float:"right"}}>
                     <Socket

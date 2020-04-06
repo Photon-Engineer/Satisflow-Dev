@@ -6,35 +6,41 @@ import { Node, Socket, Control } from 'rete-react-render-plugin';
 //Sockets and Controls
 import {numSocket, pipeSocket } from '../sockets/AllSockets'
 import { DropControl } from '../controls/DropControl'
-import { ores, purity, minerLevel } from '../data/recipes'
+import { ObjectDropControl } from '../controls/ObjectDropControl'
+import { ITEMS } from '../data/Items'
 
 
 export class Extractor extends Rete.Component {
     constructor() {
         super('Fluid Extractor')
         this.data.component = ExtractorNode;
+        this.purity = ["Impure","Normal","Pure"]
     }
 
     builder(node) {
         const out = new Rete.Output("o1", "Output", pipeSocket, false);
         node.addOutput(out);
-        node.addControl(new DropControl(this.editor, "item", node, false, "Fluid", ["Water", "Crude Oil"]));
-        node.addControl(new DropControl(this.editor, "pty", node, false,  "Purity", purity));
+        node.addControl(new ObjectDropControl(this.editor, "item", node, false, "Fluid", [ITEMS.Water, ITEMS.CrudeOil]));
+        node.addControl(new DropControl(this.editor, "pty", node, false,  "Purity", this.purity));
         node.addInput(new Rete.Input("i1","Overclock",numSocket,false));
         return node;
     }
 
     worker(node, inputs, outputs) {
         var ptyMulti;
-        switch (node.data.pty) {
-            case purity[0]:
-                ptyMulti = 0.5; break;
-            case purity[1]:
-                ptyMulti = 1; break;
-            case purity[2]:
-                ptyMulti = 2; break;
-            default:
-                ptyMulti = 1; break;
+        if(node.data.item===ITEMS.Water) {
+            ptyMulti=1;
+        } else {
+            switch (node.data.pty) {
+                case this.purity[0]:
+                    ptyMulti = 0.5; break;
+                case this.purity[1]:
+                    ptyMulti = 1; break;
+                case this.purity[2]:
+                    ptyMulti = 2; break;
+                default:
+                    ptyMulti = 1; break;
+            }
         }
 
         var out = 120 * ptyMulti;
@@ -48,7 +54,6 @@ export class Extractor extends Rete.Component {
 }
 
 export class ExtractorNode extends Node {
-    style = { background: "slateblue", borderColor: "rgb(65, 65, 65)", borderWidth:"3px", opacity:"0.8"};
     fontStyle = {color:"white"}
     fontAndPadding = {...this.fontStyle, padding:"0px"};
     render() {
@@ -56,8 +61,9 @@ export class ExtractorNode extends Node {
         const { outputs, controls, inputs, selected } = this.state;
 
         return (
-            <div className={`node ${selected}`} style={this.style}>
-                <div className="title" style={this.fontStyle}>{node.name}</div>
+            <div className={`node ${selected}`}>
+                <div style={{float:"left",fontSize:"30px",color:"white",fontFamily:"Impact"}}>&nbsp;Ex</div>
+                <div className="title-extractor title" style={this.fontStyle}>{node.name}</div>
                 <div className="control" style={this.fontStyle}>{outputs[0].name}</div>
                 <div className="output" key="o1" style={{float:"right"}}>
                     <Socket

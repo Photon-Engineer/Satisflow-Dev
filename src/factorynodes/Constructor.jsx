@@ -1,12 +1,12 @@
 import React from 'react'
 //Rete
 import Rete from "rete";
-import { setOutputMessage, setInputMessage } from '../engine/helpers'
+import { updateInputLabel, updateOutputLabel } from '../engine/helpers'
 import { Node, Socket, Control } from 'rete-react-render-plugin';
 //Sockets and Controls
 import { itemSocket, numSocket } from '../sockets/AllSockets'
-import { DropControl } from '../controls/DropControl'
-import { constructorRecipes } from '../data/recipes'
+import { ObjectDropControl } from '../controls/ObjectDropControl'
+import { ConstructorRecipes } from '../data/Items'
 
 export class Constructor extends Rete.Component {
     constructor() {
@@ -16,7 +16,7 @@ export class Constructor extends Rete.Component {
 
     builder(node) {
         node.addOutput(new Rete.Output("o1", "Output", itemSocket, false));
-        node.addControl(new DropControl(this.editor, "rec", node, false, "Recipe", constructorRecipes.name))
+        node.addControl(new ObjectDropControl(this.editor, "recipe", node, false, "Recipe", ConstructorRecipes))
         node.addInput(new Rete.Input("i1", "Input", itemSocket, false));
         node.addInput(new Rete.Input("ovc", "Overclock", numSocket, false));
         return node;
@@ -25,36 +25,28 @@ export class Constructor extends Rete.Component {
     worker(node, inputs, outputs) {
         var multi = inputs['ovc'].length ? inputs['ovc'] : 1;
 
-        var idx = constructorRecipes.name.findIndex(rec => rec === node.data.rec);
-        var out = 0;
-        var req = constructorRecipes.inppm[idx] * multi;
-        if (inputs['i1'].length) {
-            if (constructorRecipes.in[idx] === inputs['i1'][0][0]) {
-                var prc = inputs['i1'][0][1] / req;
-                out = prc > 1 ? constructorRecipes.outppm[idx] * multi : constructorRecipes.outppm[idx] * multi * prc;
-            }
-        }
-        outputs['o1'] = [constructorRecipes.out[idx], out];
-
-        const inpt = inputs['i1'].length ? inputs['i1'][0][1] : 0;
-        const reqmt = [constructorRecipes.in[idx], constructorRecipes.inppm[idx] * multi];
-        const maxout = [constructorRecipes.out[idx], constructorRecipes.outppm[idx] * multi];
-        setInputMessage(node, this.editor, 'i1', inpt, reqmt);
-        setOutputMessage(node, this.editor, 'o1', out, maxout);
+        const in1 = inputs['i1'].length ? inputs['i1'][0] : null;
+        var calcObject = node.data.recipe.calculate([in1],multi);
+        updateInputLabel(node,this.editor,'i1',calcObject,0);
+        updateOutputLabel(node,this.editor,'o1',calcObject,0);
+        outputs['o1'] = [node.data.recipe.outputs[0][0],calcObject.actualOutPpm[0]];
     }
 }
 
 export class ConstructorNode extends Node {
-    style = { background: "lightsalmon", borderColor: "blue", opacity:"0.8"};
-    fontStyle = {color:"black"}
+    nodeTitleClass = "title-producer";
+    nodeLabel = "Co";
+    fontStyle = {color:"white"};
+    fontAndPadding = {...this.fontStyle, padding:"0px"};
     render() {
         const { node, bindSocket, bindControl } = this.props;
         const { outputs, controls, inputs, selected } = this.state;
 
         return (
             <div className={`node ${selected}`} style={this.style}>
-                <div className="title" style={this.fontStyle}>{node.name}</div>
-                <div className="control" style={this.fontStyle}>
+                <div className="two-letter-label">&nbsp;{this.nodeLabel}</div>
+                <div className={this.nodeTitleClass +" title"} style={this.fontStyle}>{node.name}</div>
+                <div className="control" style={this.fontAndPadding}>
                     <Control
                         className="control"
                         key={controls[0].key}

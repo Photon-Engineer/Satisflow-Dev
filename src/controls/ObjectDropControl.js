@@ -1,30 +1,34 @@
 import React from "react";
 import Rete from "rete";
 
+// Successor to DropControl
 
-
-export class DropControl extends Rete.Control {
+export class ObjectDropControl extends Rete.Control {
     static component = ({ value, onChange, title, items }) => (
         <span>
-            {title}:&nbsp;<DynamicSelect valueIn={value} onSelectChange={onChange} listItems={items} />
+            {title}:&nbsp;<DynamicObjectSelect valueIn={value} onSelectChange={onChange} listItems={items} />
         </span> // to make this part dynamic, the component cannot be static.. it must be built with a function
     );
 
-    constructor(emitter, key, node, readonly = false, title, items = ["Item 0", "Item 1", "Item 2"]) {
+    constructor(emitter, key, node, readonly = false, title, items) {
+        //items are expected to be objects with a "name" property
         super(key);
         this.emitter = emitter;
         this.key = key;
-        this.component = DropControl.component;
-
-        const initial = node.data[key] || items[0];
+        this.component = ObjectDropControl.component;
+        
+        var initial = node.data[key] || items[0];
+        initial = items.find(item=>item.name===initial.name);// Make sure initial is contains the original class methods (needed for cloning)
+        //console.log(JSON.stringify(initial));
+        
         node.data[key] = initial;
         this.props = {
             readonly,
             value: initial,
             title: title,
             items: items,
-            onChange: v => {
-                this.setValue(v);
+            onChange: (val) => {
+                this.setValue(val);
                 this.emitter.trigger("process");
             }
         };
@@ -37,23 +41,24 @@ export class DropControl extends Rete.Control {
     }
 }
 
-class DynamicSelect extends React.Component {
+class DynamicObjectSelect extends React.Component {
     constructor(props) {
         super(props)
-        this.state = { value: props.valueIn };
+        this.state = { value: props.valueIn.name };
     }
 
     //On the change event for the select box pass the selected value back to the parent
     handleChange = (event) => {
         let selectedValue = event.target.value;
-        this.props.onSelectChange(selectedValue);
+        let idx = this.props.listItems.findIndex(i=>i.name===selectedValue);
+        this.props.onSelectChange(this.props.listItems[idx]);
         this.setState({ value: selectedValue });
     }
 
     render() {
         let arrayOfData = this.props.listItems;
         let options = arrayOfData.map((data) =>
-            <option value={data} key={data}>{data}</option>
+            <option value={data.name} key={data.name}>{data.name}</option>
         );
 
         return (

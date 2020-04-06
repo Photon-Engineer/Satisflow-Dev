@@ -4,8 +4,34 @@ export async function setOutputMessage(node, editor, outputKey, itemPpm, outObj,
     const thisNode = editor.nodes.find(n => n.id === node.id);
     var addon = "";
     if(showMaxOutput){addon = " of " + formatNumber(outObj[1])};
-    const message = "Out: (" + formatNumber(itemPpm) + addon + " " + outObj[0] + "/min)";
+    const message = "Out: (" + formatNumber(itemPpm) + addon + " " + outObj[0].name + "/min)";
     thisNode.outputs.get(outputKey).name = message;
+    await thisNode.update();
+}
+
+export async function setLabel(node, editor, isInput, key, message){
+    const thisNode = editor.nodes.find(n => n.id === node.id);
+    if(isInput){
+        thisNode.inputs.get(key).name = message;
+    } else {
+        thisNode.outputs.get(key).name = message;
+    }
+    await thisNode.update();
+}
+
+export async function updateOutputLabel(node,editor,key,recipeOutputObj,index, showMaxOutput = true){
+    const thisNode = editor.nodes.find(n => n.id === node.id);
+    var addon = "";
+    if(showMaxOutput){addon = " of " + formatNumber(recipeOutputObj.maxOutputPpm[index])};
+    const message = "Out: (" + formatNumber(recipeOutputObj.actualOutPpm[index]) + addon + " " + recipeOutputObj.recipeOutput[index] + "/min)";
+    thisNode.outputs.get(key).name = message;
+    await thisNode.update();
+}
+
+export async function updateInputLabel(node,editor,key,recipeOutputObj,index){
+    const thisNode = editor.nodes.find(n => n.id === node.id);
+    const message = "In: (" + formatNumber(recipeOutputObj.actualInpPpm[index]) + " of " + formatNumber(recipeOutputObj.recipeReqPpm[index]) + " " + recipeOutputObj.recipeInputs[index] + "/min)";
+    thisNode.inputs.get(key).name = message;
     await thisNode.update();
 }
 

@@ -42,24 +42,25 @@ export class Merger extends Rete.Component {
             case 2:
                 item = inputs['i3'][0][0]; break;
             default:
-                item = '<NO INPUT>';
+                item = null;
         }
 
         outputs['o1'] = [item,outppm];
-        setOutputMessage(node,this.editor,'o1',outppm,outputs['o1'],false);
+        //setOutputMessage(node,this.editor,'o1',outppm,outputs['o1'],false);
     }
 }
 
 class MergerNode extends Node {
+    nodeTitleClass = "title-logistics";
+    nodeLabel = "Mg";
     render() {
         const { node, bindSocket, bindControl } = this.props;
         const { outputs, controls, inputs, selected } = this.state;
         return (
-            <div className={`node ${selected}`} style={{ background: "moccasin", height: "160px", borderColor: "gray", opacity:"0.8"}}>
-                <div className="title" style={{color:"black"}}>
-                    {node.name}
-                </div>
-                <div key="i1" className="input" style={{ height: "40px"}}>
+            <div className={`node ${selected}`}>
+                <div className="two-letter-label">&nbsp;{this.nodeLabel}</div>
+                <div className={this.nodeTitleClass +" title"} style={this.fontStyle}>{node.name}</div>
+                <div key="i1" className="input" style={{ height: "40px", color:"white"}}>
                     <Socket
                         type="input"
                         socket={inputs[0].socket}
@@ -67,7 +68,7 @@ class MergerNode extends Node {
                         innerRef={bindSocket}
                     /> {outputs[0].name}
                 </div>
-                <div className="input" style={{ float: "left" }} key="i2">
+                <div className="input" style={{ float: "left", color:"white"}} key="i2">
                     <Socket
                         type="input"
                         socket={inputs[1].socket}
@@ -75,7 +76,7 @@ class MergerNode extends Node {
                         innerRef={bindSocket}
                     />&nbsp;Inputs
                 </div>
-                <div className="output" style={{ height: "40px" }} key="o1">
+                <div className="output" style={{ height: "40px", color:"white"}} key="o1">
                     Output&nbsp;<Socket
                         type="output"
                         socket={outputs[0].socket}

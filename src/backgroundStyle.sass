@@ -1,7 +1,15 @@
-$grid-size: 170px
+$grid-size: 200px
 $grid-color: #363636
 $dark-color: darken($grid-color, 10%)
 $th: 0.008
+
+@keyframes dash
+  0% 
+    stroke-dashoffset: 425;
+  100%
+    stroke-dashoffset: 0;
+  
+
 
 @function line($dir, $t, $w, $color)
   $start: $grid-size * $t - $w * $grid-size
@@ -21,10 +29,14 @@ $th: 0.008
     box-sizing: border-box
   
   .connection path
-    fill: none
+    fill: none;
     stroke: #eee
+    stroke-dasharray: 80 5;
+    animation: dash 6s infinite normal linear;
     stroke-width: 4px
     pointer-events: none
     &.active
-      stroke: #aaa  
+      stroke: #21b635  
+
+
       
