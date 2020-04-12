@@ -3,8 +3,6 @@ I should be able to do all my processing with the item objects.
 In the dropcontrol, I can create options from an array of item objects by calling data.name at option creation. 
 */
 
-
-
 export const CATS = {
     ORE: "ore",
     LIQUID: "liquid",

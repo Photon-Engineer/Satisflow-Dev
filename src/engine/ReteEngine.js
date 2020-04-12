@@ -81,17 +81,18 @@ class SaveLoadComponent extends React.Component {
     }
 
     handleStore() {
-        const YAML = require('yamljs');
-        const text = YAML.stringify(this.mainEditor.editor.toJSON());
-        //const text = JSON.stringify(this.mainEditor.editor.toJSON());
+        //const YAML = require('yamljs');
+        //const text = YAML.stringify(this.mainEditor.editor.toJSON());
+        const text = JSON.stringify(this.mainEditor.editor.toJSON());
         this.setState({ currentEditorState: text })
     }
 
     handleLoad() {
         var json = "";
-        const YAML = require('yamljs');
+        //const YAML = require('yamljs');
         try {
-            json = YAML.parse(this.state.currentEditorState);
+            //json = YAML.parse(this.state.currentEditorState);
+            json = JSON.parse(this.state.currentEditorState);
         } catch (err) {
             alert(err.message);
         } finally {

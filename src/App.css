@@ -119,23 +119,23 @@ select{
 
 .header {
   grid-area: header;
-  background-color: #61dafb;
+  background-color: orangered;
 }
 .footer {
   grid-area: footer;
-  background-color: #61dafb;
+  background-color: orangered;
   height: 40px;
 }
 
 .left-sidebar {
   grid-area: lsidebar;
-  background-color: lightcyan;
+  background-color: black;
   overflow-y: scroll;
   overflow-x: hidden;
 }
 .right-sidebar {
   grid-area: rsidebar;
-  background-color: lightcyan;
+  background-color: black;
 }
 .content {
   grid-area: content;
