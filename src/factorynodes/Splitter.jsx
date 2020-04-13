@@ -28,9 +28,9 @@ export class Splitter extends Rete.Component {
         var itemName;
         var outppm;
         if (nIn) {
-            if(nOut>0){
+            if (nOut > 0) {
                 outppm = inputs['i1'][0][1] / nOut;
-            }else{
+            } else {
                 outppm = inputs['i1'][0][1];
             }
             outputs['o1'] = [inputs['i1'][0][0], outppm];
@@ -44,12 +44,12 @@ export class Splitter extends Rete.Component {
             itemName = "N/A"
             outppm = 0;
         }
-        
-        updateOutputLabel(node,this.editor,'o1',{
-                recipeOutput: [itemName],
-                maxOutputPpm: [0],
-                actualOutPpm: [outppm],
-            },0,false);
+
+        updateOutputLabel(node, this.editor, 'o1', {
+            recipeOutput: [itemName],
+            maxOutputPpm: [0],
+            actualOutPpm: [outppm],
+        }, 0, false);
         //setOutputMessage(node,this.editor,'o1',inputs['i1'][0][1] / nOut,[inputs['i1'][0][0].name,0],false);
     }
 }
@@ -61,12 +61,10 @@ class SplitterNode extends Node {
         const { node, bindSocket, bindControl } = this.props;
         const { outputs, controls, inputs, selected } = this.state;
         return (
-            <div className={`node ${selected}`} style={{ background: "lightgray", width: "160px", height: "160px", borderColor: "orange", opacity:"0.8"}}>
+            <div className={`node ${selected}`} style={{ background: "lightgray", borderColor: "orange", opacity: "0.8",height:"160px"}}>
                 <div className="two-letter-label">&nbsp;{this.nodeLabel}</div>
-                <div className={this.nodeTitleClass +" title"}>{node.name}</div>
-                
-                <div key="o1" className="output" style={{ height: "40px",color:"white"}}>
-                    <div className="output-title" style={{color:"white",textAlign:"left",width:"80%",overflow:"hidden"}}>{outputs[0].name}</div>
+                <div className={this.nodeTitleClass + " title"}>{node.name}</div>
+                <div className="output" style={{ float: "right" }}>
                     <Socket
                         type="output"
                         socket={outputs[0].socket}
@@ -74,8 +72,8 @@ class SplitterNode extends Node {
                         innerRef={bindSocket}
                     />
                 </div>
-                
-                <div className="input" style={{ float: "left", color:"white"}} key="i1">
+                <div className="control" style={{ color: "white", height:"40px"}}>{outputs[0].name}</div>
+                <div className="input" style={{ float: "left", color: "white" }} key="i1">
                     <Socket
                         type="input"
                         socket={inputs[0].socket}
@@ -83,7 +81,7 @@ class SplitterNode extends Node {
                         innerRef={bindSocket}
                     /> {inputs[0].name}
                 </div>
-                <div className="output" style={{ height: "40px", color:"white"}} key="o2">
+                <div className="output" style={{ color: "white", height:"40px"}} key="o2">
                     Outputs&nbsp;<Socket
                         type="output"
                         socket={outputs[1].socket}
@@ -91,7 +89,7 @@ class SplitterNode extends Node {
                         innerRef={bindSocket}
                     />
                 </div>
-                <div className="output" key="o3">
+                <div className="output" style={{ color: "white", height:"40px"}} key="o3">
                     <Socket
                         type="output"
                         socket={outputs[2].socket}
@@ -100,6 +98,6 @@ class SplitterNode extends Node {
                     />
                 </div>
             </div>
-        );
+        )
     }
 }

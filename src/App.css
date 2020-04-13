@@ -119,11 +119,11 @@ select{
 
 .header {
   grid-area: header;
-  background-color: lightsalmon;
+  background-color: gray;
 }
 .footer {
   grid-area: footer;
-  background-color: lightsalmon;
+  background-color: gray;
   height: 40px;
 }
 

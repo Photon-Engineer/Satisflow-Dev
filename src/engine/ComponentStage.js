@@ -25,12 +25,12 @@ export async function initialize(engine, editor) {
         return null;
     });
 
-    /*
+    
     fetch('resources/starting_view.txt')
         .then((r) => r.json())
         .then((data) =>{
             editor.fromJSON(data);
     })
-    */
+    
 
 }

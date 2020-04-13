@@ -55,7 +55,7 @@ class Editor extends Component {
     render() {
         return (
             <div className="wrapper">
-                <div className="header">Satisflow v0.7.2</div>
+                <div className="header">Satisflow v0.7.3</div>
                 <div className="left-sidebar"></div>
                 <div className="content" ref={ref => this.createEditor(ref)} />
                 <div className="right-sidebar"><SaveLoadComponent mainEditor={this} /></div>
