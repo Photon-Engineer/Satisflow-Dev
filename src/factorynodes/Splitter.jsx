@@ -1,7 +1,7 @@
 import React from 'react'
 //Rete
 import Rete from "rete";
-import { setOutputMessage } from '../engine/helpers'
+import { setOutputMessage, updateOutputLabel } from '../engine/helpers'
 import { Node, Socket, Control } from 'rete-react-render-plugin';
 //Sockets and Controls
 import { anySocket } from '../sockets/AllSockets'
@@ -25,16 +25,31 @@ export class Splitter extends Rete.Component {
         const thisNode = this.editor.nodes.find(n => n.id === node.id);
         const nIn = inputs['i1'].length ? 1 : 0;
         const nOut = thisNode.getConnections().length - nIn;
+        var itemName;
+        var outppm;
         if (nIn) {
-            outputs['o1'] = [inputs['i1'][0][0], inputs['i1'][0][1] / nOut];
-            outputs['o2'] = [inputs['i1'][0][0], inputs['i1'][0][1] / nOut];
-            outputs['o3'] = [inputs['i1'][0][0], inputs['i1'][0][1] / nOut];
+            if(nOut>0){
+                outppm = inputs['i1'][0][1] / nOut;
+            }else{
+                outppm = inputs['i1'][0][1];
+            }
+            outputs['o1'] = [inputs['i1'][0][0], outppm];
+            outputs['o2'] = [inputs['i1'][0][0], outppm];
+            outputs['o3'] = [inputs['i1'][0][0], outppm];
+            itemName = inputs['i1'][0][0].name;
         } else {
             outputs['o1'] = [null, 0];
             outputs['o2'] = [null, 0];
             outputs['o3'] = [null, 0];
+            itemName = "N/A"
+            outppm = 0;
         }
-
+        
+        updateOutputLabel(node,this.editor,'o1',{
+                recipeOutput: [itemName],
+                maxOutputPpm: [0],
+                actualOutPpm: [outppm],
+            },0,false);
         //setOutputMessage(node,this.editor,'o1',inputs['i1'][0][1] / nOut,[inputs['i1'][0][0].name,0],false);
     }
 }
@@ -48,9 +63,10 @@ class SplitterNode extends Node {
         return (
             <div className={`node ${selected}`} style={{ background: "lightgray", width: "160px", height: "160px", borderColor: "orange", opacity:"0.8"}}>
                 <div className="two-letter-label">&nbsp;{this.nodeLabel}</div>
-                <div className={this.nodeTitleClass +" title"} style={this.fontStyle}>{node.name}</div>
-                <div key="o1" className="output" style={{ height: "40px", color:"white"}}>
-                    <div className="output-title">{outputs[0].name}</div>
+                <div className={this.nodeTitleClass +" title"}>{node.name}</div>
+                
+                <div key="o1" className="output" style={{ height: "40px",color:"white"}}>
+                    <div className="output-title" style={{color:"white",textAlign:"left",width:"80%",overflow:"hidden"}}>{outputs[0].name}</div>
                     <Socket
                         type="output"
                         socket={outputs[0].socket}
@@ -58,6 +74,7 @@ class SplitterNode extends Node {
                         innerRef={bindSocket}
                     />
                 </div>
+                
                 <div className="input" style={{ float: "left", color:"white"}} key="i1">
                     <Socket
                         type="input"

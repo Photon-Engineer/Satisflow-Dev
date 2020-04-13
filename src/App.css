@@ -119,23 +119,35 @@ select{
 
 .header {
   grid-area: header;
-  background-color: orangered;
+  background-color: lightsalmon;
 }
 .footer {
   grid-area: footer;
-  background-color: orangered;
+  background-color: lightsalmon;
   height: 40px;
 }
 
 .left-sidebar {
   grid-area: lsidebar;
-  background-color: black;
+  background: repeating-linear-gradient(
+    45deg,
+    gray,
+    gray 10px,
+    darkgray 10px,
+    darkgray 20px
+  );
   overflow-y: scroll;
   overflow-x: hidden;
 }
 .right-sidebar {
   grid-area: rsidebar;
-  background-color: black;
+  background: repeating-linear-gradient(
+    45deg,
+    gray,
+    gray 10px,
+    darkgray 10px,
+    darkgray 20px
+  );
 }
 .content {
   grid-area: content;

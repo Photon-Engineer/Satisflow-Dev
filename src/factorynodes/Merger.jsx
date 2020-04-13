@@ -1,7 +1,7 @@
 import React from 'react'
 // Rete
 import Rete from "rete";
-import { setOutputMessage } from '../engine/helpers'
+import { setOutputMessage, updateOutputLabel } from '../engine/helpers'
 import { Node, Socket, Control } from 'rete-react-render-plugin';
 //Sockets and Controls
 import { anySocket } from '../sockets/AllSockets'
@@ -34,18 +34,28 @@ export class Merger extends Rete.Component {
 
         const idx = lengths.findIndex(lgt => lgt >= 1);
         var item;
+        var itemName;
         switch (idx) {
             case 0:
-                item = inputs['i1'][0][0]; break;
+                item = inputs['i1'][0][0]; 
+                itemName = item.name;break;
             case 1:
-                item = inputs['i2'][0][0]; break;
+                item = inputs['i2'][0][0]; 
+                itemName = item.name;break;
             case 2:
-                item = inputs['i3'][0][0]; break;
+                item = inputs['i3'][0][0];
+                itemName = item.name;break;
             default:
                 item = null;
+                itemName = "N/A";
         }
 
         outputs['o1'] = [item,outppm];
+        updateOutputLabel(node,this.editor,'o1',{
+            recipeOutput: [itemName],
+            maxOutputPpm: [0],
+            actualOutPpm: [outppm],
+        },0,false)
         //setOutputMessage(node,this.editor,'o1',outppm,outputs['o1'],false);
     }
 }
@@ -53,6 +63,7 @@ export class Merger extends Rete.Component {
 class MergerNode extends Node {
     nodeTitleClass = "title-logistics";
     nodeLabel = "Mg";
+    fontStyle = {color:"white"};
     render() {
         const { node, bindSocket, bindControl } = this.props;
         const { outputs, controls, inputs, selected } = this.state;

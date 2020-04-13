@@ -1,3 +1,15 @@
+
+Welcome to Satisflow Alpha v0.7.2.
+
+This goal of this project is to provide a helpful tool for the game Satisfactory. The tool is a flow-based calculator where you can add nodes and make connections for the purpose of planning out each part of the factory. The tool makes use of Rete JS and several of its plugins to accomplish this.
+
+Some notes about me: I am not a web-designer or software engineer in any respect. I had to learn some HTML, JS, and React just to start this project. While I do have some background in programming in java and matlab, I am 100% self-taught. There will likley be bugs and incompatibilities I have not thought of. 
+
+If you are interested in contributing to the project, let me know. This is also my first github project, so please be patient as I learn the ropes. 
+
+
+
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts

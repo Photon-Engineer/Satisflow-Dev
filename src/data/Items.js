@@ -150,9 +150,8 @@ class Recipe {
         var finished = false;
         var prc = 0;
         var position = -1;
-        
         do {
-            if (item === this.inputs[i][0]) {
+            if (this.inputs[i]!==undefined && item === this.inputs[i][0]) {
                 let requiredPpm = this.inputs[i][1] * multiplier;
                 let ratio = ppm / requiredPpm;
                 prc = ratio > 1 ? 1 : ratio;
@@ -160,7 +159,10 @@ class Recipe {
                 finished = true;
             }
             i++;
-        } while (!finished || i != this.inputs.length);
+            if(i==this.inputs.length){
+                finished=true;
+            }
+        } while (!finished);
         return {
             position: position,
             percent: prc,
