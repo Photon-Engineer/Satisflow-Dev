@@ -100,20 +100,46 @@ textarea{
   margin-left: auto;
   margin-right: auto;
 }
-button{
-  margin: 5px;
-  padding: 6px;
+button {
+  font-size: 1.2em;
+  background: #fff;
+  color: #1581B7;
+  border: 0.1rem solid #1BA1E2;
+  padding: 0.2em;
+  margin: 4px;
+  width: 90%;
   border-radius: 12px;
-  width: 100%;
-  background-color: aliceblue;
-  font-size: 110%;
-  transition: all 0.3s;
   position: relative;
   z-index: 1;
+  overflow: hidden;
+}
+button:hover {
+  color: #fff;
+}
+button::after {
+  content: "";
+  background: #1BA1E2;
+  position: absolute;
+  z-index: -1;
+  padding: 0.85em 0.75em;
+  display: block;
+}
+button.slider:hover::after {
+  transform: scale(1, 1);
+  transition: all 0.45s ease-out;
+}
+button.slider::after {
+  left: -150%;
+  right: -150%;
+  top: -150%;
+  bottom: -150%;
+  line-height: 8.34em;
+  transform: scale(0, 0);
+  transition: all 0.45s ease;
 }
 
-button:hover{
-  background-color: orange;
+button.slider:active {
+  border-color: white;
 }
 
 /* --------------------- SOCKETS ------------------------ */
@@ -160,6 +186,20 @@ select{
 }
 
 /* --------------------- NODES ------------------------ */
+
+
+.context-menu {
+  border-color: red;
+  border-width: 3px;
+}
+
+.subitems {
+  /* Adjustable Height */
+  height: 200px;
+  overflow-y: scroll;
+  overflow-x:hidden;
+}
+
 
 .node {
   background-color: #444 !important;

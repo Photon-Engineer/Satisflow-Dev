@@ -3,7 +3,7 @@ import ReactRenderPlugin from "rete-react-render-plugin";
 import ConnectionPlugin from "rete-connection-plugin";
 import DockPlugin from "rete-dock-plugin"
 import AreaPlugin from "rete-area-plugin";
-import ContextMenuPlugin, { Menu, Item, Search } from 'rete-context-menu-plugin';
+import ContextMenuPlugin, { Menu, Item, Search} from 'rete-context-menu-plugin';
 import Rete from "rete";
 // React
 import React, { Component } from "react";
@@ -18,6 +18,8 @@ class Editor extends Component {
         this.editor = null;
         this.engine = null;
     }
+    
+    
     createEditor = async (container) => {
         this.engine = new Rete.Engine("satisflow@0.5.0");
         this.editor = new Rete.NodeEditor("satisflow@0.5.0", container);
@@ -50,12 +52,14 @@ class Editor extends Component {
                 await this.engine.process(this.editor.toJSON());
             }
         );
+
+        
         
         this.editor.view.resize();
         this.editor.trigger("process");
         AreaPlugin.zoomAt(this.editor, this.editor.nodes);
 
-        await ReactDOM.render(<SaveLoadComponent mainEditor={this} />,document.querySelector('.right-menu'));
+        ReactDOM.render(<SaveLoadComponent mainEditor={this} />,document.querySelector('.right-menu'));
     }
 
     render() {
@@ -138,15 +142,15 @@ class SaveLoadComponent extends React.Component {
         return (
             <div className="right-menu">
                 <div>
-                    <button onClick={this.handleStore}>Export Data</button>
+                    <button className = "slider" onClick={this.handleStore}>Export Data</button>
                 </div>
                 <textarea rows="4" columns="50" style={{ width: "150px", height: "600px" }} value={this.state.currentEditorState} onChange={this.handleChange}/>
                 <div>
                     <p>
-                    <button onClick={this.handleLoad}>Restore Data</button>
+                    <button className = "slider" onClick={this.handleLoad}>Restore Data</button>
                     </p>
                     <p>
-                    <button onClick={this.handleClear}>Clear Editor</button>
+                    <button className = "slider" onClick={this.handleClear}>Clear Editor</button>
                     </p>
                 </div>
             </div>
