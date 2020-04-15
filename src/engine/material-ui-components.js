@@ -23,7 +23,6 @@ export const ItemSelect = withStyles((theme) => ({
         borderRadius: "6px",
         transition: "all 0.3s ease",
         '&:focus': {
-            color:"blue",
             backgroundColor:"white",
             borderRadius: "6px",
             margin: "0px",

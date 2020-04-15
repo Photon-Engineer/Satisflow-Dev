@@ -27,6 +27,7 @@
 }
 .topbar {
     height: 5%;
+    min-height: 45px;
     background-color: #1BA1E2;
     position: relative;
     z-index: 2;
@@ -68,9 +69,13 @@
 }
 
 .leftbar {
-  display: inline-block;
+  min-width: 230px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
   overflow-x: hidden;
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 
 .right-menu {
@@ -101,50 +106,35 @@ textarea{
   margin-right: auto;
 }
 
-
-/*
-button {
-  font-size: 1.2em;
-  background: #fff;
-  color: #1581B7;
-  border: 0.1rem solid #1BA1E2;
-  padding: 0.2em;
-  margin: 4px;
-  width: 90%;
-  border-radius: 12px;
-  position: relative;
-  z-index: 1;
-  overflow: hidden;
-}
-button:hover {
-  color: #fff;
-}
-button::after {
-  content: "";
-  background: #1BA1E2;
-  position: absolute;
-  z-index: -1;
-  padding: 0.85em 0.75em;
-  display: block;
-}
-button.slider:hover::after {
-  transform: scale(1, 1);
-  transition: all 0.45s ease-out;
-}
-button.slider::after {
-  left: -150%;
-  right: -150%;
-  top: -150%;
-  bottom: -150%;
-  line-height: 8.34em;
-  transform: scale(0, 0);
-  transition: all 0.45s ease;
+.dock-item {
+  display: inline-block;
+  vertical-align: top;
+  width: 80%;
+  height: 50px;
+  background-color: #e3f2fd;
+  border-radius: 5px;
+  font-size: 18px;
+  font-weight: bold;
+  padding: 3px;
+  text-transform: uppercase;
+  text-align: left;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  box-shadow: 0px 3px 3px #444;
+  margin: 5px;
+  transition: all 0.3s ease;
 }
 
-button.slider:active {
-  border-color: white;
+.dock-item:hover {
+  background-color: #2196f3;
+  box-shadow: 0px 6px 3px #444;
 }
-*/
+.dock-message {
+  color: white;
+  text-align: center;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 90%;
+}
+
 /* --------------------- SOCKETS ------------------------ */
 
 input[type=number]{
@@ -190,20 +180,6 @@ select{
 
 /* --------------------- NODES ------------------------ */
 
-
-.context-menu {
-  border-color: red;
-  border-width: 3px;
-}
-
-.subitems {
-  /* Adjustable Height */
-  height: 200px;
-  overflow-y: scroll;
-  overflow-x:hidden;
-}
-
-
 .node {
   background-color: #444 !important;
   border-color: black !important;
@@ -214,25 +190,6 @@ select{
   background-image: -o-linear-gradient(top, transparent, #A6A6A6) !important;
   background-image: linear-gradient(to bottom, transparent, #A6A6A6) !important;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-
-.dock {
-  height: 100px;
-  overflow-x: auto;
-  overflow-y: hidden;
-  white-space: nowrap;
-}
-
-.dock-item {
-  display: inline-block;
-  vertical-align: top;
-  transform: scale(0.8);
-  transform-origin: 50% 0;
-}
-
-.container {
-  flex: 1;
-  overflow: hidden;
 }
 
 .dropdown-dark {

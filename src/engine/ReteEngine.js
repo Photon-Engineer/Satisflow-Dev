@@ -1,7 +1,7 @@
 // Rete and Plugins
 import ReactRenderPlugin from "rete-react-render-plugin";
 import ConnectionPlugin from "rete-connection-plugin";
-import DockPlugin from "rete-dock-plugin"
+//import DockPlugin from "rete-dock-plugin"
 import AreaPlugin from "rete-area-plugin";
 import ContextMenuPlugin from 'rete-context-menu-plugin';
 import Rete from "rete";
@@ -33,11 +33,14 @@ class Editor extends Component {
             searchKeep: title => true, // leave item when searching, optional. For example, title => ['Refresh'].includes(title)
             delay: 100,
         });
+        /*
         this.editor.use(DockPlugin,{
             container: document.querySelector('.leftbar'),
             itemClass: 'dock-item',
             plugins: [ReactRenderPlugin]
         });
+        */
+       //this.editor.use(DockPlugin);
 
         container.classList.add('custom-node-editor');
         const background = document.createElement('div');
@@ -62,6 +65,8 @@ class Editor extends Component {
             }
         );
 
+        addDropStrategy(this.editor);
+
         this.editor.view.resize();
         this.editor.trigger("process");
         const {area} = this.editor.view;
@@ -80,12 +85,42 @@ class Editor extends Component {
 
 export default Editor;
 
+
+
+function addDropStrategy(editor){
+    editor.view.container.addEventListener('dragover', e => e.preventDefault())
+    editor.view.container.addEventListener('drop', async e => {
+        if(!e.dataTransfer) return;
+
+        const name = e.dataTransfer.getData('componentName');
+        const component = editor.components.get(name)
+
+        if(!component) throw new Error(`Component ${name} not found`)
+
+        // force update the mouse position
+        editor.view.area.pointermove(e);
+        const node = await createNode(component, editor.view.area.mouse);
+
+        editor.addNode(node)
+    })
+}
+
+async function createNode(component, position) {
+    let node = await component.createNode({});
+
+    node.position = [position.x, position.y];
+
+    return node;
+}
+
+
+
 class SaveLoadComponent extends React.Component {
 
     constructor(props) {
         super(props);
         this.mainEditor = this.props.mainEditor;
-        this.state = { currentEditorState: "Click the Get JSON button to retrieve the current state of the editor." };
+        this.state = { currentEditorState: "Click the Export Data button to retrieve text that is representative of the current layout. You can reload that text later as a way of saving and loading your work." };
         this.handleLoad = this.handleLoad.bind(this);
         this.handleStore = this.handleStore.bind(this);
         this.handleChange = this.handleChange.bind(this);

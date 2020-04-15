@@ -13,7 +13,10 @@ import { Refinery } from '../factorynodes/Refinery'
 import { Overclock } from '../factorynodes/Overclock'
 // Test Components Import
 import { Starter } from '../nodes/StarterNode'
-
+// Other imports
+import { ComponentDock } from './dock'
+import React from 'react'
+import ReactDOM from 'react-dom'
 // END imports
 
 export async function initialize(engine, editor) {
@@ -25,7 +28,10 @@ export async function initialize(engine, editor) {
         return null;
     });
 
-    
+    const dock = <ComponentDock componentArray={components} />;
+    ReactDOM.render(dock,document.querySelector('.leftbar'));
+
+
     fetch('resources/starting_view.txt')
         .then((r) => r.json())
         .then((data) =>{
