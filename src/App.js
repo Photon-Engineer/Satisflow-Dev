@@ -8,7 +8,7 @@ function App() {
     <div className="wrapper">
       <div className="topbar">
         <div className="logo">SATISFLOW</div>
-        <div className="tip">Tip: Right click a node to delete, or clone it to make a copy. Right click the in the editor to quick-select a node.</div>
+        <div className="tip">Tip: Right click a node to delete, or clone it to make a copy. Right click the in the editor to quick-create a node.</div>
       </div>
       <div className="rows">
         <div className="column sidebar leftbar"></div>

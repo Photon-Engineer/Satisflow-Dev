@@ -3,7 +3,7 @@ import ReactRenderPlugin from "rete-react-render-plugin";
 import ConnectionPlugin from "rete-connection-plugin";
 import DockPlugin from "rete-dock-plugin"
 import AreaPlugin from "rete-area-plugin";
-import ContextMenuPlugin, { Menu, Item, Search} from 'rete-context-menu-plugin';
+import ContextMenuPlugin from 'rete-context-menu-plugin';
 import Rete from "rete";
 // React
 import React, { Component } from "react";
@@ -11,6 +11,9 @@ import ReactDOM from 'react-dom';
 // Custom Components
 import { initialize } from './ComponentStage';
 import '../backgroundStyle.sass';
+// Material UI
+import {BlueButton} from './material-ui-components'
+
 
 class Editor extends Component {
     constructor(props){
@@ -47,17 +50,22 @@ class Editor extends Component {
 
         this.editor.on(
             "process nodecreated noderemoved connectioncreated connectionremoved",
-            async () => {
+            async (output) => {
                 await this.engine.abort();
                 await this.engine.process(this.editor.toJSON());
+                if(output.output!=undefined){
+                    setInterval(() => {
+                        let node = output.output.node;
+                        this.editor.view.updateConnections({ node });
+                    }, 1000);
+                }
             }
         );
 
-        
-        
         this.editor.view.resize();
         this.editor.trigger("process");
-        AreaPlugin.zoomAt(this.editor, this.editor.nodes);
+        const {area} = this.editor.view;
+        area.zoom(0.7,500,400)
 
         ReactDOM.render(<SaveLoadComponent mainEditor={this} />,document.querySelector('.right-menu'));
     }
@@ -106,6 +114,7 @@ class SaveLoadComponent extends React.Component {
                 this.mainEditor.editor.fromJSON(json);
             }
         }
+
     }
   
     handleChange(event) {
@@ -139,20 +148,14 @@ class SaveLoadComponent extends React.Component {
     }
 
     render() {
+        
         return (
+            //<button className = "slider" onClick={this.handleStore}>Export Data</button>
             <div className="right-menu">
-                <div>
-                    <button className = "slider" onClick={this.handleStore}>Export Data</button>
-                </div>
+                <BlueButton variant="contained" color="primary" onClick={this.handleStore}>Export Data</BlueButton>
                 <textarea rows="4" columns="50" style={{ width: "150px", height: "600px" }} value={this.state.currentEditorState} onChange={this.handleChange}/>
-                <div>
-                    <p>
-                    <button className = "slider" onClick={this.handleLoad}>Restore Data</button>
-                    </p>
-                    <p>
-                    <button className = "slider" onClick={this.handleClear}>Clear Editor</button>
-                    </p>
-                </div>
+                <BlueButton variant="contained" color="primary" onClick={this.handleLoad}>Restore Data</BlueButton>
+                <BlueButton variant="contained" color="primary" onClick={this.handleClear}>Clear Editor</BlueButton>
             </div>
         )
     }
