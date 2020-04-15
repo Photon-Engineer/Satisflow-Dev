@@ -7,12 +7,17 @@ import ContextMenuPlugin, { Menu, Item, Search } from 'rete-context-menu-plugin'
 import Rete from "rete";
 // React
 import React, { Component } from "react";
+import ReactDOM from 'react-dom';
 // Custom Components
 import { initialize } from './ComponentStage';
 import '../backgroundStyle.sass';
-//import { } from '../nodes/ReactNodeTest'
 
 class Editor extends Component {
+    constructor(props){
+        super(props);
+        this.editor = null;
+        this.engine = null;
+    }
     createEditor = async (container) => {
         this.engine = new Rete.Engine("satisflow@0.5.0");
         this.editor = new Rete.NodeEditor("satisflow@0.5.0", container);
@@ -24,7 +29,7 @@ class Editor extends Component {
             delay: 100,
         });
         this.editor.use(DockPlugin,{
-            container: document.querySelector('.left-sidebar'),
+            container: document.querySelector('.leftbar'),
             itemClass: 'dock-item',
             plugins: [ReactRenderPlugin]
         });
@@ -49,22 +54,19 @@ class Editor extends Component {
         this.editor.view.resize();
         this.editor.trigger("process");
         AreaPlugin.zoomAt(this.editor, this.editor.nodes);
-    }
 
+        await ReactDOM.render(<SaveLoadComponent mainEditor={this} />,document.querySelector('.right-menu'));
+    }
 
     render() {
         return (
-            <div className="wrapper">
-                <div className="header">Satisflow v0.7.3</div>
-                <div className="left-sidebar"></div>
-                <div className="content" ref={ref => this.createEditor(ref)} />
-                <div className="right-sidebar"><SaveLoadComponent mainEditor={this} /></div>
-                <div className="footer">Note: Only tested on Chrome browser version 80.0... as of 3/30/2020.</div>
-            </div>
+           <div ref={ref => this.createEditor(ref)} />
         );
     }
 }
 
+
+export default Editor;
 
 class SaveLoadComponent extends React.Component {
 
@@ -79,14 +81,14 @@ class SaveLoadComponent extends React.Component {
         this.handleClear = this.handleClear.bind(this);
         this.abort = this.abort.bind(this);
     }
-
+  
     handleStore() {
         //const YAML = require('yamljs');
         //const text = YAML.stringify(this.mainEditor.editor.toJSON());
         const text = JSON.stringify(this.mainEditor.editor.toJSON());
         this.setState({ currentEditorState: text })
     }
-
+  
     handleLoad() {
         var json = "";
         //const YAML = require('yamljs');
@@ -101,20 +103,20 @@ class SaveLoadComponent extends React.Component {
             }
         }
     }
-
+  
     handleChange(event) {
         this.setState({ currentEditorState: event.target.value })
     }
-
+  
     async applyToEditor(thisobj, json) {
         await thisobj.mainEditor.engine.abort();
         await thisobj.mainEditor.engine.process(json);
     }
-
+  
     async abort(){
         await this.mainEditor.engine.abort();
     }
-
+  
     handleRefresh(){
         //this.mainEditor.editor.fromJSON(this.mainEditor.editor.toJSON());
         var thisJson = this.mainEditor.editor.toJSON();
@@ -124,7 +126,7 @@ class SaveLoadComponent extends React.Component {
         alert('Refreshing editor.')
         this.mainEditor.editor.fromJSON(JSON.parse(storedJson));
     }
-
+  
     handleClear(){
         this.abort();
         var thisJson = this.mainEditor.editor.toJSON();
@@ -134,30 +136,20 @@ class SaveLoadComponent extends React.Component {
 
     render() {
         return (
-            <div style={{padding:"10px"}}>
-                <div style={{padding:"10px"}}>
-                    <button onClick={this.handleStore}>Get JSON</button>
+            <div className="right-menu">
+                <div>
+                    <button onClick={this.handleStore}>Export Data</button>
                 </div>
-                <textarea rows="4" columns="50" style={{ width: "150px", height: "600px" }} value={this.state.currentEditorState} onChange={this.handleChange} />
-                <div style={{padding:"10px"}}>
-                    <button onClick={this.handleLoad}>Load JSON</button>
-                    <button onClick={this.handleRefresh}>Refresh Editor</button>
+                <textarea rows="4" columns="50" style={{ width: "150px", height: "600px" }} value={this.state.currentEditorState} onChange={this.handleChange}/>
+                <div>
+                    <p>
+                    <button onClick={this.handleLoad}>Restore Data</button>
+                    </p>
+                    <p>
                     <button onClick={this.handleClear}>Clear Editor</button>
+                    </p>
                 </div>
             </div>
         )
     }
-}
-
-
-class Dock extends React.Component {
-    constructor(props){
-        super(props);
-        this.mainEditor = this.props.editor;
-    }
-
-    
-}
-
-
-export default Editor;
+  }

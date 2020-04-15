@@ -63,7 +63,7 @@ class DynamicObjectSelect extends React.Component {
 
         return (
             //name="customSearch" className="custom-search-select"
-            <select className="dropdown-dark" onChange={this.handleChange} value={this.state.value} onPointerMove={e => e.stopPropagation()} onPointerMoveCapture={e => e.stopPropagation()}>
+            <select className="dropdown-dark" onChange={this.handleChange} value={this.state.value} onPointerMove={e=>e.stopPropagation()}>
                 {options}
             </select>
         )

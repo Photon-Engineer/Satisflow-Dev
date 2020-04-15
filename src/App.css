@@ -1,46 +1,122 @@
-.App {
-  text-align: center;
-  
+
+/* --------------------- MAIN LAYOUT ------------------------ */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 40vmin;
-  pointer-events: none;
+.wrapper{
+    width: 100%;
+    height: 100vh;
+    min-height: 100vh;
+}
+.rows{
+    height: 92%;
+    width: 100%;
+}
+.rows::after {
+        display: table;
+        clear: both;
+        content: "";
+}
+.column{
+    float: left;
+    padding: 10px;
+}
+.topbar {
+    height: 5%;
+    background-color: #1BA1E2;
+    position: relative;
+    z-index: 2;
+    box-shadow: 5px 0px 5px #444;
+}
+.logo {
+    width: 200px;
+    height: 80%;
+    background-color: white;
+    border-radius: 5px;
+    position: absolute;
+    left: 20px;
+    top: 10%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 30px;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+}
+.tip {
+    width: 400px;
+    height: 80%;
+    background-color: white;
+    border-radius: 5px;
+    position: absolute;
+    right: 20px;
+    top: 10%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 90%;
+    padding: 5px;
+}
+.column.sidebar {
+    height: 100%;
+    width: 12%;
+    background-color: #1581B7;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.leftbar {
+  display: inline-block;
+  overflow-x: hidden;
+  overflow-y: scroll;
+}
+
+.right-menu {
+  padding: 10px;
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  text-align: center;
 }
 
-.App-link {
-  color: #61dafb;
+.column.canvas{
+    width: 76%;
+    height: 100%;
+    background-color: #444;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.bottombar {
+    height: 3%;
+    text-align: center;
+    background-color: #1BA1E2;
 }
 
-.connection {
-  left: 0;
+textarea{
+  border-radius: 8px;
+  padding: 6px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
-/*
-.node {
-  width:  300px;
+button{
+  margin: 5px;
+  padding: 6px;
+  border-radius: 12px;
+  width: 100%;
+  background-color: aliceblue;
+  font-size: 110%;
+  transition: all 0.3s;
+  position: relative;
+  z-index: 1;
 }
-*/
+
+button:hover{
+  background-color: orange;
+}
+
+/* --------------------- SOCKETS ------------------------ */
 
 input[type=number]{
   width: 110px;
@@ -82,9 +158,8 @@ select{
   border-width: 0px;
   border-radius: 10px 10px 2px 2px;
 }
-.socket .used {
-  background-color: darkgray;
-}
+
+/* --------------------- NODES ------------------------ */
 
 .node {
   background-color: #444 !important;
@@ -95,6 +170,7 @@ select{
   background-image: -moz-linear-gradient(top, transparent, #A6A6A6) !important;
   background-image: -o-linear-gradient(top, transparent, #A6A6A6) !important;
   background-image: linear-gradient(to bottom, transparent, #A6A6A6) !important;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .dock {
@@ -115,57 +191,6 @@ select{
   flex: 1;
   overflow: hidden;
 }
-
-
-.header {
-  grid-area: header;
-  background-color: gray;
-}
-.footer {
-  grid-area: footer;
-  background-color: gray;
-  height: 40px;
-}
-
-.left-sidebar {
-  grid-area: lsidebar;
-  background: repeating-linear-gradient(
-    45deg,
-    gray,
-    gray 10px,
-    darkgray 10px,
-    darkgray 20px
-  );
-  overflow-y: scroll;
-  overflow-x: hidden;
-}
-.right-sidebar {
-  grid-area: rsidebar;
-  background: repeating-linear-gradient(
-    45deg,
-    gray,
-    gray 10px,
-    darkgray 10px,
-    darkgray 20px
-  );
-}
-.content {
-  grid-area: content;
-  position: relative;
-}
-
-.wrapper {
-  width:78vw;
-  height:92vh;
-  display: grid;
-  grid-template-columns: 200px auto 200px;
-  grid-template-rows: auto auto auto;
-  grid-template-areas:
-    'header header header'
-    'lsidebar content rsidebar'
-    'footer footer footer';
-}
-
 
 .dropdown-dark {
   background: #444;
@@ -217,6 +242,7 @@ select{
   background-image: -o-linear-gradient(top, transparent, rgba(068, 068, 068, 0.9));
   background-image: linear-gradient(to bottom, transparent, rgba(068, 068, 068, 0.9));
   border-radius: 6px;
+  text-align: center;
 }
 .title-extractor {
   font-size: 20px;

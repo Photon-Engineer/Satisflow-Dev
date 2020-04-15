@@ -1,8 +1,8 @@
 
 
-Hello, thank you for your visiting this repo!
+Hello and thank you for your visiting this repo!
 
-This goal of this project is to provide a helpful tool for the game Satisfactory. The tool is a flow-based calculator where you can add nodes and make connections for the purpose of planning out each part. This is tool is designed from the ground up with interactivity in mind. It allows you to save the output as text to be able to reload previous work. The tool makes use of [Rete JS](https://github.com/retejs/rete) and several of its plugins to accomplish this. This project would not have been kicked off without their initial work.
+This goal of this project is to provide a helpful tool for the game [Satisfactory](https://www.satisfactorygame.com/). The tool is a flow-based calculator where you can add nodes and make connections for the purpose of planning out each part. This is tool is designed from the ground up with interactivity in mind. It allows you to save the output as text to be able to reload previous work. The tool makes use of [Rete JS](https://github.com/retejs/rete) and several of its plugins to accomplish this. This project would not have been kicked off without their initial work.
 
 ![Satisflow](/public/resources/satisflow_demo_image.PNG)
 

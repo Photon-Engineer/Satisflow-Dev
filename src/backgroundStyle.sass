@@ -20,6 +20,11 @@ $th: 0.008
   @return line($dir, 0.5, $th * 2, $grid-color), line($dir, 0.25, $th, $grid-color), line($dir, 0.75, $th, $grid-color), line($dir, 1, $th * 2, $grid-color)
 
 .custom-node-editor
+  position: relative
+  left: -10px
+  right: 0px
+  top: -10px
+  bottom: 0px
   .background
     z-index: -5
     background-size: $grid-size $grid-size
@@ -35,7 +40,7 @@ $th: 0.008
     animation: dash 6s infinite normal linear;
     stroke-width: 4px
     pointer-events: none
-    &.active
+    &::hover
       stroke: #21b635  
 
 
