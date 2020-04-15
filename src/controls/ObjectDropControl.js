@@ -29,7 +29,6 @@ export class ObjectDropControl extends Rete.Control {
             items: items,
             onChange: (val) => {
                 this.setValue(val);
-                this.emitter.trigger('resetconnection');
                 this.emitter.trigger("process");
             }
         };

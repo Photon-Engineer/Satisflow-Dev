@@ -15,7 +15,9 @@ function App() {
         <div className="column canvas">{nodeEditor}</div>
         <div className="column sidebar right-menu"></div>
       </div>
-      <div className="bottombar">Note: Only tested on Chrome browser version 80.0... as of 3/30/2020.</div>
+      <div className="bottombar">
+        <p>&copy; Copyright 2020 by Joseph Cosentino&emsp;<a href="https://github.com/Photon-Engineer/Satisflow">Github Project and Documentation</a></p>
+        </div>
     </div>
   );
 }
