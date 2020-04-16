@@ -186,7 +186,7 @@ class SaveLoadComponent extends React.Component {
         
         return (
             //<button className = "slider" onClick={this.handleStore}>Export Data</button>
-            <div className="right-menu">
+            <div>
                 <BlueButton variant="contained" color="primary" onClick={this.handleStore}>Export Data</BlueButton>
                 <textarea rows="4" columns="50" style={{ width: "150px", height: "600px" }} value={this.state.currentEditorState} onChange={this.handleChange}/>
                 <BlueButton variant="contained" color="primary" onClick={this.handleLoad}>Restore Data</BlueButton>
