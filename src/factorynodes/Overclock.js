@@ -19,8 +19,8 @@ export class Overclock extends Rete.Component {
         return node;
     }
 
-    worker(node, outputs) {
-        outputs['o1'] = node.data.ovc/100;
+    worker(node, inputs, outputs) {
+        outputs['o1'] = [node.data.ovc/100];
     }
 }
 

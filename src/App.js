@@ -1,6 +1,7 @@
 import React from 'react';
 import './App.css';
 import NodeEditor from './engine/ReteEngine';
+import {version} from './version'
 
 function App() {
   let nodeEditor = <NodeEditor />;
@@ -16,7 +17,7 @@ function App() {
         <div className="sidebar right-menu"></div>
       </div>
       <div className="bottombar">
-        <p>&copy; Copyright 2020 by Joseph Cosentino&emsp;<a href="https://github.com/Photon-Engineer/Satisflow">Github Project and Documentation</a></p>
+        <p>&copy; Copyright 2020 by Joseph Cosentino&emsp;<a href="https://github.com/Photon-Engineer/Satisflow">Github Project and Documentation</a>&nbsp;Version {version}</p>
         </div>
     </div>
   );

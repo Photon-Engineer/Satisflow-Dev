@@ -170,6 +170,7 @@ class Recipe {
     }
 
     calculate(inputs, multiplier) {
+        //console.log(multiplier)
         // inputs should be an array of [item,ppm] arrays for each input
         const RIN = this.inputs.map(inp => inp[0].name);
         const RRP = this.inputs.map(inp => inp[1] * multiplier);

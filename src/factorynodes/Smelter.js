@@ -25,7 +25,7 @@ export class Smelter extends Rete.Component {
 
     worker(node, inputs, outputs) {
         var multi = inputs['ovc'].length ? inputs['ovc'] : 1;
-
+        
         const in1 = inputs['i1'].length ? inputs['i1'][0] : null;
         var calcObject = node.data.recipe.calculate([in1],multi);
         updateInputLabel(node,this.editor,'i1',calcObject,0);
