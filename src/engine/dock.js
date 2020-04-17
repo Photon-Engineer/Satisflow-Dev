@@ -13,7 +13,7 @@ export class ComponentDock extends React.Component {
 
     render() {
         let componentPlaceholders = this.componentArray.map(comp =>
-        <div className="dock-item" draggable={true} onDragStart={(e)=>this.handleDrag(e,comp.name)}>{comp.name}</div>
+        <div className="dock-item" draggable={true} key={comp.name} onDragStart={(e)=>this.handleDrag(e,comp.name)}>{comp.name}</div>
         )
         return (
         <div>

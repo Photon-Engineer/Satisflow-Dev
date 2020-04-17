@@ -1,4 +1,3 @@
-import React from 'react'
 //Rete
 import Rete from "rete";
 import {updateInputLabel, updateOutputLabel} from '../engine/helpers'

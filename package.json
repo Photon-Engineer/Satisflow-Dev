@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@material-ui/core": "^4.9.10",
+    "lz-string": "^1.4.4",
     "node-sass": "^4.13.1",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
@@ -13,7 +14,6 @@
     "rete-area-plugin": "0.2.1",
     "rete-connection-plugin": "0.7.2",
     "rete-context-menu-plugin": "^0.5.2",
-    "rete-dock-plugin": "^0.2.1",
     "rete-react-render-plugin": "0.2.0",
     "yamljs": "^0.3.0"
   },

@@ -1,8 +1,8 @@
 import React from 'react'
 // Rete
 import Rete from "rete";
-import { setOutputMessage, updateOutputLabel } from '../engine/helpers'
-import { Node, Socket, Control } from 'rete-react-render-plugin';
+import { updateOutputLabel } from '../engine/helpers'
+import { Node, Socket } from 'rete-react-render-plugin';
 //Sockets and Controls
 import { anySocket } from '../sockets/AllSockets'
 
@@ -65,8 +65,8 @@ class MergerNode extends Node {
     nodeLabel = "Mg";
     fontStyle = {color:"white"};
     render() {
-        const { node, bindSocket, bindControl } = this.props;
-        const { outputs, controls, inputs, selected } = this.state;
+        const { node, bindSocket } = this.props;
+        const { outputs, inputs, selected } = this.state;
         return (
             <div className={`node ${selected}`}>
                 <div className="two-letter-label">&nbsp;{this.nodeLabel}</div>

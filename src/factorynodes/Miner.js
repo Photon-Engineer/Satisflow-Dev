@@ -5,9 +5,10 @@ import { setOutputMessage } from '../engine/helpers'
 import { Node, Socket, Control } from 'rete-react-render-plugin';
 //Sockets and Controls
 import { itemSocket, numSocket } from '../sockets/AllSockets'
-import { DropControl } from '../controls/DropControl'
 import { ObjectDropControl } from '../controls/ObjectDropControl'
+import { ButtonBarControl } from '../controls/ButtonBarControl'
 import { getItemsByCat, CATS } from '../data/Items'
+
 
 
 export class Miner extends Rete.Component {
@@ -23,8 +24,9 @@ export class Miner extends Rete.Component {
         const ores = getItemsByCat(CATS.ORE);
         node.addOutput(out);
         node.addControl(new ObjectDropControl(this.editor, "item", node, false, "Item", ores));
-        node.addControl(new DropControl(this.editor, "pty", node, false,  "Purity", this.purity));
-        node.addControl(new DropControl(this.editor, "min", node, false, "Level", this.minerLevel));
+        //node.addControl(new DropControl(this.editor, "pty", node, false,  "Purity", this.purity));
+        node.addControl(new ButtonBarControl(this.editor,"pty",node,false,this.purity));
+        node.addControl(new ButtonBarControl(this.editor, "min", node, false, this.minerLevel,"0em 1.2em"));
         node.addInput(new Rete.Input("i1","Overclock",numSocket,false));
         return node;
     }

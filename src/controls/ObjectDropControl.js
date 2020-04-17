@@ -60,7 +60,7 @@ class DynamicObjectSelect extends React.Component {
         let arrayOfData = this.props.listItems;
         let options = arrayOfData.map((data) =>
             //<option value={data.name} key={data.name}>{data.name}</option>
-            <MenuItem value={data.name}>{data.name}</MenuItem>
+            <MenuItem key={data.name} value={data.name}>{data.name}</MenuItem>
         );
         return (
             //name="customSearch" className="custom-search-select"

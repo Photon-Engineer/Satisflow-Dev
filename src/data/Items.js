@@ -159,7 +159,7 @@ class Recipe {
                 finished = true;
             }
             i++;
-            if(i==this.inputs.length){
+            if(i===this.inputs.length){
                 finished=true;
             }
         } while (!finished);

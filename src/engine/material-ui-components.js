@@ -1,7 +1,6 @@
 import { withStyles } from '@material-ui/core/styles';
 import blue from '@material-ui/core/colors/blue'
 import Button from '@material-ui/core/Button'
-import ButtonBar from '@material-ui/core/ButtonGroup'
 import Select from '@material-ui/core/Select'
 
 export const BlueButton = withStyles((theme) => ({

@@ -19,7 +19,7 @@ export class Overclock extends Rete.Component {
         return node;
     }
 
-    worker(node, inputs, outputs) {
+    worker(node, outputs) {
         outputs['o1'] = node.data.ovc/100;
     }
 }
@@ -29,7 +29,7 @@ class OverclockNode extends Node {
     fontAndPadding = {...this.fontStyle, padding:"0px"};
     render() {
         const { node, bindSocket, bindControl } = this.props;
-        const { outputs, controls, inputs, selected } = this.state;
+        const { outputs, controls, selected } = this.state;
 
         return (
             <div className={`node ${selected}`}>

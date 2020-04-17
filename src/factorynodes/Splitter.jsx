@@ -1,8 +1,8 @@
 import React from 'react'
 //Rete
 import Rete from "rete";
-import { setOutputMessage, updateOutputLabel } from '../engine/helpers'
-import { Node, Socket, Control } from 'rete-react-render-plugin';
+import { updateOutputLabel } from '../engine/helpers'
+import { Node, Socket } from 'rete-react-render-plugin';
 //Sockets and Controls
 import { anySocket } from '../sockets/AllSockets'
 
@@ -58,8 +58,8 @@ class SplitterNode extends Node {
     nodeTitleClass = "title-logistics";
     nodeLabel = "Sp";
     render() {
-        const { node, bindSocket, bindControl } = this.props;
-        const { outputs, controls, inputs, selected } = this.state;
+        const { node, bindSocket } = this.props;
+        const { outputs, inputs, selected } = this.state;
         return (
             <div className={`node ${selected}`} style={{ background: "lightgray", borderColor: "orange", opacity: "0.8",height:"160px"}}>
                 <div className="two-letter-label">&nbsp;{this.nodeLabel}</div>

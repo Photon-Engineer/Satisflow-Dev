@@ -56,7 +56,7 @@ class Editor extends Component {
             async (output) => {
                 await this.engine.abort();
                 await this.engine.process(this.editor.toJSON());
-                if(output.output!=undefined){
+                if(output.output!==undefined){
                     setInterval(() => {
                         let node = output.output.node;
                         this.editor.view.updateConnections({ node });
@@ -113,8 +113,6 @@ async function createNode(component, position) {
     return node;
 }
 
-
-
 class SaveLoadComponent extends React.Component {
 
     constructor(props) {
@@ -130,18 +128,20 @@ class SaveLoadComponent extends React.Component {
     }
   
     handleStore() {
-        //const YAML = require('yamljs');
-        //const text = YAML.stringify(this.mainEditor.editor.toJSON());
-        const text = JSON.stringify(this.mainEditor.editor.toJSON());
-        this.setState({ currentEditorState: text })
+        var lz = require('lz-string');
+        //const text = JSON.stringify(this.mainEditor.editor.toJSON());
+        //const text = toHexString(lz.compressToUint8Array(JSON.stringify(this.mainEditor.editor.toJSON())));
+        const text = lz.compressToEncodedURIComponent(JSON.stringify(this.mainEditor.editor.toJSON()));
+        
+        this.setState({ currentEditorState: text });
     }
   
     handleLoad() {
         var json = "";
-        //const YAML = require('yamljs');
+        var lz = require('lz-string');
+        var text = lz.decompressFromEncodedURIComponent(this.state.currentEditorState);
         try {
-            //json = YAML.parse(this.state.currentEditorState);
-            json = JSON.parse(this.state.currentEditorState);
+            json = JSON.parse(text);
         } catch (err) {
             alert(err.message);
         } finally {

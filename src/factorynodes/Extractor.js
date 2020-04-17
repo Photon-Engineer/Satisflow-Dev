@@ -5,7 +5,7 @@ import { setOutputMessage } from '../engine/helpers'
 import { Node, Socket, Control } from 'rete-react-render-plugin';
 //Sockets and Controls
 import {numSocket, pipeSocket } from '../sockets/AllSockets'
-import { DropControl } from '../controls/DropControl'
+import {ButtonBarControl } from '../controls/ButtonBarControl'
 import { ObjectDropControl } from '../controls/ObjectDropControl'
 import { ITEMS } from '../data/Items'
 
@@ -21,7 +21,7 @@ export class Extractor extends Rete.Component {
         const out = new Rete.Output("o1", "Output", pipeSocket, false);
         node.addOutput(out);
         node.addControl(new ObjectDropControl(this.editor, "item", node, false, "Fluid", [ITEMS.Water, ITEMS.CrudeOil]));
-        node.addControl(new DropControl(this.editor, "pty", node, false,  "Purity", this.purity));
+        node.addControl(new ButtonBarControl(this.editor,"pty",node,false,this.purity));
         node.addInput(new Rete.Input("i1","Overclock",numSocket,false));
         return node;
     }
