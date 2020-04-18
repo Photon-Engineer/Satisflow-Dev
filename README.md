@@ -11,7 +11,7 @@ Simple tutorial:
 
 ## Adding Factory buildings and connecting them:
 ![Add and connect nodes](/public/resources/AddingNodes.gif)
-Adding nodes as as simple as dragging the desired node into the editor from the options on the left side. All non-power related buildings are available, though those may be added in the future. Connect nodes by clicking on an output port, the the mouse pointer down and drag to an input port. If the correct item is transmited, you will see the labels update accordingly, indicating the item amounts coming in to the new node. You can also add a building by right-clicking an empty spot in the editor. 
+Adding nodes as as simple as dragging the desired node into the editor from the options on the left side. All non-power related buildings are available, though those may be added in the future. Connect nodes by clicking on an output port, hold the mouse pointer down and drag to an input port. If the correct item is transmited, you will see the labels update accordingly, indicating the item amounts coming in to the new node. You can also add a building by right-clicking an empty spot in the editor. 
 
 ## Selecting a Recipe
 ![Changing Recipes](/public/resources/ChooseRecipe.gif)
@@ -36,6 +36,12 @@ Sometimes the editor will hang-up and you will no longer be able to pan or zoom.
 Not all recipes have been tested. 
 
 If you encounter any other issues, please add it to the issues on this repository. 
+
+## Donations
+
+If you'd like to support me and this project, please use the donation button below:
+
+[![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=2DS93F4W6JQKQ&currency_code=USD&source=url)
 
 ---
 

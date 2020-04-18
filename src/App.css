@@ -100,6 +100,7 @@
     height: 20px;
     text-align: center;
     background-color: #1BA1E2;
+    vertical-align: middle;
 }
 
 textarea{
@@ -197,41 +198,22 @@ select{
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-.dropdown-dark {
-  background: #444;
-  border-color: #bbb;
-  background-image: -webkit-linear-gradient(top, transparent, rgba(0, 0, 0, 0.4));
-  background-image: -moz-linear-gradient(top, transparent, rgba(0, 0, 0, 0.4));
-  background-image: -o-linear-gradient(top, transparent, rgba(0, 0, 0, 0.4));
-  background-image: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.4));
-  -webkit-box-shadow: inset 0 1px rgba(255, 255, 255, 0.1), 0 1px 1px rgba(0, 0, 0, 0.2);
-  box-shadow: inset 0 1px rgba(255, 255, 255, 0.1), 0 1px 1px rgba(0, 0, 0, 0.2);
-  border-radius: 6px;
-  color: rgb(245, 245, 245);
+.donateButton {
+  margin: 2px 20px;
+  height: 17px;
+  background-color: #E1F5FE;
+  border-radius: 3px;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  font-weight: bold;
+  cursor: pointer;
+  border: none;
+  padding: 2px 8px;
+}
+.donateButton:hover{
+  background-color: #FFDD83;
 }
 
-.dropdown-dark:before {
-  border-bottom-color: #aaa;
-}
-
-.dropdown-dark:after {
-  border-top-color: #aaa;
-}
-
-.dropdown-dark .dropdown-select {
-  color: #aaa;
-  text-shadow: 0 1px black;
-  background: #444;  /* Fallback for IE 8 */
-}
-
-.dropdown-dark .dropdown-select:focus {
-  color: #ccc;
-}
-
-.dropdown-dark .dropdown-select > option {
-  background: #444;
-  text-shadow: 0 1px rgba(0, 0, 0, 0.4);
-}
 
 .two-letter-label {
   float: left;
