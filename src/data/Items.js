@@ -251,10 +251,12 @@ export const ConstructorRecipes = [
 
 export const AssemblerRecipes = [
 	new Recipe("Reinforced Iron Plate",STRUC.ASSM).addInput(ITEMS.IronPlate,30).addInput(ITEMS.Screw,60).addOutput(ITEMS.ReinforcedIronPlate,5),
-	new Recipe("Alt: Adhered Iron Plate",STRUC.ASSM).addInput(ITEMS.IronPlate,11.25).addInput(ITEMS.Rubber,3.75).addOutput(ITEMS.ReinforcedIronPlate,3.75),
+    new Recipe("Alt: Adhered Iron Plate",STRUC.ASSM).addInput(ITEMS.IronPlate,11.25).addInput(ITEMS.Rubber,3.75).addOutput(ITEMS.ReinforcedIronPlate,3.75),
+    new Recipe("Alt: Stitched Iron Plate",STRUC.ASSM).addInput(ITEMS.IronPlate,18.75).addInput(ITEMS.Wire,37.5).addOutput(ITEMS.ReinforcedIronPlate,5.625),
 	new Recipe("Circuit Board",STRUC.ASSM).addInput(ITEMS.CopperSheet,15).addInput(ITEMS.Plastic,30).addOutput(ITEMS.Circuit,7.5),
 	new Recipe("Alt: Bolted Frame",STRUC.ASSM).addInput(ITEMS.ReinforcedIronPlate,7.5).addInput(ITEMS.Screw,140).addOutput(ITEMS.ModularFrame,5),
-	new Recipe("Modular Frame",STRUC.ASSM).addInput(ITEMS.ReinforcedIronPlate,3).addInput(ITEMS.IronRod,12).addOutput(ITEMS.ModularFrame,2),
+    new Recipe("Modular Frame",STRUC.ASSM).addInput(ITEMS.ReinforcedIronPlate,3).addInput(ITEMS.IronRod,12).addOutput(ITEMS.ModularFrame,2),
+    new Recipe("Alt: Steeled Frame",STRUC.ASSM).addInput(ITEMS.ReinforcedIronPlate,2).addInput(ITEMS.SteelPipe,10).addOutput(ITEMS.ModularFrame,3),
 	new Recipe("Rotor",STRUC.ASSM).addInput(ITEMS.IronRod,20).addInput(ITEMS.Screw,100).addOutput(ITEMS.Rotor,4),
 	new Recipe("Smart Plating",STRUC.ASSM).addInput(ITEMS.ReinforcedIronPlate,2).addInput(ITEMS.Rotor,2).addOutput(ITEMS.SmartPlating,2),
 	new Recipe("Alt: Coated Iron Plate",STRUC.ASSM).addInput(ITEMS.IronIngot,50).addInput(ITEMS.Plastic,10).addOutput(ITEMS.IronPlate,75),
