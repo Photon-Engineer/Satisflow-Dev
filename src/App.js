@@ -17,7 +17,7 @@ function App() {
         <div className="sidebar right-menu"></div>
       </div>
       <div className="bottombar">
-        <p>&copy; Copyright 2020 by Joseph Cosentino&emsp;<a href="https://github.com/Photon-Engineer/Satisflow">Github Project and Documentation</a>&nbsp;Version {version}&nbsp;<DonateButton /></p>
+        <p className="bottom-link">&copy; Copyright 2020 by Joseph Cosentino&emsp;<a style={{color:"lightyellow"}} href="https://github.com/Photon-Engineer/Satisflow">Github Project and Documentation</a>&nbsp;Version {version}&nbsp;<DonateButton /></p>
       </div>
     </div>
   );

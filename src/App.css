@@ -97,7 +97,7 @@
 }
 
 .bottombar {
-    height: 20px;
+    height: 30px;
     text-align: center;
     background-color: #1BA1E2;
     vertical-align: middle;
@@ -139,6 +139,11 @@ textarea{
   padding: 0px 5px;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   font-size: 90%;
+}
+
+.bottom-link {
+  color: white;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 /* --------------------- SOCKETS ------------------------ */
