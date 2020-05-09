@@ -5,7 +5,8 @@ import {updateInputLabel, updateOutputLabel } from '../engine/helpers'
 import { itemSocket, numSocket } from '../sockets/AllSockets'
 import { ObjectDropControl } from '../controls/ObjectDropControl'
 import { SmelterRecipes } from '../data/Items'
-import { ConstructorNode } from './Constructor'
+//import { ConstructorNode } from './Constructor'
+import { ConstructorNode } from '../nodes/constructor2pt0'
 
 export class Smelter extends Rete.Component {
     constructor() {

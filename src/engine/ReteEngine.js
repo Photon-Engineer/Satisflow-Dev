@@ -4,7 +4,9 @@ import ConnectionPlugin from "rete-connection-plugin";
 //import DockPlugin from "rete-dock-plugin"
 import AreaPlugin from "rete-area-plugin";
 import ContextMenuPlugin from 'rete-context-menu-plugin';
-import Rete from "rete";
+import ConnectionReroutePlugin from 'rete-connection-reroute-plugin';
+import ConnectionPathPlugin from 'rete-connection-path-plugin';
+import Rete, { Connection } from "rete";
 // React
 import React, { Component } from "react";
 import ReactDOM from 'react-dom';
@@ -12,22 +14,34 @@ import ReactDOM from 'react-dom';
 import { initialize } from './ComponentStage';
 import '../backgroundStyle.sass';
 // Material UI
-import {BlueButton} from './material-ui-components'
+import { BlueButton } from './material-ui-components'
 
 
 class Editor extends Component {
-    constructor(props){
+    constructor(props) {
         super(props);
         this.editor = null;
         this.engine = null;
     }
-    
-    
+
+
     createEditor = async (container) => {
         this.engine = new Rete.Engine("satisflow@0.5.0");
         this.editor = new Rete.NodeEditor("satisflow@0.5.0", container);
+        window.rete_editor = this.editor;
         this.editor.use(ConnectionPlugin);
         this.editor.use(ReactRenderPlugin);
+        
+        this.editor.use(ConnectionPathPlugin, {
+            type: ConnectionPathPlugin.DEFAULT, // DEFAULT or LINEAR transformer
+            //transformer: () => ([x1, y1, x2, y2]) => [[x1, y1], [x2, y2]], // optional, custom transformer
+            curve: ConnectionPathPlugin.curveBundle, // curve identifier
+            options: { vertical: true, curvature: 0.1 }, // optional
+            //arrow: { color: 'steelblue', marker: 'M-5,-10 L-5,10 L20,0 z' }
+        });
+
+        //this.editor.use(ConnectionReroutePlugin);
+
         this.editor.use(ContextMenuPlugin, {
             searchBar: false, // true by default
             searchKeep: title => true, // leave item when searching, optional. For example, title => ['Refresh'].includes(title)
@@ -40,7 +54,7 @@ class Editor extends Component {
             plugins: [ReactRenderPlugin]
         });
         */
-       //this.editor.use(DockPlugin);
+        //this.editor.use(DockPlugin);
 
         container.classList.add('custom-node-editor');
         const background = document.createElement('div');
@@ -49,35 +63,54 @@ class Editor extends Component {
 
         initialize(this.engine, this.editor); // Register and Create Initial Components
 
-        this.editor.on('error',err=>alert(err));
+        this.editor.on('error', err => alert(err));
 
         this.editor.on(
             "process nodecreated noderemoved connectioncreated connectionremoved",
             async (output) => {
                 await this.engine.abort();
                 await this.engine.process(this.editor.toJSON());
-                if(output.output!==undefined){
-                    setInterval(() => {
-                        let node = output.output.node;
+                if (output.output !== undefined) {
+                    let node = output.output.node;
+                    setTimeout(() => {
                         this.editor.view.updateConnections({ node });
                     }, 1000);
+
                 }
             }
         );
+
+        this.editor.on('renderconnection', (connection) => {
+            const key = connection.connection.output.key;
+            const node = connection.connection.output.node;
+            const type = node.outputs.get(key).socket.name;
+            var connClass;
+            if (type === "pipe") {
+                connClass = "fluid-connection";
+
+            }else if (type === "number") {
+                connClass = "ovc-connection";
+            }
+            var c = connection.el.children;
+            for (var i = 0; i < c.length; i++) {
+                c[i].children[0].classList.add(connClass);
+            }
+
+        })
 
         addDropStrategy(this.editor);
 
         this.editor.view.resize();
         this.editor.trigger("process");
-        const {area} = this.editor.view;
-        area.zoom(0.7,500,400)
+        const { area } = this.editor.view;
+        area.zoom(0.7, 500, 400)
 
-        ReactDOM.render(<SaveLoadComponent mainEditor={this} />,document.querySelector('.right-menu'));
+        ReactDOM.render(<SaveLoadComponent mainEditor={this} />, document.querySelector('.right-menu'));
     }
 
     render() {
         return (
-           <div ref={ref => this.createEditor(ref)} />
+            <div ref={ref => this.createEditor(ref)} />
         );
     }
 }
@@ -87,15 +120,15 @@ export default Editor;
 
 
 
-function addDropStrategy(editor){
+function addDropStrategy(editor) {
     editor.view.container.addEventListener('dragover', e => e.preventDefault())
     editor.view.container.addEventListener('drop', async e => {
-        if(!e.dataTransfer) return;
+        if (!e.dataTransfer) return;
 
         const name = e.dataTransfer.getData('componentName');
         const component = editor.components.get(name)
 
-        if(!component) throw new Error(`Component ${name} not found`)
+        if (!component) throw new Error(`Component ${name} not found`)
 
         // force update the mouse position
         editor.view.area.pointermove(e);
@@ -104,6 +137,7 @@ function addDropStrategy(editor){
         editor.addNode(node)
     })
 }
+
 
 async function createNode(component, position) {
     let node = await component.createNode({});
@@ -126,16 +160,16 @@ class SaveLoadComponent extends React.Component {
         this.handleClear = this.handleClear.bind(this);
         this.abort = this.abort.bind(this);
     }
-  
+
     handleStore() {
         var lz = require('lz-string');
         //const text = JSON.stringify(this.mainEditor.editor.toJSON());
         //const text = toHexString(lz.compressToUint8Array(JSON.stringify(this.mainEditor.editor.toJSON())));
         const text = lz.compressToEncodedURIComponent(JSON.stringify(this.mainEditor.editor.toJSON()));
-        
+
         this.setState({ currentEditorState: text });
     }
-  
+
     handleLoad() {
         var json = "";
         var lz = require('lz-string');
@@ -151,21 +185,21 @@ class SaveLoadComponent extends React.Component {
         }
 
     }
-  
+
     handleChange(event) {
         this.setState({ currentEditorState: event.target.value })
     }
-  
+
     async applyToEditor(thisobj, json) {
         await thisobj.mainEditor.engine.abort();
         await thisobj.mainEditor.engine.process(json);
     }
-  
-    async abort(){
+
+    async abort() {
         await this.mainEditor.engine.abort();
     }
-  
-    handleRefresh(){
+
+    handleRefresh() {
         //this.mainEditor.editor.fromJSON(this.mainEditor.editor.toJSON());
         var thisJson = this.mainEditor.editor.toJSON();
         var storedJson = JSON.stringify(thisJson);
@@ -174,8 +208,8 @@ class SaveLoadComponent extends React.Component {
         alert('Refreshing editor.')
         this.mainEditor.editor.fromJSON(JSON.parse(storedJson));
     }
-  
-    handleClear(){
+
+    handleClear() {
         this.abort();
         var thisJson = this.mainEditor.editor.toJSON();
         thisJson.nodes = {}
@@ -183,15 +217,15 @@ class SaveLoadComponent extends React.Component {
     }
 
     render() {
-        
+
         return (
             //<button className = "slider" onClick={this.handleStore}>Export Data</button>
             <div>
                 <BlueButton variant="contained" color="primary" onClick={this.handleStore}>Export Data</BlueButton>
-                <textarea rows="4" columns="50" style={{ width: "150px", height: "600px" }} value={this.state.currentEditorState} onChange={this.handleChange}/>
+                <textarea rows="4" columns="50" style={{ width: "150px", height: "600px" }} value={this.state.currentEditorState} onChange={this.handleChange} />
                 <BlueButton variant="contained" color="primary" onClick={this.handleLoad}>Restore Data</BlueButton>
                 <BlueButton variant="contained" color="primary" onClick={this.handleClear}>Clear Editor</BlueButton>
             </div>
         )
     }
-  }
+}

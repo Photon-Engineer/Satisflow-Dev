@@ -1,18 +1,21 @@
 // Final Factory Components Import
 import { Storage } from '../factorynodes/Storage'
-import { Splitter } from '../factorynodes/Splitter'
-import { Merger } from '../factorynodes/Merger'
+//import { Splitter } from '../factorynodes/Splitter'
+import { Splitter } from '../nodes/splitter2pt0'
+//import { Merger } from '../factorynodes/Merger'
+import { Merger } from '../nodes/merger2pt0'
 import { Miner } from '../factorynodes/Miner'
 import { Extractor } from '../factorynodes/Extractor'
 import { Smelter } from '../factorynodes/Smelter'
 import { Foundry } from '../factorynodes/Foundry'
-import { Constructor } from '../factorynodes/Constructor'
+//import { Constructor } from '../factorynodes/Constructor'
 import { Assembler } from '../factorynodes/Assembler'
 import { Manufacturer } from '../factorynodes/Manufacturer'
 import { Refinery } from '../factorynodes/Refinery'
 import { Overclock } from '../factorynodes/Overclock'
 // Test Components Import
 import { Starter } from '../nodes/StarterNode'
+import { Constructor } from '../nodes/constructor2pt0'
 // Other imports
 import { ComponentDock } from './dock'
 import React from 'react'
@@ -31,12 +34,14 @@ export async function initialize(engine, editor) {
     const dock = <ComponentDock componentArray={components} />;
     ReactDOM.render(dock,document.querySelector('.leftbar'));
 
-
+    var lz = require('lz-string');
+        //var text = lz.decompressFromEncodedURIComponent(this.state.currentEditorState);
     fetch('resources/starting_view.txt')
-        .then((r) => r.json())
+        .then((r) => r.text())
         .then((data) =>{
-            editor.fromJSON(data);
+            editor.fromJSON(JSON.parse(lz.decompressFromEncodedURIComponent(data)));
     })
+    
     
 
 }
