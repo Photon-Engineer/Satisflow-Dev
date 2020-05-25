@@ -54,6 +54,8 @@ export class Splitter extends Rete.Component {
     }
 }
 
+
+/*
 class SplitterNode extends Node {
     nodeTitleClass = "title-logistics";
     nodeLabel = "Sp";
@@ -101,3 +103,5 @@ class SplitterNode extends Node {
         )
     }
 }
+*/
+

@@ -42,6 +42,18 @@ export async function setInputMessage(node, editor, inputKey, itemPpm, reqObj) {
     await thisNode.update();
 }
 
+export const dataTypes = {
+    ITEM: "item",
+    FLUID: "fluid",
+    OVC: "ovc",
+}
+
+export function styleConnections(node,editor,key,dataType){
+    const thisNode = editor.nodes.find(n => n.id === node.id);
+    const conn = thisNode.getConnections();
+    console.log(JSON.stringify(conn));
+}
+
 
 function formatNumber(num){
     if(Number.isInteger(num)){
@@ -125,4 +137,8 @@ export function readTextFile(file)
         }
     }
     rawFile.send(null);
+}
+
+export function determineIndex(current,maxIndex){
+    return current >= maxIndex ? current - maxIndex : current;
 }

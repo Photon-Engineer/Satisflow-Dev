@@ -6,7 +6,7 @@ import {ItemSelect} from '../engine/material-ui-components'
 
 export class ObjectDropControl extends Rete.Control {
     static component = ({ value, onChange, title, items }) => (
-        <span>
+        <span className="objectDropControl">
             {title}:&nbsp;<DynamicObjectSelect valueIn={value} onSelectChange={onChange} listItems={items} />
         </span> // to make this part dynamic, the component cannot be static.. it must be built with a function
     );
@@ -70,7 +70,7 @@ class DynamicObjectSelect extends React.Component {
             </select>
             
             */
-            <div style={{display:"inline-block"}}>
+            <div className="objectDropControl" style={{display:"inline-block"}}>
                 <ItemSelect className="item-select" value={this.state.value} autoWidth={true} onChange={this.handleChange}>{options}</ItemSelect>
             </div>
         )

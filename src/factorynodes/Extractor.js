@@ -1,7 +1,7 @@
 import React from 'react'
 //Rete
 import Rete from "rete";
-import { setOutputMessage } from '../engine/helpers'
+import { setOutputMessage, styleConnections, dataTypes } from '../engine/helpers'
 import { Node, Socket, Control } from 'rete-react-render-plugin';
 //Sockets and Controls
 import {numSocket, pipeSocket } from '../sockets/AllSockets'
@@ -50,6 +50,7 @@ export class Extractor extends Rete.Component {
         outputs['o1'] = array;
 
         setOutputMessage(node,this.editor,'o1',out,array,false);
+        styleConnections(node,this.editor,'o1',dataTypes.FLUID);
     }
 }
 

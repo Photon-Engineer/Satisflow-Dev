@@ -7,28 +7,53 @@ This goal of this project is to provide a helpful and relativley unique planning
 
 The tool makes use of [Rete JS](https://github.com/retejs/rete) and several of its plugins to accomplish this. This project would not have been kicked off without their initial work, so thank you to the Rete team!
 
-![Satisflow](/public/resources/satisflow_demo_image.PNG)
 
-Simple tutorial:
+
+![Satisflow](/public/resources/satisflow2_cover.gif)
+
+## Simple tutorial:
+
+Basic Controls: 
+- Drag the editor around by clicking and holding an empty point in the editor and dragging. 
+- Drag a node around by clicking and holding a node and dragging. 
+- Add nodes by clicking and dragging from the dock on the left, or by right-clicking in the editor and selecting one of the options. 
+- Rotate a node by clicking it and pressing "R". 
+- Connect nodes by clicking an output, then clicking an input on another node. You can also click and drag, but it doesn't work quite as well consistently. 
+- Delete or clone a node by right-clicking it. Cloning will preserve the rotation and the recipe, so doing that can save some time. 
+- Save your work by clicking "Export Data" on the right. You must copy the entire output and save it somewhere, such as in notepad manually. Please save often for larger projects!
+- To restore your work, paste the exported data into the textbox, and then click "Restore Data". 
+- To clear the entire editor (YOU CANNOT UNDO THIS), click "Clear Editor". 
+
+Have fun and stay efficient!
+
 
 ## Adding Factory buildings and connecting them:
-![Add and connect nodes](/public/resources/AddingNodes.gif)
-Adding nodes as as simple as dragging the desired node into the editor from the options on the left side. All non-power related buildings are available, though those may be added in the future. Connect nodes by clicking on an output port, hold the mouse pointer down and drag to an input port. If the correct item is transmited, you will see the labels update accordingly, indicating the item amounts coming in to the new node. You can also add a building by right-clicking an empty spot in the editor. 
+![Add and connect nodes](/public/resources/satisflow2_add_nodes.gif)
+Adding nodes is as simple as dragging the desired node into the editor from the options on the left side. All non-power related buildings are available, though those may be added in the future. Connect nodes by clicking on an output port, hold the mouse pointer down and drag to an input port. If the correct item is transmited, you will see the labels update accordingly, indicating the item amounts coming in to the new node. You can also add a building by right-clicking an empty spot in the editor. 
 
 ## Selecting a Recipe
-![Changing Recipes](/public/resources/ChooseRecipe.gif)
+![Changing Recipes](/public/resources/satisflow2_recipe.gif)
 Some nodes include a dropdown of possible recipes to choose from. All known alternate recipes are included for each building. If any recipes are not working correctly or have the wrong amounts, please add an issue to the repo. 
 
 ## Cloning and Deleting
-![Cloning and Deleting](/public/resources/CloningNodes.gif)
+![Cloning and Deleting](/public/resources/satisflow2_clone.gif)
 For speed, you can right click a node to clone it. Cloning will preserve whatever recipe you've already selected. Using the same method, you can also delete the node. 
 
 ## Item connections vs Pipe connections
-(Image is TBD)
-Green connection points represent item inputs and outputs, orange circular connection points represent pipe outputs. You cannot connect an item output to a pipe input and vise versa. There are some buildings however, such as mergers and splitters that can be connected to either type. This makes it so additional nodes aren't needed to perform those types of logistics on fluids. 
+
+Green-square connection points represent item inputs and outputs, orange circular connection points represent pipe outputs. You cannot connect an item output to a pipe input and vise versa. There are some buildings however, such as mergers and splitters that can be connected to either type. Nodes that can be connected to either type are green circles with an orange border.  
 
 ## Overclocking
-Most buildings have the ability to be overclocked up to 250%. To do this, add an overclock node and connect it to the overclock port. Note: overclock nodes can be connected to multiple structures, unlike other buildings. 
+![Overclocking](/public/resources/satisflow2_overclock.gif)
+Most buildings have the ability to be overclocked up to 250%. To do this, add an overclock node and connect it to the overclock port. Note: overclock nodes can be connected to multiple structures, unlike other buildings. Overclock nodes can be connected to multiple structures. 
+
+## Organization
+![Rotating](/public/resources/satisflow2_rotate.gif)
+If you click a node, then click "R", it will rotate the node 90 degrees so connections can come and go from any desired direction. You can re-route connections by adding a junction which is a small node with an input and an output that you can use to organize your setup. 
+
+## Creative Nodes
+![Rotating](/public/resources/satisflow2_creative.png)
+If you want to get a belt with a specific item and rate, you can add a creative node. This can output any item at any rate desired, and can be connected to multiple buildings at once. This can be helpful to represent an already existing part of your factory, or to provide a balanced input to multiple structures at once. 
 
 ## Saving and Restoring
 ![Saving Progess](/public/resources/SavingReloadingLayouts.gif)
@@ -42,7 +67,9 @@ If you have any issues, please make a post in the issues tab on github. Be speci
 ## Known Issues
 Sometimes the editor will hang-up and you will no longer be able to pan or zoom. If this happens, click the export button to save your work, copy the text, reload the page, the paste the text back and reload your progress. The error is not understood at this point in time. 
 
-Not all recipes have been tested. There may be recipes missing. 
+Most, but not all recipes have been directly verified to be correct in game. There may be recipes incorrect or missing recipes (especially alternate recipes). 
+
+Note: This project seems to work best in an updated Firefox browser. 
 
 ## Donations
 
@@ -52,78 +79,14 @@ If you'd like to support me and this project, please use the donation button bel
 
 ---
 
-Some notes about me: I am not a web-designer or software engineer in any respect. I had to learn some HTML, JS, and React just to start this project. While I do have some background in programming in java and matlab, I am 100% self-taught. There will likley be bugs and incompatibilities I have not thought of. 
+Some notes about me: I am not a web-designer or software engineer in any respect. I had to learn some HTML, JS, and React just to start this project. While I do have some background in programming in java and matlab, I am 100% self-taught. There will be bugs and incompatibilities I have not thought of. 
 
 If you are interested in contributing to the project, let me know. This is also my first github project, so please be patient as I learn the ropes. 
 
 
 ---
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app). 
 
-## Available Scripts
 
-In the project directory, you can run:
-
-### `npm start`
-
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.<br>
-You will also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.<br>
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+It is a YARN based project. You can load a development build with yarn start. 

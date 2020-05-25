@@ -32,9 +32,9 @@ class OverclockNode extends Node {
         const { outputs, controls, selected } = this.state;
 
         return (
-            <div className={`node ${selected}`}>
+            <div className="node-pane" style={{width:"140px", height:"60px"}}>
                 <div className="two-letter-label">&nbsp;OC</div>
-                <div className="title" style={this.fontStyle}>{node.name}</div>
+                <div className="title-logistics ti-grad title-pane">{node.name}</div>
                 <div className="output" key="o1" style={{float:"right"}}>
                     <Socket
                         type="output"
