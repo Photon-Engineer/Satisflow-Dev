@@ -52,7 +52,7 @@ Most buildings have the ability to be overclocked up to 250%. To do this, add an
 If you click a node, then click "R", it will rotate the node 90 degrees so connections can come and go from any desired direction. You can re-route connections by adding a junction which is a small node with an input and an output that you can use to organize your setup. 
 
 ## Creative Nodes
-![Rotating](/public/resources/satisflow2_creative.png)
+![Creative](/public/resources/satisflow2_creative.PNG)
 If you want to get a belt with a specific item and rate, you can add a creative node. This can output any item at any rate desired, and can be connected to multiple buildings at once. This can be helpful to represent an already existing part of your factory, or to provide a balanced input to multiple structures at once. 
 
 ## Saving and Restoring
