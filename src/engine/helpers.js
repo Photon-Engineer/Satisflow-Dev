@@ -138,3 +138,7 @@ export function readTextFile(file)
     }
     rawFile.send(null);
 }
+
+export function determineIndex(current,maxIndex){
+    return current >= maxIndex ? current - maxIndex : current;
+}

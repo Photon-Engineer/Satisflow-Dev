@@ -1,47 +1,48 @@
 import React from 'react'
 //Rete
 import Rete from "rete";
-import { updateInputLabel, updateOutputLabel, determineIndex} from '../engine/helpers'
 import { Node, Socket, Control } from 'rete-react-render-plugin';
+import {determineIndex} from '../engine/helpers';
 //Sockets and Controls
-import { itemSocket, numSocket } from '../sockets/AllSockets'
-import { ObjectDropControl } from '../controls/ObjectDropControl'
-import { ConstructorRecipes } from '../data/Items'
+import {anySocket} from '../sockets/AllSockets'
+import {NumControl} from '../controls/NumControl'
+import {StrControl} from '../controls/StrControl'
 
-export class Constructor extends Rete.Component {
+export class Storage extends Rete.Component {
     constructor() {
-        super('Constructor')
-        this.data.component = ConstructorNode;
+        super('Storage')
+        this.data.component = StorageNode;
     }
 
     builder(node) {
-        node.addOutput(new Rete.Output("o1", "Output", itemSocket, false));
-        node.addControl(new ObjectDropControl(this.editor, "recipe", node, false, "Recipe", ConstructorRecipes))
-        node.addInput(new Rete.Input("i1", "Input", itemSocket, false));
-        node.addInput(new Rete.Input("ovc", "Overclock", numSocket, false));
+        node.addInput(new Rete.Input("i1","Input",anySocket));
+        node.addControl(new StrControl(this.editor,"item",node,true));
+        node.addControl(new NumControl(this.editor,"num",node,true));
+        node.addOutput(new Rete.Output('o1','Output',anySocket));
         return node;
     }
 
-    worker(node, inputs, outputs) {
-
-        var multi = inputs['ovc'].length ? inputs['ovc'] : 1;
-
-        const in1 = inputs['i1'].length ? inputs['i1'][0] : null;
-        var calcObject = node.data.recipe.calculate([in1], multi);
-        updateInputLabel(node, this.editor, 'i1', calcObject, 0);
-        updateOutputLabel(node, this.editor, 'o1', calcObject, 0);
-        outputs['o1'] = [node.data.recipe.outputs[0][0], calcObject.actualOutPpm[0]];
+    worker(node,inputs,outputs) {
+        
+        outputs['o1'] = inputs['i1'].length ? inputs['i1'][0] : [null,0];
+        const thisNode = this.editor.nodes.find(n => n.id === node.id);
+        if(inputs['i1'].length) {
+            thisNode.controls.get('item').setValue(inputs['i1'][0][0].name);
+            thisNode.controls.get('num').setValue(inputs['i1'][0][1]);
+        } else {
+            thisNode.controls.get('item').setValue('<NO INPUT>');
+            thisNode.controls.get('num').setValue(0);
+        }
     }
 }
-
-
 
 class AdjustableNodePane extends React.Component {
     constructor(props) {
         super(props);
         this.rotArray = ["rotate(0deg)", "rotate(90deg)", "rotate(180deg)", "rotate(270deg)",]
         this.paneArray = ["lrpane","udpane"];
-        this.positionArray = ["left-socket","top-socket","right-socket","bottom-socket"];
+        this.nodeSizeArray = ["sto-lr","sto-ud"];
+        this.positionArray = ["left-socket","top-socket","right-socket","bottom-socket-sto"];
         //this.state = { transform: this.stateArray[0], }
         var iniState = this.props.propShare.node.data.rotationState === undefined ? 0 : this.props.propShare.node.data.rotationState;
 
@@ -50,6 +51,7 @@ class AdjustableNodePane extends React.Component {
             inPos: this.positionArray[determineIndex(0+iniState,this.positionArray.length)],
             otPos: this.positionArray[determineIndex(2+iniState,this.positionArray.length)],
             rotAdj: this.rotArray[determineIndex(0+iniState,this.rotArray.length)],
+            nodeSz: this.nodeSizeArray[determineIndex(0+iniState,this.nodeSizeArray.length)],
         }
         //this.stateArray = ["0px","20px"];
         //this.state = {margin: this.stateArray[0]};
@@ -76,11 +78,15 @@ class AdjustableNodePane extends React.Component {
             var idx4 = this.rotArray.findIndex((x)=> x===this.state.rotAdj);
             idx4 = idx4 === this.rotArray.length - 1 ? 0 : ++idx4;
 
+            var idx5 = this.nodeSizeArray.findIndex((x)=> x===this.state.nodeSz);
+            idx5 = idx5 === this.nodeSizeArray.length - 1 ? 0 : ++idx5;
+
             this.setState({
                 pane: this.paneArray[idx1],
                 inPos: this.positionArray[idx2],
                 otPos: this.positionArray[idx3],
                 rotAdj: this.rotArray[idx4],
+                nodeSz: this.nodeSizeArray[idx5],
             });
             //alert(this.stateArray[idx])
             //this.setState({margin: this.stateArray[idx]});
@@ -108,7 +114,7 @@ class AdjustableNodePane extends React.Component {
         const { node, bindSocket, bindControl } = this.props.propShare;
         const { outputs, controls, inputs, selected } = this.props.stateShare;
         return (
-            <div className="node-pane">
+            <div className={"node-pane "+this.state.nodeSz}>
                 <div className={"socket-pane "+this.state.pane}>
                     <div className={this.state.inPos}>
                         <Socket
@@ -117,6 +123,7 @@ class AdjustableNodePane extends React.Component {
                             io={inputs[0]}
                             innerRef={bindSocket}
                         />
+                        
                     </div>
                 </div>
                 <div className={"socket-pane "+this.state.pane}>
@@ -129,28 +136,28 @@ class AdjustableNodePane extends React.Component {
                         />
                     </div>
                 </div>
-                <div className="content-pane" tabIndex="0" onKeyPress={this.handleRotate}>
+                <div className="content-pane" tabIndex="0" onKeyPress={this.handleRotate} style={{margin:"4%"}}>
                     <div className={nodeTitleClass + " ti-grad title-pane"}>
                         <div className="two-letter-label">&nbsp;{nodeLabel}</div>
                         {node.name}
                     </div>
                     <div className="label-pane">
-                        <Control
-                            className="control"
-                            key={controls[0].key}
-                            control={controls[0]}
-                            innerRef={bindControl}
-                        />
-                        <div className="label">{inputs[0].name}</div>
-                        <div className="label">{outputs[0].name}</div>
-                    </div>
-                    <div className="ovc-pane">
-                        <Socket
-                            type="input"
-                            socket={inputs[1].socket}
-                            io={inputs[1]}
-                            innerRef={bindSocket}
-                        />&nbsp;Overclock
+                        <div className="label">
+                            <Control
+                                className="control"
+                                key={controls[0].key}
+                                control={controls[0]}
+                                innerRef={bindControl}
+                            />
+                        </div>
+                        <div className="label">
+                            <Control
+                                className="control"
+                                key={controls[1].key}
+                                control={controls[1]}
+                                innerRef={bindControl}
+                            />
+                        </div>
                     </div>
                 </div>
             </div>
@@ -158,9 +165,9 @@ class AdjustableNodePane extends React.Component {
     }
 }
 
-export class ConstructorNode extends Node {
-    nodeTitleClass = "title-producer";
-    nodeLabel = "Co";
+export class StorageNode extends Node {
+    nodeTitleClass = "title-logistics";
+    nodeLabel = "St";
     render() {
         //tabIndex="0" onKeyDown={(e) => this.handleRotate(e)}   <-- this is how you can get a div to take focus and respond to events
         return (

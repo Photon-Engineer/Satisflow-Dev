@@ -4,7 +4,7 @@ import ConnectionPlugin from "rete-connection-plugin";
 //import DockPlugin from "rete-dock-plugin"
 import AreaPlugin from "rete-area-plugin";
 import ContextMenuPlugin from 'rete-context-menu-plugin';
-import ConnectionReroutePlugin from 'rete-connection-reroute-plugin';
+//import ConnectionReroutePlugin from 'rete-connection-reroute-plugin';
 import ConnectionPathPlugin from 'rete-connection-path-plugin';
 import Rete, { Connection } from "rete";
 // React
@@ -36,11 +36,11 @@ class Editor extends Component {
             type: ConnectionPathPlugin.DEFAULT, // DEFAULT or LINEAR transformer
             //transformer: () => ([x1, y1, x2, y2]) => [[x1, y1], [x2, y2]], // optional, custom transformer
             curve: ConnectionPathPlugin.curveBundle, // curve identifier
-            options: { vertical: true, curvature: 0.1 }, // optional
+            options: { vertical: false, curvature: 0.1 }, // optional
             //arrow: { color: 'steelblue', marker: 'M-5,-10 L-5,10 L20,0 z' }
         });
 
-        //this.editor.use(ConnectionReroutePlugin);
+        //this.editor.use(ConnectionReroutePlugin); // this is not working.. could be because the connection path plugin is also installed? 
 
         this.editor.use(ContextMenuPlugin, {
             searchBar: false, // true by default
@@ -79,7 +79,7 @@ class Editor extends Component {
                 }
             }
         );
-
+/*
         this.editor.on('renderconnection', (connection) => {
             const key = connection.connection.output.key;
             const node = connection.connection.output.node;
@@ -97,7 +97,27 @@ class Editor extends Component {
             }
 
         })
+*/
+        this.editor.on('connectionpath',(data)=>{
+            const {
+                points, // array of numbers, e.g. [x1, y1, x2, y2]
+                connection, // Rete.Connection instance
+                d // string, d attribute of <path>
+            } = data;
+            if(connection!==undefined){
+                const key = connection.output.key;
+                const node = connection.output.node;
+                const type = node.outputs.get(key).socket.name;
+                
+                if(type==="number"){
+                    const [x1, y1, x2, y2] = points;
+                    const hx1 = x1 + Math.abs(x2 - x1) * 0.3;
+                    const hx2 = x2 - Math.abs(x2 - x1) * 0.3;
+                    data.d = `M ${x1} ${y1} C ${hx1} ${y1} ${hx2} ${y2} ${x2+12} ${y2+12} `;
+                }
+            }
 
+        })
         addDropStrategy(this.editor);
 
         this.editor.view.resize();
@@ -128,7 +148,7 @@ function addDropStrategy(editor) {
         const name = e.dataTransfer.getData('componentName');
         const component = editor.components.get(name)
 
-        if (!component) throw new Error(`Component ${name} not found`)
+        if (!component) return;
 
         // force update the mouse position
         editor.view.area.pointermove(e);

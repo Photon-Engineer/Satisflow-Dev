@@ -1,42 +1,38 @@
-import React from 'react';
+import React from 'react'
 //Rete
 import Rete from "rete";
 import { Node, Socket, Control } from 'rete-react-render-plugin';
 //Sockets and Controls
-import {anySocket} from '../sockets/AllSockets'
-import {NumControl} from '../controls/NumControl'
-import { ObjectDropControl } from '../controls/ObjectDropControl'
-import {itemObjArray} from '../data/Items'
+import { numSocket } from '../sockets/AllSockets'
+import { OverclockControl } from '../controls/OverclockControl'
 
-export class Starter extends Rete.Component {
+
+export class Overclock extends Rete.Component {
     constructor() {
-        super('Creative')
-        this.data.component = StarterNode;
+        super('Overclock')
+        this.data.component = OverclockNode;
     }
 
     builder(node) {
-        node.addOutput(new Rete.Output("o1","Output",anySocket));
-        node.addControl(new ObjectDropControl(this.editor,"item",node,false,"Item",itemObjArray));
-        node.addControl(new NumControl(this.editor,"num",node));
-        
-
+        node.addOutput(new Rete.Output("o1", "Output", numSocket, true));
+        node.addControl(new OverclockControl(this.editor, "ovc", node, false));
         return node;
     }
 
-    worker(node,inputs,outputs) {
-        const array = [node.data.item,node.data.num];
-        outputs['o1'] = array;
+    worker(node, inputs, outputs) {
+        outputs['o1'] = [node.data.ovc/100];
     }
 }
 
-class StarterNode extends Node {
+
+export class OverclockNode extends Node {
     nodeTitleClass = "title-logistics";
-    nodeLabel = "Cr";
+    nodeLabel = "Ov";
     render() {
         const { node, bindSocket, bindControl } = this.props;
         const { outputs, controls, inputs, selected } = this.state;
         return (
-            <div className="node-pane" style={{width:"250px", height:"120px",}}>
+            <div className="node-pane" style={{width:"200px", height:"100px",}}>
                 <div className={"socket-pane lrpane"}>
                     <div className="right-socket">
                         <Socket
@@ -47,7 +43,7 @@ class StarterNode extends Node {
                         />
                     </div>
                 </div>
-                <div className="content-pane" style={{margin:"1% 5%"}}>
+                <div className="content-pane" style={{height:"80%"}}>
                     <div className={this.nodeTitleClass + " ti-grad title-pane"}>
                         <div className="two-letter-label">&nbsp;{this.nodeLabel}</div>
                         {node.name}
@@ -58,14 +54,6 @@ class StarterNode extends Node {
                                 className="control"
                                 key={controls[0].key}
                                 control={controls[0]}
-                                innerRef={bindControl}
-                            />
-                        </div>
-                        <div className="label">
-                            <Control
-                                className="control"
-                                key={controls[1].key}
-                                control={controls[1]}
                                 innerRef={bindControl}
                             />
                         </div>

@@ -4,44 +4,34 @@ import Rete from "rete";
 import { updateInputLabel, updateOutputLabel, determineIndex} from '../engine/helpers'
 import { Node, Socket, Control } from 'rete-react-render-plugin';
 //Sockets and Controls
-import { itemSocket, numSocket } from '../sockets/AllSockets'
+import { anySocket } from '../sockets/AllSockets'
 import { ObjectDropControl } from '../controls/ObjectDropControl'
 import { ConstructorRecipes } from '../data/Items'
 
-export class Constructor extends Rete.Component {
+export class ConnectionPoint extends Rete.Component {
     constructor() {
-        super('Constructor')
-        this.data.component = ConstructorNode;
+        super('Junction')
+        this.data.component = PointNode;
     }
 
     builder(node) {
-        node.addOutput(new Rete.Output("o1", "Output", itemSocket, false));
-        node.addControl(new ObjectDropControl(this.editor, "recipe", node, false, "Recipe", ConstructorRecipes))
-        node.addInput(new Rete.Input("i1", "Input", itemSocket, false));
-        node.addInput(new Rete.Input("ovc", "Overclock", numSocket, false));
+        node.addOutput(new Rete.Output("o1", "Output", anySocket, false));
+        node.addInput(new Rete.Input("i1", "Input", anySocket, false));
         return node;
     }
 
     worker(node, inputs, outputs) {
-
-        var multi = inputs['ovc'].length ? inputs['ovc'] : 1;
-
         const in1 = inputs['i1'].length ? inputs['i1'][0] : null;
-        var calcObject = node.data.recipe.calculate([in1], multi);
-        updateInputLabel(node, this.editor, 'i1', calcObject, 0);
-        updateOutputLabel(node, this.editor, 'o1', calcObject, 0);
-        outputs['o1'] = [node.data.recipe.outputs[0][0], calcObject.actualOutPpm[0]];
+        outputs['o1'] = in1;
     }
 }
-
-
 
 class AdjustableNodePane extends React.Component {
     constructor(props) {
         super(props);
         this.rotArray = ["rotate(0deg)", "rotate(90deg)", "rotate(180deg)", "rotate(270deg)",]
         this.paneArray = ["lrpane","udpane"];
-        this.positionArray = ["left-socket","top-socket","right-socket","bottom-socket"];
+        this.positionArray = ["left-socket","top-socket","right-socket-pnt","bottom-socket-pnt"];
         //this.state = { transform: this.stateArray[0], }
         var iniState = this.props.propShare.node.data.rotationState === undefined ? 0 : this.props.propShare.node.data.rotationState;
 
@@ -108,7 +98,7 @@ class AdjustableNodePane extends React.Component {
         const { node, bindSocket, bindControl } = this.props.propShare;
         const { outputs, controls, inputs, selected } = this.props.stateShare;
         return (
-            <div className="node-pane">
+            <div className="node-pane" style={{width:"40px", height:"40px", borderRadius:"25px", backgroundColor:"#777"}}>
                 <div className={"socket-pane "+this.state.pane}>
                     <div className={this.state.inPos}>
                         <Socket
@@ -130,35 +120,14 @@ class AdjustableNodePane extends React.Component {
                     </div>
                 </div>
                 <div className="content-pane" tabIndex="0" onKeyPress={this.handleRotate}>
-                    <div className={nodeTitleClass + " ti-grad title-pane"}>
-                        <div className="two-letter-label">&nbsp;{nodeLabel}</div>
-                        {node.name}
-                    </div>
-                    <div className="label-pane">
-                        <Control
-                            className="control"
-                            key={controls[0].key}
-                            control={controls[0]}
-                            innerRef={bindControl}
-                        />
-                        <div className="label">{inputs[0].name}</div>
-                        <div className="label">{outputs[0].name}</div>
-                    </div>
-                    <div className="ovc-pane">
-                        <Socket
-                            type="input"
-                            socket={inputs[1].socket}
-                            io={inputs[1]}
-                            innerRef={bindSocket}
-                        />&nbsp;Overclock
-                    </div>
+                    <img src="./resources/arrow.png" width="20px" height="20px" style={{transform: this.state.rotAdj, alignSelf:"center",marginTop:"25%"}} draggable="false" />
                 </div>
             </div>
         )
     }
 }
 
-export class ConstructorNode extends Node {
+export class PointNode extends Node {
     nodeTitleClass = "title-producer";
     nodeLabel = "Co";
     render() {

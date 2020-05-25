@@ -1,7 +1,7 @@
 import React from 'react'
 //Rete
 import Rete from "rete";
-import { updateOutputLabel } from '../engine/helpers'
+import { updateOutputLabel, determineIndex } from '../engine/helpers'
 import { Node, Socket } from 'rete-react-render-plugin';
 //Sockets and Controls
 import { anySocket } from '../sockets/AllSockets'
@@ -60,14 +60,16 @@ class AdjustableNodePane extends React.Component {
         this.rotArray = ["rotate(0deg)", "rotate(90deg)", "rotate(180deg)", "rotate(270deg)",]
         this.paneArray = ["lrpane", "udpane"];
         this.positionArray = ["left-socket", "top-socket", "right-socket", "bottom-socket"];
+
+        var iniState = this.props.propShare.node.data.rotationState === undefined ? 0 : this.props.propShare.node.data.rotationState;
         //this.state = { transform: this.stateArray[0], }
         this.state = {
-            pane: this.paneArray[0],
-            inPos: this.positionArray[0],
-            otPos1: this.positionArray[1],
-            otPos2: this.positionArray[2],
-            otPos3: this.positionArray[3],
-            rotAdj: this.rotArray[0],
+            pane: this.paneArray[determineIndex(iniState+0,this.paneArray.length)],
+            inPos: this.positionArray[determineIndex(iniState+0,this.positionArray.length)],
+            otPos1: this.positionArray[determineIndex(iniState+1,this.positionArray.length)],
+            otPos2: this.positionArray[determineIndex(iniState+2,this.positionArray.length)],
+            otPos3: this.positionArray[determineIndex(iniState+3,this.positionArray.length)],
+            rotAdj: this.rotArray[determineIndex(iniState+0,this.rotArray.length)],
         }
         //this.stateArray = ["0px","20px"];
         //this.state = {margin: this.stateArray[0]};
@@ -117,6 +119,8 @@ class AdjustableNodePane extends React.Component {
             setTimeout(() => {
                 let node = this.props.propShare.node;
                 window.rete_editor.view.updateConnections({ node });
+                var idx4 = this.rotArray.findIndex((x)=> x===this.state.rotAdj);
+                node.data.rotationState = idx4;
             }, 1000);
 
         } catch {

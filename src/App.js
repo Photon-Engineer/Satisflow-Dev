@@ -1,5 +1,5 @@
 import React from 'react';
-import './App.css';
+import './App2.scss';
 import NodeEditor from './engine/ReteEngine';
 import { version } from './version'
 
