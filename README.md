@@ -51,6 +51,8 @@ Most buildings have the ability to be overclocked up to 250%. To do this, add an
 ![Rotating](/public/resources/satisflow2_rotate.gif)
 If you click a node, then click "R", it will rotate the node 90 degrees so connections can come and go from any desired direction. You can re-route connections by adding a junction which is a small node with an input and an output that you can use to organize your setup. 
 
+(NEW) Hold control when selecting nodes to move several nodes at a time. Only works for moving nodes. There is no visual indication as to which nodes are selected yet. 
+
 ## Creative Nodes
 ![Creative](/public/resources/satisflow2_creative.PNG)
 If you want to get a belt with a specific item and rate, you can add a creative node. This can output any item at any rate desired, and can be connected to multiple buildings at once. This can be helpful to represent an already existing part of your factory, or to provide a balanced input to multiple structures at once. 
@@ -65,7 +67,7 @@ You can also clear the current progress by clicking the Clear Editor button. Not
 If you have any issues, please make a post in the issues tab on github. Be specific and provide the text associated with the layout you've produced with the issue, and I will try to fix it in a timely manner. 
 
 ## Known Issues
-Sometimes the editor will hang-up and you will no longer be able to pan or zoom. If this happens, click the export button to save your work, copy the text, reload the page, the paste the text back and reload your progress. The error is not understood at this point in time. 
+Sometimes the editor will hang-up and you will no longer be able to pan or zoom. If this happens, click the export button to save your work, copy the text, reload the page, the paste the text back and reload your progress. The error is not understood at this point in time. (Only tested on Chrome/ Edge (Chromium)/ and Firefox)
 
 Most, but not all recipes have been directly verified to be correct in game. There may be recipes incorrect or missing recipes (especially alternate recipes). 
 
@@ -86,7 +88,72 @@ If you are interested in contributing to the project, let me know. This is also 
 
 ---
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app). 
 
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-It is a YARN based project. You can load a development build with yarn start. 
+## Available Scripts
+
+In the project directory, you can run:
+
+### `yarn start`
+
+Runs the app in the development mode.<br />
+Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+
+The page will reload if you make edits.<br />
+You will also see any lint errors in the console.
+
+### `yarn test`
+
+Launches the test runner in the interactive watch mode.<br />
+See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+
+### `yarn build`
+
+Builds the app for production to the `build` folder.<br />
+It correctly bundles React in production mode and optimizes the build for the best performance.
+
+The build is minified and the filenames include the hashes.<br />
+Your app is ready to be deployed!
+
+See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+
+### `yarn eject`
+
+**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+
+If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+
+Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+
+You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+
+## Learn More
+
+You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+
+To learn React, check out the [React documentation](https://reactjs.org/).
+
+### Code Splitting
+
+This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
+
+### Analyzing the Bundle Size
+
+This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
+
+### Making a Progressive Web App
+
+This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
+
+### Advanced Configuration
+
+This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
+
+### Deployment
+
+This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
+
+### `yarn build` fails to minify
+
+This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify

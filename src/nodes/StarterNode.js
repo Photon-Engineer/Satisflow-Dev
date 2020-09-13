@@ -36,7 +36,7 @@ class StarterNode extends Node {
         const { node, bindSocket, bindControl } = this.props;
         const { outputs, controls, inputs, selected } = this.state;
         return (
-            <div className="node-pane" style={{width:"250px", height:"120px",}}>
+            <div className="node-pane" style={{width:"300px", height:"150px",}}>
                 <div className={"socket-pane lrpane"}>
                     <div className="right-socket">
                         <Socket

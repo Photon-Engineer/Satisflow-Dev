@@ -53,6 +53,7 @@ class AdjustableNodePane extends React.Component {
         super(props);
         this.rotArray = ["rotate(0deg)", "rotate(90deg)", "rotate(180deg)", "rotate(270deg)",]
         this.paneArray = ["lrpane","udpane"];
+        this.nodeSizeArray = ["man-lr","man-ud"];
         this.positionArray = ["left-socket","top-socket","right-socket","bottom-socket-man"];
         //this.state = { transform: this.stateArray[0], }
         var iniState = this.props.propShare.node.data.rotationState === undefined ? 0 : this.props.propShare.node.data.rotationState;
@@ -62,6 +63,7 @@ class AdjustableNodePane extends React.Component {
             inPos: this.positionArray[determineIndex(0+iniState,this.positionArray.length)],
             otPos: this.positionArray[determineIndex(2+iniState,this.positionArray.length)],
             rotAdj: this.rotArray[determineIndex(0+iniState,this.rotArray.length)],
+            nodeSz: this.nodeSizeArray[determineIndex(0+iniState,this.nodeSizeArray.length)],
         }
         //this.stateArray = ["0px","20px"];
         //this.state = {margin: this.stateArray[0]};
@@ -88,11 +90,15 @@ class AdjustableNodePane extends React.Component {
             var idx4 = this.rotArray.findIndex((x)=> x===this.state.rotAdj);
             idx4 = idx4 === this.rotArray.length - 1 ? 0 : ++idx4;
 
+            var idx5 = this.nodeSizeArray.findIndex((x)=> x===this.state.nodeSz);
+            idx5 = idx5 === this.nodeSizeArray.length - 1 ? 0 : ++idx5;
+
             this.setState({
                 pane: this.paneArray[idx1],
                 inPos: this.positionArray[idx2],
                 otPos: this.positionArray[idx3],
                 rotAdj: this.rotArray[idx4],
+                nodeSz: this.nodeSizeArray[idx5],
             });
             //alert(this.stateArray[idx])
             //this.setState({margin: this.stateArray[idx]});
@@ -120,7 +126,7 @@ class AdjustableNodePane extends React.Component {
         const { node, bindSocket, bindControl } = this.props.propShare;
         const { outputs, controls, inputs, selected } = this.props.stateShare;
         return (
-            <div className="node-pane" style={{width:"518px",height:"518px"}}>
+            <div className={"node-pane "+this.state.nodeSz}>
                 <div className={"socket-pane "+this.state.pane}>
                     <div className={this.state.inPos}>
                         <Socket

@@ -8,42 +8,31 @@
 }
 
 .wrapper{
-    width: 100%;
+    display: grid;
+    grid-template-columns: 250px 1fr 250px;
+    grid-template-rows: 60px 1fr 30px;
+    gap: 0px 0px;
+    grid-template-areas:
+      "topbar topbar topbar"
+      "leftbar canvas right-menu"
+      "bottombar bottombar bottombar";
+    width: 100vw;
     height: 100vh;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    overflow-x: hidden;
-    overflow-y: hidden;
-}
-.rows{
-    flex-grow: 1;
-    flex: 1;
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-}
-
-.column{
-    float: left;
-    padding: 10px;
 }
 .topbar {
-    height: 45px;
-    min-height: 45px;
+    grid-area: topbar;
     background-color: #1BA1E2;
-    position: relative;
     z-index: 2;
     box-shadow: 5px 0px 5px #444;
 }
 .logo {
     width: 200px;
-    height: 80%;
+    height: 40px;
     background-color: white;
     border-radius: 5px;
     position: absolute;
     left: 20px;
-    top: 10%;
+    top: 10px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -51,13 +40,13 @@
     font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
 }
 .tip {
-    width: 400px;
-    height: 80%;
+    width: 800px;
+    height: 40px;
     background-color: white;
     border-radius: 5px;
     position: absolute;
     right: 20px;
-    top: 10%;
+    top: 10px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -70,9 +59,7 @@
 }
 
 .leftbar {
-  min-width: 230px;
-  max-width: 240px;
-  max-height: 92vh;
+  grid-area: leftbar;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -82,7 +69,7 @@
 }
 
 .right-menu {
-  width: 200px;
+  grid-area: right-menu;
   padding: 10px;
   display: flex;
   flex-direction: column;
@@ -91,18 +78,17 @@
 }
 
 .canvas{
-    min-width: 600px;
-    width: auto;
-    flex: 1;
-    height: 100%;
+    grid-area: canvas;
+    min-width: 500px;
     background-color: #444;
+
 }
 
 .bottombar {
-    height: 30px;
+    grid-area: bottombar;
     text-align: center;
     background-color: #1BA1E2;
-    vertical-align: middle;
+    vertical-align: middle; 
 }
 
 textarea{
@@ -111,6 +97,7 @@ textarea{
   display: block;
   margin-left: auto;
   margin-right: auto;
+  resize: none;
 }
 
 .dock-item {
@@ -257,7 +244,7 @@ select{
   display: inline-block;
   position: relative;
   z-index: 0;
-  opacity: 80%;
+  opacity: 0.8;
 }
 
 .node-pane:hover {
@@ -327,33 +314,43 @@ select{
 }
 
 .min-lr {
-  width: 402px;
+  width: 300px;
   height: 230px;
 }
 
 .min-ud {
   width: 230px;
-  height: 402px;
+  height: 300px;
 }
 
 .asy-lr {
-  width: 431px;
-  height: 288px;
+  width: 400px;
+  height: 220px;
 }
 
 .asy-ud {
-  width: 288px;
-  height: 431px;
+  width: 220px;
+  height: 400px;
 }
 
 .ref-lr {
-  width: 575px;
-  height: 345px;
+  width: 300px;
+  height: 300px;
 }
 
 .ref-ud {
-  width: 345px;
-  height: 575px;
+  width: 300px;
+  height: 300px;
+}
+
+.man-lr {
+  width: 400px;
+  height: 300px;
+}
+
+.man-ud {
+  width: 300px;
+  height: 400px;
 }
 
 .sto-lr {
@@ -404,15 +401,15 @@ select{
 }
 
 .bottom-socket-min {
-  margin: 170% auto 0px auto;
+  margin: 125% auto 0px auto;
 }
 
 .bottom-socket-asy {
-  margin: 140% auto 0px auto;
+  margin: 175% auto 0px auto;
 }
 
 .bottom-socket-ref {
-  margin: 162% auto 0px auto;
+  margin: 95% auto 0px auto;
 }
 
 .bottom-socket-sto {
@@ -420,7 +417,7 @@ select{
 }
 
 .bottom-socket-man {
-  margin: 98% auto 0px auto;
+  margin: 130% auto 0px auto;
 }
 
 .bottom-socket-pnt {

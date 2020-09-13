@@ -79,6 +79,8 @@ class Editor extends Component {
                 }
             }
         );
+
+        this.editor.on("multiselectnode", (args) => args.accumulate = args.e.ctrlKey || args.e.metaKey);
 /*
         this.editor.on('renderconnection', (connection) => {
             const key = connection.connection.output.key;
@@ -242,7 +244,7 @@ class SaveLoadComponent extends React.Component {
             //<button className = "slider" onClick={this.handleStore}>Export Data</button>
             <div>
                 <BlueButton variant="contained" color="primary" onClick={this.handleStore}>Export Data</BlueButton>
-                <textarea rows="4" columns="50" style={{ width: "150px", height: "600px" }} value={this.state.currentEditorState} onChange={this.handleChange} />
+                <textarea rows="4" columns="50" style={{ width: "200px", height: "600px" }} value={this.state.currentEditorState} onChange={this.handleChange} />
                 <BlueButton variant="contained" color="primary" onClick={this.handleLoad}>Restore Data</BlueButton>
                 <BlueButton variant="contained" color="primary" onClick={this.handleClear}>Clear Editor</BlueButton>
             </div>
