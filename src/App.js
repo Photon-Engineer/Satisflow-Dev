@@ -3,6 +3,7 @@ import './App2.scss';
 import NodeEditor from './engine/ReteEngine';
 import { version } from './version'
 
+
 function App() {
   let nodeEditor = <NodeEditor />;
   return (
@@ -36,5 +37,3 @@ class DonateButton extends React.Component {
 }
 
 export default App;
-
-

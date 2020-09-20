@@ -4,6 +4,7 @@ import ConnectionPlugin from "rete-connection-plugin";
 //import DockPlugin from "rete-dock-plugin"
 import AreaPlugin from "rete-area-plugin";
 import ContextMenuPlugin from 'rete-context-menu-plugin';
+import ModulePlugin from 'rete-module-plugin';
 //import ConnectionReroutePlugin from 'rete-connection-reroute-plugin';
 import ConnectionPathPlugin from 'rete-connection-path-plugin';
 import Rete, { Connection } from "rete";
@@ -42,19 +43,22 @@ class Editor extends Component {
 
         //this.editor.use(ConnectionReroutePlugin); // this is not working.. could be because the connection path plugin is also installed? 
 
+        // Modules
+        var defaultData = () => ({id: 'demo@0.1.0', nodes: {}});
+        var modules = {test: defaultData()};
+
+        this.editor.use(ModulePlugin,{engine:this.engine, modules:modules})
+            // Needs -> Module component, input node, output node, HTML area for creating/loading/adding modules
+            // Thoughts -> Module component cannot be rotated. Input/output nodes will have a dropdown to select socket type.
+            //             When a module is created, the user is asked to provide a name for it. 
+            //             Consider changing the dock into an accordian, which can be used to group entries, material-ui already has one -> https://material-ui.com/components/accordion/
+
+        // Context Menu
         this.editor.use(ContextMenuPlugin, {
             searchBar: false, // true by default
             searchKeep: title => true, // leave item when searching, optional. For example, title => ['Refresh'].includes(title)
             delay: 100,
         });
-        /*
-        this.editor.use(DockPlugin,{
-            container: document.querySelector('.leftbar'),
-            itemClass: 'dock-item',
-            plugins: [ReactRenderPlugin]
-        });
-        */
-        //this.editor.use(DockPlugin);
 
         container.classList.add('custom-node-editor');
         const background = document.createElement('div');
@@ -81,25 +85,7 @@ class Editor extends Component {
         );
 
         this.editor.on("multiselectnode", (args) => args.accumulate = args.e.ctrlKey || args.e.metaKey);
-/*
-        this.editor.on('renderconnection', (connection) => {
-            const key = connection.connection.output.key;
-            const node = connection.connection.output.node;
-            const type = node.outputs.get(key).socket.name;
-            var connClass;
-            if (type === "pipe") {
-                connClass = "fluid-connection";
 
-            }else if (type === "number") {
-                connClass = "ovc-connection";
-            }
-            var c = connection.el.children;
-            for (var i = 0; i < c.length; i++) {
-                c[i].children[0].classList.add(connClass);
-            }
-
-        })
-*/
         this.editor.on('connectionpath',(data)=>{
             const {
                 points, // array of numbers, e.g. [x1, y1, x2, y2]
@@ -251,3 +237,4 @@ class SaveLoadComponent extends React.Component {
         )
     }
 }
+
