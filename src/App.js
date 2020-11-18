@@ -1,5 +1,8 @@
 import React from 'react';
-import './App2.scss';
+//import './App2.scss';
+import './App.scss';
+import './Dock.scss';
+import './Nodes.scss';
 import NodeEditor from './engine/ReteEngine';
 import { version } from './version'
 

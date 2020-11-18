@@ -1,11 +1,22 @@
-//import React from 'react';
-import { anySocket } from '../sockets/AllSockets'
-import {StrControl} from '../controls/StrControl'
-import rete from 'rete'
+import React from 'react';
+//Rete
+import Rete from "rete";
+import { Node, Socket, Control } from 'rete-react-render-plugin';
+//Sockets and Controls
+import {anySocket} from '../sockets/AllSockets'
+import {NumControl} from '../controls/NumControl'
+//import {StrControl} from '../controls/StrControl'
+import { ObjectDropControl } from '../controls/ObjectDropControl'
+import {itemObjArray} from '../data/Items'
+import { updateOutputLabel, updateInputLabel} from '../engine/helpers'
+import { NodeBuilder } from './NodeBuilder'
 
-export class InputNumber extends rete.Component {
+import MenuItem from '@material-ui/core/MenuItem';
+import {ItemSelect} from '../engine/material-ui-components'
+
+export class InputNumber extends Rete.Component {
     constructor() {
-        super('InputX');
+        super('Input');
         this.module = {
             nodeType: 'input',
             socket: anySocket,
@@ -14,41 +25,64 @@ export class InputNumber extends rete.Component {
             //    return sockets[node.data.socketType];
             //}
         }
+        this.data.component = InputNode;
     }
  
     builder(node) {
-        var out = new rete.Output('output', 'Number', anySocket); // the key must be 'output'
-        var ctrl = new StrControl(this, 'name', node); // the key must be 'name'
+        //var out = new rete.Output('output', 'Number', anySocket); // the key must be 'output'
+        //var ctrl = new StrControl(this, 'name', node); // the key must be 'name'
         //var ctrl2 = new rete.FieldControl(this.editor, 'number', {type: 'number', value: 1});
-        
+        node.addOutput(new Rete.Output("output","",anySocket));
+        node.addControl(new StrControl(this.editor, 'name', node,false,'Input: Name'));//{value: 'num'}); // the key must be 'name'
         return node
-            .addControl(ctrl)
+            //.addControl(ctrl)
             //.addControl(ctrl2)
-            .addOutput(out);
+            //.addOutput(out);
     }
- 
+    /*
     async worker(node, inputs, outputs) {
-        if (!outputs['num'])
-            outputs['num'] = node.data.number; // here you can modify received outputs of Input node
+        const array = [node.data.item,node.data.num];
+        outputs['o1'] = array;
+        //if (!outputs['num'])
+        //    outputs['num'] = node.data.number; // here you can modify received outputs of Input node
     }
+    */
 };
  
-export class ModuleComponent extends rete.Component {
+export class ModuleComponent extends Rete.Component {
  
     constructor() {
         super("Module");
         this.module = {
             nodeType: 'module'
         }
+        this.data.component = ModuleNode;
     }
  
     builder(node) {
-        var ctrl = new StrControl(this.editor, 'module', {value: 'Module name..'}); // the key must be 'module'
+        var ctrl = new StrControl(this.editor, 'module', node,false);//{value: 'Module name..'}); // the key must be 'module'
+        var ctrl = new SelectControl(this.editor, 'module', node,false); // the key must be 'module'
         ctrl.onChange = () => {
             this.updateModuleSockets(node);
             node.update();
          }
-        return node//.addControl(ctrl);
+        return node.addControl(ctrl);
+    }
+
+    worker(node, inputs, outputs) {
+        console.log('here')
+
+        //Update Output Labels
+        const okeys = Object.keys(outputs);
+        for(var i=0;i<okeys.length;i++) {
+            if(outputs[okeys[i]][0]!==undefined){
+                updateOutputLabel(node, this.editor, okeys[i], {
+                    recipeOutput: [outputs[okeys[i]][0].name],
+                    maxOutputPpm: [0],
+                    actualOutPpm: [outputs[okeys[i]][1]],
+                }, 0, false);
+            }
+        }
     }
  
     change(node, item) {
@@ -57,9 +91,9 @@ export class ModuleComponent extends rete.Component {
     }
 }
  
-export class OutputNumber extends rete.Component {
+export class OutputNumber extends Rete.Component {
     constructor() {
-        super('OutputX');
+        super('Output');
         this.module = {
             nodeType: 'output',
             socket: anySocket,
@@ -68,14 +102,132 @@ export class OutputNumber extends rete.Component {
             //   return sockets[node.data.socketType];
             //}
         }
+        this.data.component = OutputNode;
     }
  
     builder(node) {
-        var inp = new rete.Input('input', 'Number', anySocket); // the key must be 'input'
-        var ctrl = new StrControl(this.editor, 'name', {value: 'num'}); // the key must be 'name'
+        var inp = new Rete.Input('input', '', anySocket); // the key must be 'input'
+        var ctrl = new StrControl(this.editor, 'name', node,false,'Output: Name')//{value: 'num'}); // the key must be 'name'
  
         return node
-            //.addControl(ctrl)
+            .addControl(ctrl)
             .addInput(inp);
+    }
+}
+
+class InputNode extends Node {
+    nodeTitleClass = "title-logistics";
+    nodeLabel = "In";
+    render() {
+        return (
+            <NodeBuilder propShare={this.props} stateShare={this.state} nodeTitleClass={this.nodeTitleClass} nodeLabel={this.nodeLabel} doOverclock={false}/>
+        );
+    }
+}
+
+export class ModuleNode extends InputNode {
+    nodeTitleClass = "title-logistics";
+    nodeLabel = "MOD";
+}
+
+export class OutputNode extends InputNode {
+    nodeTitleClass = "title-logistics";
+    nodeLabel = "OUT";
+}
+
+class StrControl extends Rete.Control {
+    static component = ({ value, change }) => (
+        <input
+            type="text"
+            value={value}
+            size = "12"
+            onChange={e => change(e.target.value)}
+            onPointerMove={e => e.stopPropagation()}
+        />
+    );
+
+    constructor(emitter, key, node, readonly = false,initText = '...') {
+        super(key);
+        this.emitter = emitter;
+        this.key = key;
+        this.component = StrControl.component;
+
+        const initial = node.data[key] || initText;
+
+        node.data[key] = initial;
+        this.props = {
+            readonly,
+            value: initial,
+            change: this.change.bind(this),
+        };
+
+    }
+    
+    onChange() {}
+
+    change(val) {
+        this.props.value = val;
+        this.update();
+        this.doUpdate();
+        this.onChange();
+    }
+
+    doUpdate() {
+        if (this.key) this.putData(this.key, this.props.value);
+        this.emitter.trigger('process');
+    }
+
+    setValue(val) {
+        this.props.value = val;
+        this.putData(this.key, val);
+        this.doUpdate();
+        this.update();
+    }
+}
+
+
+
+class SelectControl extends Rete.Control {
+    static component = ({value, items, change}) => (
+        <ItemSelect className="item-select" value={value} autoWidth={true} onChange={(e) => change(e.target.value)}>
+            {Object.keys(items).slice(1,Object.keys(items).length).map((mod)=>(<MenuItem key={mod} value={mod}>{mod}</MenuItem>))}
+        </ItemSelect>
+    )
+
+    constructor(emitter, key, node, readonly = false) {
+        super(key);
+        this.emitter = emitter;
+        this.key = key;
+        this.component = SelectControl.component;
+        const initial = node.data[key] || Object.keys(emitter.modules)[0];
+
+        node.data[key] = initial;
+        this.props = {
+            readonly,
+            value: initial,
+            items: emitter.modules,
+            change: this.change.bind(this),
+        };
+    }
+
+    onChange() {}
+
+    change(val) {
+        this.props.value = val;
+        this.update();
+        this.doUpdate();
+        this.onChange();
+    }
+
+    doUpdate() {
+        if (this.key) this.putData(this.key, this.props.value);
+        this.emitter.trigger('process');
+    }
+
+    setValue(val) {
+        this.props.value = val;
+        this.putData(this.key, val);
+        this.doUpdate();
+        this.update();
     }
 }

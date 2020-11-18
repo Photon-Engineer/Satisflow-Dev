@@ -1,0 +1,27 @@
+Node:
+[x] Balanced splitter (One input, one output-infinite connections)
+[x] Balanced Merger (One input-infinite connections, one output)
+[ ] Add new packager building
+
+Saving: 
+[ ] Remove the save text box and instead just directly save to a file named by the user. 
+
+Performance:
+[ ] Processes seem to happen multiple times, need to abort properly. 
+
+Feature: 
+[x] Get Modules Plugin working
+    [x] Change ctrl to dropdown in modules (use this.editor.modules for names)
+    [ ] Update saving method to also grab modules.
+    [ ] Automatically determine input name and add controls for selecting item/amount for auto label.
+    [ ] Automatically generate input/output names in components
+[ ] Add comments plugin
+[ ] Get Connection-Reroute plugin working and remove junction
+[ ] Power Buildings
+[ ] Global Power Req Calculation
+
+Other
+[ ] Come up with better way to define recipies
+[ ] Evaluate all recipies
+[ ] Update Background Grid
+[ ] Potentially Update Node Styling 

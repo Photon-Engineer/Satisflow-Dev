@@ -27,8 +27,9 @@ class Editor extends Component {
 
 
     createEditor = async (container) => {
-        this.engine = new Rete.Engine("satisflow@0.5.0");
-        this.editor = new Rete.NodeEditor("satisflow@0.5.0", container);
+        const key = "satisflow@0.5.0"; //also in component stage
+        this.engine = new Rete.Engine(key);
+        this.editor = new Rete.NodeEditor(key, container);
         window.rete_editor = this.editor;
         this.editor.use(ConnectionPlugin);
         this.editor.use(ReactRenderPlugin);
@@ -44,15 +45,15 @@ class Editor extends Component {
         //this.editor.use(ConnectionReroutePlugin); // this is not working.. could be because the connection path plugin is also installed? 
 
         // Modules
-        var defaultData = () => ({id: 'demo@0.1.0', nodes: {}});
-        var modules = {test: defaultData()};
+        var defaultData = () => ({id: key, nodes: {}});
+        var modules = {"Main View": {data: defaultData()}};
 
         this.editor.use(ModulePlugin,{engine:this.engine, modules:modules})
             // Needs -> Module component, input node, output node, HTML area for creating/loading/adding modules
             // Thoughts -> Module component cannot be rotated. Input/output nodes will have a dropdown to select socket type.
             //             When a module is created, the user is asked to provide a name for it. 
             //             Consider changing the dock into an accordian, which can be used to group entries, material-ui already has one -> https://material-ui.com/components/accordion/
-
+        this.editor.modules = modules;
         // Context Menu
         this.editor.use(ContextMenuPlugin, {
             searchBar: false, // true by default
@@ -65,7 +66,7 @@ class Editor extends Component {
         background.classList = 'background';
         this.editor.use(AreaPlugin, { background });
 
-        initialize(this.engine, this.editor); // Register and Create Initial Components
+        initialize(this.engine, this.editor,modules); // Register and Create Initial Components
 
         this.editor.on('error', err => alert(err));
 

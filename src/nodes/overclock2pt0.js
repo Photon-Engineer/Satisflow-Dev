@@ -5,7 +5,7 @@ import { Node, Socket, Control } from 'rete-react-render-plugin';
 //Sockets and Controls
 import { numSocket } from '../sockets/AllSockets'
 import { OverclockControl } from '../controls/OverclockControl'
-
+import { NodeBuilder } from './NodeBuilder'
 
 export class Overclock extends Rete.Component {
     constructor() {
@@ -14,7 +14,7 @@ export class Overclock extends Rete.Component {
     }
 
     builder(node) {
-        node.addOutput(new Rete.Output("o1", "Output", numSocket, true));
+        node.addOutput(new Rete.Output("o1", "", numSocket, true));
         node.addControl(new OverclockControl(this.editor, "ovc", node, false));
         return node;
     }
@@ -24,42 +24,12 @@ export class Overclock extends Rete.Component {
     }
 }
 
-
 export class OverclockNode extends Node {
     nodeTitleClass = "title-logistics";
     nodeLabel = "Ov";
     render() {
-        const { node, bindSocket, bindControl } = this.props;
-        const { outputs, controls, inputs, selected } = this.state;
         return (
-            <div className="node-pane" style={{width:"200px", height:"100px",}}>
-                <div className={"socket-pane lrpane"}>
-                    <div className="right-socket">
-                        <Socket
-                            type="output"
-                            socket={outputs[0].socket}
-                            io={outputs[0]}
-                            innerRef={bindSocket}
-                        />
-                    </div>
-                </div>
-                <div className="content-pane" style={{height:"80%"}}>
-                    <div className={this.nodeTitleClass + " ti-grad title-pane"}>
-                        <div className="two-letter-label">&nbsp;{this.nodeLabel}</div>
-                        {node.name}
-                    </div>
-                    <div className="label-pane">
-                        <div className="label">
-                            <Control
-                                className="control"
-                                key={controls[0].key}
-                                control={controls[0]}
-                                innerRef={bindControl}
-                            />
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <NodeBuilder propShare={this.props} stateShare={this.state} nodeTitleClass={this.nodeTitleClass} nodeLabel={this.nodeLabel} doOverclock={false}/>
         );
     }
 }
