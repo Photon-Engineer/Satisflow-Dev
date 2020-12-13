@@ -32,8 +32,12 @@ export class InputNumber extends Rete.Component {
         //var out = new rete.Output('output', 'Number', anySocket); // the key must be 'output'
         //var ctrl = new StrControl(this, 'name', node); // the key must be 'name'
         //var ctrl2 = new rete.FieldControl(this.editor, 'number', {type: 'number', value: 1});
+        var nIn = 0;
+        const nodes = this.editor.nodes;
+        nodes.forEach((elem)=>{if(elem.name==="Input") nIn++})
+        
         node.addOutput(new Rete.Output("output","",anySocket));
-        node.addControl(new StrControl(this.editor, 'name', node,false,'Input: Name'));//{value: 'num'}); // the key must be 'name'
+        node.addControl(new StrControl(this.editor, 'name', node,false,'Input: '+nIn));//{value: 'num'}); // the key must be 'name'
         return node
             //.addControl(ctrl)
             //.addControl(ctrl2)
@@ -106,8 +110,13 @@ export class OutputNumber extends Rete.Component {
     }
  
     builder(node) {
+        var nOut = 0;
+        const nodes = this.editor.nodes;
+        nodes.forEach((elem)=>{if(elem.name==="Output") nOut++})
+
+
         var inp = new Rete.Input('input', '', anySocket); // the key must be 'input'
-        var ctrl = new StrControl(this.editor, 'name', node,false,'Output: Name')//{value: 'num'}); // the key must be 'name'
+        var ctrl = new StrControl(this.editor, 'name', node,false,'Output '+nOut)//{value: 'num'}); // the key must be 'name'
  
         return node
             .addControl(ctrl)
@@ -116,7 +125,7 @@ export class OutputNumber extends Rete.Component {
 }
 
 class InputNode extends Node {
-    nodeTitleClass = "title-logistics";
+    nodeTitleClass = "title-modules";
     nodeLabel = "In";
     render() {
         return (
@@ -126,12 +135,12 @@ class InputNode extends Node {
 }
 
 export class ModuleNode extends InputNode {
-    nodeTitleClass = "title-logistics";
+    nodeTitleClass = "title-modules";
     nodeLabel = "MOD";
 }
 
 export class OutputNode extends InputNode {
-    nodeTitleClass = "title-logistics";
+    nodeTitleClass = "title-modules";
     nodeLabel = "OUT";
 }
 

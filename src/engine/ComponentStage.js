@@ -82,11 +82,13 @@ class ModuleHandler extends React.Component {
         let selectedValue = event.target.value;
         //let idx = this.state.modulenames.findIndex(i => i === selectedValue);
         //this.props.onSelectChange(this.props.listItems[idx]);
+        this.props.editor.currentModule = selectedValue;
         this.setState({ value: selectedValue});
     }
 
     createNewModule = (event) => {
-        var modName = window.prompt("Enter a unique name for the module:","My Module 1");
+        var modName = window.prompt("Enter a unique name for the module:","My Module "+Object.keys(this.props.modules).length);
+        if(modName===null) return;
         if(Object.keys(this.props.modules).indexOf(modName)==-1){
             this.props.modules[this.state.value].data = this.props.editor.toJSON();
             //modData = modData.concat(this.emptyData);
@@ -100,6 +102,7 @@ class ModuleHandler extends React.Component {
     componentDidUpdate() {
         var data = this.props.modules[this.state.value].data;
         this.props.editor.fromJSON(data);
+        this.props.editor.currentModule = this.state.value;
     }
 
     renameModule = (event) => {

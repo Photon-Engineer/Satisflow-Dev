@@ -55,7 +55,12 @@
   }
   
   .title-logistics {
-    background: olive;
+    background: rgb(197, 149, 19);
+    @include titleform;
+  }
+
+  .title-modules {
+    background: blue;
     @include titleform;
   }
 

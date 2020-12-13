@@ -12,9 +12,10 @@ Performance:
 Feature: 
 [x] Get Modules Plugin working
     [x] Change ctrl to dropdown in modules (use this.editor.modules for names)
-    [ ] Update saving method to also grab modules.
-    [ ] Automatically determine input name and add controls for selecting item/amount for auto label.
-    [ ] Automatically generate input/output names in components
+    [x] Update saving method to also grab modules.
+        [ ] Test. Figure out how to update the ModuleHandler. Maybe put a function in the editor like moduleHandlerReset, that links to the state of the object. 
+    [-] Automatically determine input name and add controls for selecting item/amount for auto label.
+    [x] Automatically generate input/output names in components
 [ ] Add comments plugin
 [ ] Get Connection-Reroute plugin working and remove junction
 [ ] Power Buildings

@@ -54,6 +54,7 @@ class Editor extends Component {
             //             When a module is created, the user is asked to provide a name for it. 
             //             Consider changing the dock into an accordian, which can be used to group entries, material-ui already has one -> https://material-ui.com/components/accordion/
         this.editor.modules = modules;
+        this.editor.currentModule = "Main View";
         // Context Menu
         this.editor.use(ContextMenuPlugin, {
             searchBar: false, // true by default
@@ -165,8 +166,10 @@ class SaveLoadComponent extends React.Component {
         this.handleLoad = this.handleLoad.bind(this);
         this.handleStore = this.handleStore.bind(this);
         this.handleChange = this.handleChange.bind(this);
-        this.handleRefresh = this.handleRefresh.bind(this);
+        //this.handleRefresh = this.handleRefresh.bind(this);
         this.handleClear = this.handleClear.bind(this);
+        this.handleSave = this.handleSave.bind(this);
+        this.handleFileLoad = this.handleFileLoad.bind(this);
         this.abort = this.abort.bind(this);
     }
 
@@ -207,7 +210,7 @@ class SaveLoadComponent extends React.Component {
     async abort() {
         await this.mainEditor.engine.abort();
     }
-
+    /*
     handleRefresh() {
         //this.mainEditor.editor.fromJSON(this.mainEditor.editor.toJSON());
         var thisJson = this.mainEditor.editor.toJSON();
@@ -217,6 +220,7 @@ class SaveLoadComponent extends React.Component {
         alert('Refreshing editor.')
         this.mainEditor.editor.fromJSON(JSON.parse(storedJson));
     }
+    */
 
     handleClear() {
         this.abort();
@@ -225,14 +229,44 @@ class SaveLoadComponent extends React.Component {
         this.mainEditor.editor.fromJSON(thisJson);
     }
 
+    handleSave(){
+        this.mainEditor.editor.modules[this.mainEditor.editor.currentModule].data = this.mainEditor.editor.toJSON();
+        const text = JSON.stringify(this.mainEditor.editor.modules);
+        const filename = 'Satisflow_Data.JSON';
+
+        var element = document.createElement('a');
+        element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+        element.setAttribute('download', filename);
+        element.style.display = 'none';
+        document.body.appendChild(element);
+        element.click();
+        document.body.removeChild(element);
+    }
+
+    handleFileLoad(event) {
+        var file = event.target.files;
+        console.log(file);
+        const reader = new FileReader();
+        reader.onloadend = (e) => {
+            var json = JSON.parse(e.target.result);
+            this.mainEditor.editor.modules = json;
+            this.mainEditor.editor.currentModule = "Main View";
+            this.mainEditor.editor.fromJSON(json["Main View"].data);
+        }
+        reader.readAsText(file[0]);
+        
+    }
+
     render() {
 
         return (
             //<button className = "slider" onClick={this.handleStore}>Export Data</button>
+
+            //<textarea rows="4" columns="50" style={{ width: "200px", height: "600px" }} value={this.state.currentEditorState} onChange={this.handleChange} />
+            //<BlueButton variant="contained" color="primary" onClick={this.handleLoad}>Restore Data</BlueButton>
             <div>
-                <BlueButton variant="contained" color="primary" onClick={this.handleStore}>Export Data</BlueButton>
-                <textarea rows="4" columns="50" style={{ width: "200px", height: "600px" }} value={this.state.currentEditorState} onChange={this.handleChange} />
-                <BlueButton variant="contained" color="primary" onClick={this.handleLoad}>Restore Data</BlueButton>
+                <BlueButton variant="contained" color="primary" onClick={this.handleSave}>Export Data</BlueButton>
+                <input type="file" onChange={this.handleFileLoad} id="test" key="test" />
                 <BlueButton variant="contained" color="primary" onClick={this.handleClear}>Clear Editor</BlueButton>
             </div>
         )
