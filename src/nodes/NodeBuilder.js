@@ -95,7 +95,6 @@ export class NodeBuilder extends React.Component {
             inLabels = inLabels.slice(0,inLabels.length-1);
         }
 
-
         return (
             <div className="node-pane">
                 <div className={"socket-pane-"+inPos}>

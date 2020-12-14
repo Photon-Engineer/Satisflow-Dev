@@ -47,13 +47,14 @@ class Editor extends Component {
         // Modules
         var defaultData = () => ({id: key, nodes: {}});
         var modules = {"Main View": {data: defaultData()}};
-
-        this.editor.use(ModulePlugin,{engine:this.engine, modules:modules})
+        this.editor.modules = modules;
+        this.editor.use(ModulePlugin,{engine:this.engine, modules:this.editor.modules})
+        //this.engine.use(ModulePlugin, {engine:this.engine, modules:this.editor.modules});
             // Needs -> Module component, input node, output node, HTML area for creating/loading/adding modules
             // Thoughts -> Module component cannot be rotated. Input/output nodes will have a dropdown to select socket type.
             //             When a module is created, the user is asked to provide a name for it. 
             //             Consider changing the dock into an accordian, which can be used to group entries, material-ui already has one -> https://material-ui.com/components/accordion/
-        this.editor.modules = modules;
+        
         this.editor.currentModule = "Main View";
         // Context Menu
         this.editor.use(ContextMenuPlugin, {
@@ -67,7 +68,7 @@ class Editor extends Component {
         background.classList = 'background';
         this.editor.use(AreaPlugin, { background });
 
-        initialize(this.engine, this.editor,modules); // Register and Create Initial Components
+        initialize(this.engine, this.editor); // Register and Create Initial Components
 
         this.editor.on('error', err => alert(err));
 
@@ -249,11 +250,17 @@ class SaveLoadComponent extends React.Component {
         const reader = new FileReader();
         reader.onloadend = (e) => {
             var json = JSON.parse(e.target.result);
-            this.mainEditor.editor.modules = json;
-            this.mainEditor.editor.currentModule = "Main View";
-            this.mainEditor.editor.fromJSON(json["Main View"].data);
+            modify(this.mainEditor.editor.modules,json);
+            //this.mainEditor.editor.modules = json;
+            var event = {target: {value: "Main View"}};
+            //this.mainEditor.editor.use(ModulePlugin,{engine:this.engine, modules:this.mainEditor.editor.modules})
+            this.mainEditor.editor.ModuleHandlerChangeEvent(event,false);
+            //this.mainEditor.editor.currentModule = "Main View";
+            //this.mainEditor.editor.fromJSON(json["Main View"].data);
         }
-        reader.readAsText(file[0]);
+        if(file.length>0){
+            reader.readAsText(file[0]);
+        }
         
     }
 
@@ -264,12 +271,27 @@ class SaveLoadComponent extends React.Component {
 
             //<textarea rows="4" columns="50" style={{ width: "200px", height: "600px" }} value={this.state.currentEditorState} onChange={this.handleChange} />
             //<BlueButton variant="contained" color="primary" onClick={this.handleLoad}>Restore Data</BlueButton>
+            //<input type="file" onChange={this.handleFileLoad} id="test" key="test" />
             <div>
                 <BlueButton variant="contained" color="primary" onClick={this.handleSave}>Export Data</BlueButton>
-                <input type="file" onChange={this.handleFileLoad} id="test" key="test" />
+                <input type="file" hidden id="blue-file-button" onChange={this.handleFileLoad}/>
+                <label htmlFor="blue-file-button">
+                    <BlueButton variant="contained" component="span" color="primary">Load Data</BlueButton>
+                </label> 
                 <BlueButton variant="contained" color="primary" onClick={this.handleClear}>Clear Editor</BlueButton>
             </div>
         )
     }
 }
 
+function modify(obj, newObj) {
+
+    Object.keys(obj).forEach(function(key) {
+      delete obj[key];
+    });
+  
+    Object.keys(newObj).forEach(function(key) {
+      obj[key] = newObj[key];
+    });
+    
+  }

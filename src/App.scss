@@ -16,9 +16,11 @@ $fontfam: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     height: 40px;
     background-color: white;
     border-radius: 5px;
-    position: absolute;
-    left: 20px;
-    top: 10px;
+    //position: absolute;
+    //left: 20px;
+    //top: 10px;
+    margin-top: 10px;
+    margin-left: 20px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -42,6 +44,8 @@ $fontfam: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: $primblue;
     z-index: 2;
     @include makeshadow;
+    display: flex;
+    flex-direction: row;
 }
 .sidebar {
     background-color: darken($primblue,10%);
@@ -100,13 +104,27 @@ $fontfam: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     width: 200px;
     font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
     @include impactmessage;
+    transition: ease 0.3s;
 }
+
 .tip {
-    width: 800px;
+    width: auto;
     @include impactmessage;
     font-family: $fontfam;
     font-size: 90%;
     padding: 5px;
+    font-weight: bold;
+    transition: all linear 0.5s;
+}
+
+.tip:hover {
+  background-color: lightsalmon;
+  
+}
+
+.tip:active {
+  background-color: #FFDD83;
+  transition: none;
 }
 
 .donateButton {

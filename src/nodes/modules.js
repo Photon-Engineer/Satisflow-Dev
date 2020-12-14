@@ -74,7 +74,7 @@ export class ModuleComponent extends Rete.Component {
     }
 
     worker(node, inputs, outputs) {
-        console.log('here')
+        //console.log('here')
 
         //Update Output Labels
         const okeys = Object.keys(outputs);
