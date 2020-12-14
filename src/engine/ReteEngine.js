@@ -96,15 +96,31 @@ class Editor extends Component {
                 d // string, d attribute of <path>
             } = data;
             if(connection!==undefined){
-                const key = connection.output.key;
-                const node = connection.output.node;
-                const type = node.outputs.get(key).socket.name;
-                
-                if(type==="number"){
-                    const [x1, y1, x2, y2] = points;
+                const outKey = connection.output.key;
+                const inKey = connection.input.key;
+                const inNode = connection.input.node;
+                const outNode = connection.output.node;
+                const outType = outNode.outputs.get(outKey).socket.name;
+                const [x1, y1, x2, y2] = points;
+                if(outType==="number"){
                     const hx1 = x1 + Math.abs(x2 - x1) * 0.3;
                     const hx2 = x2 - Math.abs(x2 - x1) * 0.3;
-                    data.d = `M ${x1} ${y1} C ${hx1} ${y1} ${hx2} ${y2} ${x2+12} ${y2+12} `;
+                    data.d = `M ${x1} ${y1} C ${hx1} ${y1} ${hx2} ${y2} ${x2} ${y2} `;
+                    //data.d = `M ${x1} ${y1} C ${x2} ${y1} ${x1} ${y2} ${x2} ${y2}`;
+                } else {
+                    var svgstr = `M ${x1} ${y1} C `;
+                    if(socketIsHorizontal(outNode,outKey)){
+                        svgstr = svgstr + `${x2} ${y1} `;
+                    }else{
+                        svgstr = svgstr + `${x1} ${y2} `;
+                    }
+                    if(socketIsHorizontal(inNode,inKey)){
+                        svgstr = svgstr + ` ${x1} ${y2} ${x2} ${y2}`;
+                    } else {
+                        svgstr = svgstr + ` ${x2} ${y1} ${x2} ${y2}`;
+                    }
+                    data.d = svgstr;
+                    //data.d = `M ${x1} ${y1} C ${x2} ${y1} ${x1} ${y2} ${x2} ${y2}`;
                 }
             }
 
@@ -294,4 +310,31 @@ function modify(obj, newObj) {
       obj[key] = newObj[key];
     });
     
+  }
+
+
+  function socketIsHorizontal(node,key) {
+    let rot = node.data["rotationState"];
+    let type = node["name"];
+    
+    const rot02 = rot === 0 || rot ===2 || rot === undefined; // check if rotation state is 0 or 2 (horizontal states)
+    const sCheck = type==="Splitter" && !(key==="i1" || key==="o2"); // Check for vertical socket on splitter node
+    const mCheck = type==="Merger" && !(key==="o1" || key==="i2"); // Check for vertical socket on merger node
+    const smCheck = sCheck || mCheck; //check for non-splitter/ merger bldg
+    const noSM = type!=="Splitter" && type !=="Merger";
+
+    var isHorSocket = true;
+
+    if(rot02 && smCheck) {
+        isHorSocket = false;
+    }
+    if(!rot02 && !smCheck) {
+        isHorSocket = false;
+    }
+    if(!rot02 && noSM){
+        isHorSocket = false;
+    }
+    
+    return isHorSocket;
+
   }
