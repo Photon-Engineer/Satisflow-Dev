@@ -30,6 +30,7 @@ import ReactDOM from 'react-dom'
 import { BlueButton } from './material-ui-components'
 import MenuItem from '@material-ui/core/MenuItem';
 import {ItemSelect} from '../engine/material-ui-components'
+import AreaPlugin from 'rete-area-plugin';
 // END imports
 
 export async function initialize(engine, editor) {
@@ -109,10 +110,14 @@ class ModuleHandler extends React.Component {
         }
     }
 
-    componentDidUpdate() {
+    async componentDidUpdate() {
         var data = this.props.editor.modules[this.state.value].data;
-        this.props.editor.fromJSON(data);
+        await this.props.editor.fromJSON(data);
         this.props.editor.currentModule = this.state.value;
+        //if(Object.keys(data.nodes).length === 0 && data.nodes.constructor === Object) {
+        //    return;
+        //}
+        AreaPlugin.zoomAt(this.props.editor);
     }
 
     renameModule = (event) => {

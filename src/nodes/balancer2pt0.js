@@ -28,7 +28,7 @@ export class Balancer extends Rete.Component {
         var inppm = 0;
         var outppm = 0;
 
-        if (nIn) {
+        if (nIn && (inputs['i1'][0]!==undefined)) {
             inputs['i1'].forEach((inp)=>inppm=inppm+inp[1]);
             if (nOut > 0) {
                 outppm = inppm / nOut;

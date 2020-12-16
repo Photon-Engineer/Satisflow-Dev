@@ -79,6 +79,10 @@
   .node-pane:active {
     background-color: aquamarine;
   }
+
+  .node-pane.selected {
+    background-color: #1581B7;
+  }
   .content-pane {
     display: flex;
     min-width: 210px;

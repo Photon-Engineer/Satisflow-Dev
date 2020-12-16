@@ -2,11 +2,12 @@
 import ReactRenderPlugin from "rete-react-render-plugin";
 import ConnectionPlugin from "rete-connection-plugin";
 //import DockPlugin from "rete-dock-plugin"
+import CommentPlugin from "rete-comment-plugin";
 import AreaPlugin from "rete-area-plugin";
 import ContextMenuPlugin from 'rete-context-menu-plugin';
 import ModulePlugin from 'rete-module-plugin';
 //import ConnectionReroutePlugin from 'rete-connection-reroute-plugin';
-import ConnectionPathPlugin from 'rete-connection-path-plugin';
+//import ConnectionPathPlugin from 'rete-connection-path-plugin';
 import Rete, { Connection } from "rete";
 // React
 import React, { Component } from "react";
@@ -34,6 +35,7 @@ class Editor extends Component {
         this.editor.use(ConnectionPlugin);
         this.editor.use(ReactRenderPlugin);
         
+        /*
         this.editor.use(ConnectionPathPlugin, {
             type: ConnectionPathPlugin.DEFAULT, // DEFAULT or LINEAR transformer
             //transformer: () => ([x1, y1, x2, y2]) => [[x1, y1], [x2, y2]], // optional, custom transformer
@@ -41,8 +43,10 @@ class Editor extends Component {
             options: { vertical: false, curvature: 0.1 }, // optional
             //arrow: { color: 'steelblue', marker: 'M-5,-10 L-5,10 L20,0 z' }
         });
+        */
+        
 
-        //this.editor.use(ConnectionReroutePlugin); // this is not working.. could be because the connection path plugin is also installed? 
+        //this.editor.use(ConnectionReroutePlugin); // this is not working.. not sure what is preventing it. 
 
         // Modules
         var defaultData = () => ({id: key, nodes: {}});
@@ -66,7 +70,16 @@ class Editor extends Component {
         container.classList.add('custom-node-editor');
         const background = document.createElement('div');
         background.classList = 'background';
-        this.editor.use(AreaPlugin, { background });
+        //
+        this.editor.use(AreaPlugin, { background: background, snap: {size: 8, dynamic: true} });
+
+        this.editor.use(CommentPlugin,{
+            //frameCommentKeys: { code: 'KeyC', shiftKey: false, ctrlKey: false, altKey: true },
+            //inlineCommentKeys: { code: 'KeyC', shiftKey: true, ctrlKey: false, altKey: false },
+            //deleteCommentKeys: { code: 'Delete', shiftKey: false, ctrlKey: false, altKey: false }
+            //margin: 30,
+        })
+
 
         initialize(this.engine, this.editor); // Register and Create Initial Components
 
@@ -244,6 +257,8 @@ class SaveLoadComponent extends React.Component {
         var thisJson = this.mainEditor.editor.toJSON();
         thisJson.nodes = {}
         this.mainEditor.editor.fromJSON(thisJson);
+        this.mainEditor.editor.trigger('removecomment',{type:"frame"});
+        this.mainEditor.editor.trigger('removecomment',{type:"inline"});
     }
 
     handleSave(){

@@ -9,6 +9,9 @@ import { version } from './version'
 
 function App() {
   let nodeEditor = <NodeEditor />;
+
+  window.addEventListener('beforeunload', onBeforeUnload);
+
   return (
     <div className="wrapper">
       <div className="topbar">
@@ -70,6 +73,16 @@ class TipCycle extends React.Component {
       <div className="tip" onClick={this.cycleTip}>{tip}</div>
     )
   }
+}
+
+function onBeforeUnload(e) {
+  if (true) {
+      e.preventDefault();
+      e.returnValue = '';
+      return;
+  }
+
+  delete e['returnValue'];
 }
 
 export default App;

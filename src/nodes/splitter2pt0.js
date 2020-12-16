@@ -32,7 +32,7 @@ export class Splitter extends Rete.Component {
 
         var itemName;
         var outppm;
-        if (nIn) {
+        if (nIn && (inputs['i1'][0]!==undefined)) {
             if (nOut > 0) {
                 outppm = inputs['i1'][0][1] / nOut;
             } else {
@@ -118,7 +118,7 @@ class AdjustableNodePane extends React.Component {
         
         
         return (
-            <div className="node-pane" style={{ width: "100px", height: "100px" }}>
+            <div className={"node-pane "+selected} style={{ width: "100px", height: "100px" }}>
                 <div className={"socket-pane-"+rotPos[0]}>
                     <div className={"socket-"+rotPos[0]}>
                         <Socket

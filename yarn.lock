@@ -3698,18 +3698,6 @@ cyclist@^1.0.1:
   resolved "https://registry.yarnpkg.com/cyclist/-/cyclist-1.0.1.tgz#596e9698fd0c80e12038c2b82d6eb1b35b6224d9"
   integrity sha1-WW6WmP0MgOEgOMK4LW6xs1tiJNk=
 
-d3-path@1:
-  version "1.0.9"
-  resolved "https://registry.yarnpkg.com/d3-path/-/d3-path-1.0.9.tgz#48c050bb1fe8c262493a8caf5524e3e9591701cf"
-  integrity sha512-VLaYcn81dtHVTjEHd8B+pbe9yHWpXKZUC87PzoFmsFrJqgFwDe/qxfp5MlfsfM1V5E/iVt0MmEbWQ7FVIXh/bg==
-
-d3-shape@^1.2.2:
-  version "1.3.7"
-  resolved "https://registry.yarnpkg.com/d3-shape/-/d3-shape-1.3.7.tgz#df63801be07bc986bc54f63789b4fe502992b5d7"
-  integrity sha512-EUkvKjqPFUAZyOlhY5gzCxCeI0Aep04LwIRpsZ/mLFelJiUfnK56jo5JMDSE7yyP2kLSb6LtF+S5chMk7uqPqw==
-  dependencies:
-    d3-path "1"
-
 d@1, d@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/d/-/d-1.0.1.tgz#8698095372d58dbee346ffd0c7093f99f8f9eb5a"
@@ -9365,12 +9353,10 @@ rete-area-plugin@^0.2.1:
   resolved "https://registry.yarnpkg.com/rete-area-plugin/-/rete-area-plugin-0.2.1.tgz#0afe4581baf99c36c904d08e4f0a835ed6604d86"
   integrity sha512-MOeQRmSC/gjkZIMo0fNuomzunRplALqd86V+jSzuhBYchCw0wshv2/iXu4xRxVZkw9r1HpZxlz9gLkbatCbXMw==
 
-rete-connection-path-plugin@^0.3.1:
-  version "0.3.1"
-  resolved "https://registry.yarnpkg.com/rete-connection-path-plugin/-/rete-connection-path-plugin-0.3.1.tgz#c8ce2ce2b3ea2d1466c554f9f6a642b31df9f4d5"
-  integrity sha512-clJ4P16hviRtUskZDRTgI9O2fyXo14RD8PBVtQOelg1xR9MgbFwq7P3XXzC7hF7VZF1kHm23sztAqI1bHdqQwQ==
-  dependencies:
-    d3-shape "^1.2.2"
+rete-comment-plugin@^0.7.0-rc.1:
+  version "0.7.0-rc.1"
+  resolved "https://registry.yarnpkg.com/rete-comment-plugin/-/rete-comment-plugin-0.7.0-rc.1.tgz#a8cc0e0858a655e543eb432b4bd1b82fa631a50d"
+  integrity sha512-Bc8HOFaR6IMozikpbeRzq8OFlDFpIpaIh3WbNkVvXiEINHgyBAmZw2gEtwtpf62F1MHWR7gdxvuwiMaVHKYeUQ==
 
 rete-connection-plugin@^0.9.0:
   version "0.9.0"

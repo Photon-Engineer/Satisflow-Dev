@@ -121,7 +121,7 @@ class AdjustableNodePane extends React.Component {
         }
 
         return (
-            <div className="node-pane" style={{width:"100px", height:"100px"}}>
+            <div className={"node-pane "+selected} style={{width:"100px", height:"100px"}}>
                 <div className={"socket-pane-"+rotPos[0]}>
                     <div className={"socket-"+rotPos[0]}>
                         <Socket

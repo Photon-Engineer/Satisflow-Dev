@@ -96,7 +96,7 @@ export class NodeBuilder extends React.Component {
         }
 
         return (
-            <div className="node-pane">
+            <div className={"node-pane " +selected}>
                 <div className={"socket-pane-"+inPos}>
                     <div className={"socket-"+inPos}>
                         {inSockets}
