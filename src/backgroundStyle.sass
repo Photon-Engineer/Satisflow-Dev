@@ -5,9 +5,9 @@ $th: 0.008
 
 @keyframes dash
   0% 
-    stroke-dashoffset: 425;
+    stroke-dashoffset: 425
   100%
-    stroke-dashoffset: 0;
+    stroke-dashoffset: 0
   
 
 
@@ -26,7 +26,7 @@ $th: 0.008
   top: 0px
   bottom: 0px
   .background
-    z-index: -5
+    z-index: -15
     background-size: $grid-size $grid-size
     background-image: line(right, 0.5, $th * 3, $dark-color), line(bottom, 0.5, $th * 3, $dark-color), lines(right), lines(bottom)
     background-color: darken($grid-color, 6%)
@@ -34,10 +34,10 @@ $th: 0.008
     box-sizing: border-box
   
   .connection path
-    fill: none;
+    fill: none
     stroke: #eee
-    stroke-dasharray: 80 5;
-    animation: dash 6s infinite normal linear;
+    stroke-dasharray: 80 5
+    animation: dash 6s infinite normal linear
     stroke-width: 4px
     pointer-events: none
     &::hover

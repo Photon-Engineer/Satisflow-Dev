@@ -1,0 +1,148 @@
+$primblue: #1BA1E2;
+$primgray: #eee;
+$primdark: #444;
+$fontfam: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+@mixin makeshadow {
+    box-shadow: 5px 0px 5px $primdark;
+}
+@mixin impactmessage {
+    height: 40px;
+    background-color: white;
+    border-radius: 5px;
+    //position: absolute;
+    //left: 20px;
+    //top: 10px;
+    margin-top: 10px;
+    margin-left: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 30px;
+}
+
+.wrapper{
+    display: grid;
+    grid-template-columns: 250px 1fr 250px;
+    grid-template-rows: 60px 1fr 30px;
+    gap: 0px 0px;
+    grid-template-areas:
+      "topbar topbar topbar"
+      "leftbar canvas right-menu"
+      "bottombar bottombar bottombar";
+    width: 100vw;
+    height: 100vh;
+}
+.topbar {
+    grid-area: topbar;
+    background-color: $primblue;
+    z-index: 2;
+    @include makeshadow;
+    display: flex;
+    flex-direction: row;
+}
+.sidebar {
+    background-color: darken($primblue,10%);
+}
+.leftbar {
+    grid-area: leftbar;
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+.leftbar-internal {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    width:100%;
+}
+.leftbar-header {
+    font-family: $fontfam
+  }
+  
+  .right-menu {
+    grid-area: right-menu;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+  }
+  
+  .canvas{
+      grid-area: canvas;
+      min-width: 500px;
+      background-color: $primdark;
+  
+  }
+  
+.bottombar {
+    grid-area: bottombar;
+    text-align: center;
+    background-color: $primblue;
+    vertical-align: middle; 
+}
+  
+  textarea{
+    border-radius: 8px;
+    padding: 6px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    resize: none;
+  }
+
+.logo {
+    width: 200px;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    @include impactmessage;
+    transition: ease 0.3s;
+}
+
+.tip {
+    width: auto;
+    @include impactmessage;
+    font-family: $fontfam;
+    font-size: 90%;
+    padding: 5px;
+    font-weight: bold;
+    transition: all linear 0.5s;
+}
+
+.tip:hover {
+  background-color: lightsalmon;
+  
+}
+
+.tip:active {
+  background-color: #FFDD83;
+  transition: none;
+}
+
+.donateButton {
+    margin: 2px 20px;
+    height: 17px;
+    background-color: $primgray;
+    border-radius: 3px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    font-weight: bold;
+    cursor: pointer;
+    border: none;
+    padding: 2px 8px;
+  }
+  .donateButton:hover{
+    background-color: #FFDD83;
+  }
+
+  input {
+    width: 117px;
+  }

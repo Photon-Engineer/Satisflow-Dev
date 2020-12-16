@@ -2,10 +2,12 @@
 import ReactRenderPlugin from "rete-react-render-plugin";
 import ConnectionPlugin from "rete-connection-plugin";
 //import DockPlugin from "rete-dock-plugin"
+import CommentPlugin from "rete-comment-plugin";
 import AreaPlugin from "rete-area-plugin";
 import ContextMenuPlugin from 'rete-context-menu-plugin';
+import ModulePlugin from 'rete-module-plugin';
 //import ConnectionReroutePlugin from 'rete-connection-reroute-plugin';
-import ConnectionPathPlugin from 'rete-connection-path-plugin';
+//import ConnectionPathPlugin from 'rete-connection-path-plugin';
 import Rete, { Connection } from "rete";
 // React
 import React, { Component } from "react";
@@ -26,12 +28,14 @@ class Editor extends Component {
 
 
     createEditor = async (container) => {
-        this.engine = new Rete.Engine("satisflow@0.5.0");
-        this.editor = new Rete.NodeEditor("satisflow@0.5.0", container);
+        const key = "satisflow@0.5.0"; //also in component stage
+        this.engine = new Rete.Engine(key);
+        this.editor = new Rete.NodeEditor(key, container);
         window.rete_editor = this.editor;
         this.editor.use(ConnectionPlugin);
         this.editor.use(ReactRenderPlugin);
         
+        /*
         this.editor.use(ConnectionPathPlugin, {
             type: ConnectionPathPlugin.DEFAULT, // DEFAULT or LINEAR transformer
             //transformer: () => ([x1, y1, x2, y2]) => [[x1, y1], [x2, y2]], // optional, custom transformer
@@ -39,27 +43,43 @@ class Editor extends Component {
             options: { vertical: false, curvature: 0.1 }, // optional
             //arrow: { color: 'steelblue', marker: 'M-5,-10 L-5,10 L20,0 z' }
         });
+        */
+        
 
-        //this.editor.use(ConnectionReroutePlugin); // this is not working.. could be because the connection path plugin is also installed? 
+        //this.editor.use(ConnectionReroutePlugin); // this is not working.. not sure what is preventing it. 
 
+        // Modules
+        var defaultData = () => ({id: key, nodes: {}});
+        var modules = {"Main View": {data: defaultData()}};
+        this.editor.modules = modules;
+        this.editor.use(ModulePlugin,{engine:this.engine, modules:this.editor.modules})
+        //this.engine.use(ModulePlugin, {engine:this.engine, modules:this.editor.modules});
+            // Needs -> Module component, input node, output node, HTML area for creating/loading/adding modules
+            // Thoughts -> Module component cannot be rotated. Input/output nodes will have a dropdown to select socket type.
+            //             When a module is created, the user is asked to provide a name for it. 
+            //             Consider changing the dock into an accordian, which can be used to group entries, material-ui already has one -> https://material-ui.com/components/accordion/
+        
+        this.editor.currentModule = "Main View";
+        // Context Menu
         this.editor.use(ContextMenuPlugin, {
             searchBar: false, // true by default
             searchKeep: title => true, // leave item when searching, optional. For example, title => ['Refresh'].includes(title)
             delay: 100,
         });
-        /*
-        this.editor.use(DockPlugin,{
-            container: document.querySelector('.leftbar'),
-            itemClass: 'dock-item',
-            plugins: [ReactRenderPlugin]
-        });
-        */
-        //this.editor.use(DockPlugin);
 
         container.classList.add('custom-node-editor');
         const background = document.createElement('div');
         background.classList = 'background';
-        this.editor.use(AreaPlugin, { background });
+        //
+        this.editor.use(AreaPlugin, { background: background, snap: {size: 8, dynamic: true} });
+
+        this.editor.use(CommentPlugin,{
+            //frameCommentKeys: { code: 'KeyC', shiftKey: false, ctrlKey: false, altKey: true },
+            //inlineCommentKeys: { code: 'KeyC', shiftKey: true, ctrlKey: false, altKey: false },
+            //deleteCommentKeys: { code: 'Delete', shiftKey: false, ctrlKey: false, altKey: false }
+            //margin: 30,
+        })
+
 
         initialize(this.engine, this.editor); // Register and Create Initial Components
 
@@ -81,25 +101,7 @@ class Editor extends Component {
         );
 
         this.editor.on("multiselectnode", (args) => args.accumulate = args.e.ctrlKey || args.e.metaKey);
-/*
-        this.editor.on('renderconnection', (connection) => {
-            const key = connection.connection.output.key;
-            const node = connection.connection.output.node;
-            const type = node.outputs.get(key).socket.name;
-            var connClass;
-            if (type === "pipe") {
-                connClass = "fluid-connection";
 
-            }else if (type === "number") {
-                connClass = "ovc-connection";
-            }
-            var c = connection.el.children;
-            for (var i = 0; i < c.length; i++) {
-                c[i].children[0].classList.add(connClass);
-            }
-
-        })
-*/
         this.editor.on('connectionpath',(data)=>{
             const {
                 points, // array of numbers, e.g. [x1, y1, x2, y2]
@@ -107,15 +109,31 @@ class Editor extends Component {
                 d // string, d attribute of <path>
             } = data;
             if(connection!==undefined){
-                const key = connection.output.key;
-                const node = connection.output.node;
-                const type = node.outputs.get(key).socket.name;
-                
-                if(type==="number"){
-                    const [x1, y1, x2, y2] = points;
+                const outKey = connection.output.key;
+                const inKey = connection.input.key;
+                const inNode = connection.input.node;
+                const outNode = connection.output.node;
+                const outType = outNode.outputs.get(outKey).socket.name;
+                const [x1, y1, x2, y2] = points;
+                if(outType==="number"){
                     const hx1 = x1 + Math.abs(x2 - x1) * 0.3;
                     const hx2 = x2 - Math.abs(x2 - x1) * 0.3;
-                    data.d = `M ${x1} ${y1} C ${hx1} ${y1} ${hx2} ${y2} ${x2+12} ${y2+12} `;
+                    data.d = `M ${x1} ${y1} C ${hx1} ${y1} ${hx2} ${y2} ${x2} ${y2} `;
+                    //data.d = `M ${x1} ${y1} C ${x2} ${y1} ${x1} ${y2} ${x2} ${y2}`;
+                } else {
+                    var svgstr = `M ${x1} ${y1} C `;
+                    if(socketIsHorizontal(outNode,outKey)){
+                        svgstr = svgstr + `${x2} ${y1} `;
+                    }else{
+                        svgstr = svgstr + `${x1} ${y2} `;
+                    }
+                    if(socketIsHorizontal(inNode,inKey)){
+                        svgstr = svgstr + ` ${x1} ${y2} ${x2} ${y2}`;
+                    } else {
+                        svgstr = svgstr + ` ${x2} ${y1} ${x2} ${y2}`;
+                    }
+                    data.d = svgstr;
+                    //data.d = `M ${x1} ${y1} C ${x2} ${y1} ${x1} ${y2} ${x2} ${y2}`;
                 }
             }
 
@@ -178,8 +196,10 @@ class SaveLoadComponent extends React.Component {
         this.handleLoad = this.handleLoad.bind(this);
         this.handleStore = this.handleStore.bind(this);
         this.handleChange = this.handleChange.bind(this);
-        this.handleRefresh = this.handleRefresh.bind(this);
+        //this.handleRefresh = this.handleRefresh.bind(this);
         this.handleClear = this.handleClear.bind(this);
+        this.handleSave = this.handleSave.bind(this);
+        this.handleFileLoad = this.handleFileLoad.bind(this);
         this.abort = this.abort.bind(this);
     }
 
@@ -220,7 +240,7 @@ class SaveLoadComponent extends React.Component {
     async abort() {
         await this.mainEditor.engine.abort();
     }
-
+    /*
     handleRefresh() {
         //this.mainEditor.editor.fromJSON(this.mainEditor.editor.toJSON());
         var thisJson = this.mainEditor.editor.toJSON();
@@ -230,24 +250,106 @@ class SaveLoadComponent extends React.Component {
         alert('Refreshing editor.')
         this.mainEditor.editor.fromJSON(JSON.parse(storedJson));
     }
+    */
 
     handleClear() {
         this.abort();
         var thisJson = this.mainEditor.editor.toJSON();
         thisJson.nodes = {}
         this.mainEditor.editor.fromJSON(thisJson);
+        this.mainEditor.editor.trigger('removecomment',{type:"frame"});
+        this.mainEditor.editor.trigger('removecomment',{type:"inline"});
+    }
+
+    handleSave(){
+        this.mainEditor.editor.modules[this.mainEditor.editor.currentModule].data = this.mainEditor.editor.toJSON();
+        const text = JSON.stringify(this.mainEditor.editor.modules);
+        const filename = 'Satisflow_Data.JSON';
+
+        var element = document.createElement('a');
+        element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+        element.setAttribute('download', filename);
+        element.style.display = 'none';
+        document.body.appendChild(element);
+        element.click();
+        document.body.removeChild(element);
+    }
+
+    handleFileLoad(event) {
+        var file = event.target.files;
+        console.log(file);
+        const reader = new FileReader();
+        reader.onloadend = (e) => {
+            var json = JSON.parse(e.target.result);
+            modify(this.mainEditor.editor.modules,json);
+            //this.mainEditor.editor.modules = json;
+            var event = {target: {value: "Main View"}};
+            //this.mainEditor.editor.use(ModulePlugin,{engine:this.engine, modules:this.mainEditor.editor.modules})
+            this.mainEditor.editor.ModuleHandlerChangeEvent(event,false);
+            //this.mainEditor.editor.currentModule = "Main View";
+            //this.mainEditor.editor.fromJSON(json["Main View"].data);
+        }
+        if(file.length>0){
+            reader.readAsText(file[0]);
+        }
+        
     }
 
     render() {
 
         return (
             //<button className = "slider" onClick={this.handleStore}>Export Data</button>
+
+            //<textarea rows="4" columns="50" style={{ width: "200px", height: "600px" }} value={this.state.currentEditorState} onChange={this.handleChange} />
+            //<BlueButton variant="contained" color="primary" onClick={this.handleLoad}>Restore Data</BlueButton>
+            //<input type="file" onChange={this.handleFileLoad} id="test" key="test" />
             <div>
-                <BlueButton variant="contained" color="primary" onClick={this.handleStore}>Export Data</BlueButton>
-                <textarea rows="4" columns="50" style={{ width: "200px", height: "600px" }} value={this.state.currentEditorState} onChange={this.handleChange} />
-                <BlueButton variant="contained" color="primary" onClick={this.handleLoad}>Restore Data</BlueButton>
+                <BlueButton variant="contained" color="primary" onClick={this.handleSave}>Export Data</BlueButton>
+                <input type="file" hidden id="blue-file-button" onChange={this.handleFileLoad}/>
+                <label htmlFor="blue-file-button">
+                    <BlueButton variant="contained" component="span" color="primary">Load Data</BlueButton>
+                </label> 
                 <BlueButton variant="contained" color="primary" onClick={this.handleClear}>Clear Editor</BlueButton>
             </div>
         )
     }
 }
+
+function modify(obj, newObj) {
+
+    Object.keys(obj).forEach(function(key) {
+      delete obj[key];
+    });
+  
+    Object.keys(newObj).forEach(function(key) {
+      obj[key] = newObj[key];
+    });
+    
+  }
+
+
+  function socketIsHorizontal(node,key) {
+    let rot = node.data["rotationState"];
+    let type = node["name"];
+    
+    const rot02 = rot === 0 || rot ===2 || rot === undefined; // check if rotation state is 0 or 2 (horizontal states)
+    const sCheck = type==="Splitter" && !(key==="i1" || key==="o2"); // Check for vertical socket on splitter node
+    const mCheck = type==="Merger" && !(key==="o1" || key==="i2"); // Check for vertical socket on merger node
+    const smCheck = sCheck || mCheck; //check for non-splitter/ merger bldg
+    const noSM = type!=="Splitter" && type !=="Merger";
+
+    var isHorSocket = true;
+
+    if(rot02 && smCheck) {
+        isHorSocket = false;
+    }
+    if(!rot02 && !smCheck) {
+        isHorSocket = false;
+    }
+    if(!rot02 && noSM){
+        isHorSocket = false;
+    }
+    
+    return isHorSocket;
+
+  }

@@ -7,6 +7,7 @@ import {anySocket} from '../sockets/AllSockets'
 import {NumControl} from '../controls/NumControl'
 import { ObjectDropControl } from '../controls/ObjectDropControl'
 import {itemObjArray} from '../data/Items'
+import { NodeBuilder } from './NodeBuilder'
 
 export class Starter extends Rete.Component {
     constructor() {
@@ -15,7 +16,7 @@ export class Starter extends Rete.Component {
     }
 
     builder(node) {
-        node.addOutput(new Rete.Output("o1","Output",anySocket));
+        node.addOutput(new Rete.Output("o1","",anySocket));
         node.addControl(new ObjectDropControl(this.editor,"item",node,false,"Item",itemObjArray));
         node.addControl(new NumControl(this.editor,"num",node));
         
@@ -29,6 +30,17 @@ export class Starter extends Rete.Component {
     }
 }
 
+
+export class StarterNode extends Node {
+    nodeTitleClass = "title-logistics";
+    nodeLabel = "Cr";
+    render() {
+        return (
+            <NodeBuilder propShare={this.props} stateShare={this.state} nodeTitleClass={this.nodeTitleClass} nodeLabel={this.nodeLabel} doOverclock={false}/>
+        );
+    }
+}
+/*
 class StarterNode extends Node {
     nodeTitleClass = "title-logistics";
     nodeLabel = "Cr";
@@ -37,8 +49,8 @@ class StarterNode extends Node {
         const { outputs, controls, inputs, selected } = this.state;
         return (
             <div className="node-pane" style={{width:"300px", height:"150px",}}>
-                <div className={"socket-pane lrpane"}>
-                    <div className="right-socket">
+                <div className={"socket-pane-right"}>
+                    <div className="socket-right">
                         <Socket
                             type="output"
                             socket={outputs[0].socket}
@@ -47,8 +59,8 @@ class StarterNode extends Node {
                         />
                     </div>
                 </div>
-                <div className="content-pane" style={{margin:"1% 5%"}}>
-                    <div className={this.nodeTitleClass + " ti-grad title-pane"}>
+                <div className="content-pane">
+                    <div className={this.nodeTitleClass + "ti-grad title-pane"}>
                         <div className="two-letter-label">&nbsp;{this.nodeLabel}</div>
                         {node.name}
                     </div>
@@ -75,3 +87,4 @@ class StarterNode extends Node {
         );
     }
 }
+*/

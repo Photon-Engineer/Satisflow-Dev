@@ -52,11 +52,13 @@ export class Merger extends Rete.Component {
         }
 
         outputs['o1'] = [item,outppm];
+        /*
         updateOutputLabel(node,this.editor,'o1',{
             recipeOutput: [itemName],
             maxOutputPpm: [0],
             actualOutPpm: [outppm],
         },0,false)
+        */
         //setOutputMessage(node,this.editor,'o1',outppm,outputs['o1'],false);
     }
 }
@@ -64,72 +66,26 @@ export class Merger extends Rete.Component {
 class AdjustableNodePane extends React.Component {
     constructor(props) {
         super(props);
-        this.rotArray = ["rotate(0deg)", "rotate(90deg)", "rotate(180deg)", "rotate(270deg)",]
-        this.paneArray = ["lrpane","udpane"];
-        this.positionArray = ["left-socket","top-socket","right-socket","bottom-socket"];
-
         var iniState = this.props.propShare.node.data.rotationState === undefined ? 0 : this.props.propShare.node.data.rotationState;
-        //this.state = { transform: this.stateArray[0], }
         this.state = {
-            pane: this.paneArray[determineIndex(iniState+ 0,this.paneArray.length)],
-            inPos1: this.positionArray[determineIndex(iniState+1,this.positionArray.length)],
-            inPos2: this.positionArray[determineIndex(iniState+0,this.positionArray.length)],
-            inPos3: this.positionArray[determineIndex(iniState+3,this.positionArray.length)],
-            otPos: this.positionArray[determineIndex(iniState+2,this.positionArray.length)],
-            rotAdj: this.rotArray[determineIndex(iniState+0,this.rotArray.length)],
+            rotationState: iniState,
         }
-        //this.stateArray = ["0px","20px"];
-        //this.state = {margin: this.stateArray[0]};
         this.handleRotate = this.handleRotate.bind(this);
     }
-    // The problem is that this component cannot be clicked because it is behind the content pane
-    // So there needs to be another way to invoke this method from within this pane... hmm
-    // One way around that problem is to increase the scope of this class to include the content pane as well
-    //  Then the class will have direct access to the same pane that the user does, so it should be possible to invoke the method successfully.
     handleRotate = (event) => {
         if (event.key === 'r') {
-            //var idx = this.stateArray.findIndex((x) => x === this.state.transform);
-            //var idx = this.stateArray.findIndex((x)=>x===this.state.margin);
-            //alert(idx);
-            var idx1 = this.paneArray.findIndex((x)=> x===this.state.pane);
-            idx1 = idx1 === this.paneArray.length - 1 ? 0 : ++idx1;
-
-            var idx2_1 = this.positionArray.findIndex((x)=> x===this.state.inPos1);
-            idx2_1 = idx2_1 === this.positionArray.length - 1 ? 0 : ++idx2_1;
-            var idx2_2 = this.positionArray.findIndex((x)=> x===this.state.inPos2);
-            idx2_2 = idx2_2 === this.positionArray.length - 1 ? 0 : ++idx2_2;
-            var idx2_3 = this.positionArray.findIndex((x)=> x===this.state.inPos3);
-            idx2_3 = idx2_3 === this.positionArray.length - 1 ? 0 : ++idx2_3;
-
-            var idx3 = this.positionArray.findIndex((x)=> x===this.state.otPos);
-            idx3 = idx3 === this.positionArray.length - 1 ? 0 : ++idx3;
-
-            
-
-            var idx4 = this.rotArray.findIndex((x)=> x===this.state.rotAdj);
-            idx4 = idx4 === this.rotArray.length - 1 ? 0 : ++idx4;
-
             this.setState({
-                pane: this.paneArray[idx1],
-                inPos1: this.positionArray[idx2_1],
-                inPos2: this.positionArray[idx2_2],
-                inPos3: this.positionArray[idx2_3],
-                otPos: this.positionArray[idx3],
-                rotAdj: this.rotArray[idx4],
+                rotationState: determineIndex(this.state.rotationState+1,4),
             });
-            //alert(this.stateArray[idx])
-            //this.setState({margin: this.stateArray[idx]});
         }
     }
-    
+
     componentDidUpdate() {
-        //console.log(JSON.stringify(window.rete_editor))
         try {
             setTimeout(() => {
                 let node = this.props.propShare.node;
                 window.rete_editor.view.updateConnections({ node });
-                var idx4 = this.rotArray.findIndex((x)=> x===this.state.rotAdj);
-                node.data.rotationState = idx4;
+                node.data.rotationState = this.state.rotationState;
             }, 1000);
 
         } catch {
@@ -142,10 +98,32 @@ class AdjustableNodePane extends React.Component {
         const nodeLabel = this.props.nodeLabel;
         const { node, bindSocket, bindControl } = this.props.propShare;
         const { outputs, controls, inputs, selected } = this.props.stateShare;
+
+        var rotPos = ["","","",""];
+        var rotImg = "";
+        switch(this.state.rotationState){
+            case 0:
+                rotPos = ["bottom","left","top","right"];
+                rotImg = "rotate(0deg)"
+                break;
+            case 1:
+                rotPos = ["left","top","right","bottom"];
+                rotImg = "rotate(90deg)"
+                break;
+            case 2:
+                rotPos = ["top","right","bottom","left"];
+                rotImg = "rotate(180deg)"
+                break;
+            case 3:
+                rotPos = ["right","bottom","left","top"];
+                rotImg = "rotate(270deg)"
+                break;
+        }
+
         return (
-            <div className="node-pane" style={{width:"100px", height:"100px"}}>
-                <div className={"socket-pane "+this.state.pane}>
-                    <div className={this.state.inPos1}>
+            <div className={"node-pane "+selected} style={{width:"100px", height:"100px"}}>
+                <div className={"socket-pane-"+rotPos[0]}>
+                    <div className={"socket-"+rotPos[0]}>
                         <Socket
                             type="input"
                             socket={inputs[0].socket}
@@ -154,8 +132,8 @@ class AdjustableNodePane extends React.Component {
                         />
                     </div>
                 </div>
-                <div className={"socket-pane "+this.state.pane}>
-                    <div className={this.state.inPos2}>
+                <div className={"socket-pane-"+rotPos[1]}>
+                    <div className={"socket-"+rotPos[1]}>
                         <Socket
                             type="input"
                             socket={inputs[1].socket}
@@ -164,8 +142,8 @@ class AdjustableNodePane extends React.Component {
                         />
                     </div>
                 </div>
-                <div className={"socket-pane "+this.state.pane}>
-                    <div className={this.state.inPos3}>
+                <div className={"socket-pane-"+rotPos[2]}>
+                    <div className={"socket-"+rotPos[2]}>
                         <Socket
                             type="input"
                             socket={inputs[2].socket}
@@ -174,8 +152,8 @@ class AdjustableNodePane extends React.Component {
                         />
                     </div>
                 </div>
-                <div className={"socket-pane "+this.state.pane}>
-                    <div className={this.state.otPos}>
+                <div className={"socket-pane-"+rotPos[3]}>
+                    <div className={"socket-"+rotPos[3]}>
                         <Socket
                             type="output"
                             socket={outputs[0].socket}
@@ -184,9 +162,9 @@ class AdjustableNodePane extends React.Component {
                         />
                     </div>
                 </div>
-                <div className="content-pane" tabIndex="0" onKeyPress={this.handleRotate}>
+                <div className="content-pane" tabIndex="0" onKeyPress={this.handleRotate} style={{minWidth:"80px"}}>
                     <div className="label-pane" style={{backgroundColor:"orange", paddingTop:"5px", paddingLeft:"0px"}}>
-                        <img src="./resources/arrow.png" width="80px" height="80px" style={{transform: this.state.rotAdj, alignSelf:"center"}} draggable="false" />
+                        <img src="./resources/arrow.png" width="80px" height="80px" style={{transform: rotImg, alignSelf:"center"}} draggable="false" />
                     </div>
                 </div>
             </div>
