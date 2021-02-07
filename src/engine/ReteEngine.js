@@ -285,17 +285,20 @@ class SaveLoadComponent extends React.Component {
     }
 
     handleFileLoad(event) {
-        var file = event.target.files;
-        console.log(file);
-        const reader = new FileReader();
-        reader.onloadend = (e) => {
-            var json = JSON.parse(e.target.result);
-            modify(this.mainEditor.editor.modules, json);
-            var event = { target: { value: "Main View" } };
-            this.mainEditor.editor.ModuleHandlerChangeEvent(event, false);
-        }
-        if (file.length > 0) {
-            reader.readAsText(file[0]);
+        const isconfirmed = window.confirm('This will overwrite all the current data, continue?');
+        if (isconfirmed) {
+            var file = event.target.files;
+            console.log(file);
+            const reader = new FileReader();
+            reader.onloadend = (e) => {
+                var json = JSON.parse(e.target.result);
+                modify(this.mainEditor.editor.modules, json);
+                var event = { target: { value: "Main View" } };
+                this.mainEditor.editor.ModuleHandlerChangeEvent(event, false);
+            }
+            if (file.length > 0) {
+                reader.readAsText(file[0]);
+            }
         }
     }
 
@@ -306,12 +309,12 @@ class SaveLoadComponent extends React.Component {
         const reader = new FileReader();
         reader.onloadend = (e) => {
             var json = JSON.parse(e.target.result);
-            mergeModify(this.mainEditor.editor.modules, json, file[0].name.slice(0, -5));
-            const keyArray = Object.keys(this.mainEditor.editor.modules);
+            mergeModify(this.mainEditor.editor.modules, json, this.mainEditor.editor, file[0].name.slice(0, -5));
+            //const keyArray = Object.keys(this.mainEditor.editor.modules);
             //for(var i = keyArray.length-1;i>-0;i--){
             //    await this.mainEditor.editor.ModuleHandlerChangeEvent({ target: { value: keyArray[i]} }, false);
             //}
-            this.mainEditor.editor.ModuleHandlerChangeEvent({ target: { value: "Main View"} }, false);
+            //this.mainEditor.editor.ModuleHandlerChangeEvent({ target: { value: "Main View" } }, false);
         }
 
         if (file.length > 0) {
@@ -350,14 +353,26 @@ function modify(obj, newObj) {
 
 }
 
-function mergeModify(obj, newObj, name) {
-    Object.keys(newObj).forEach(function (key) {
+async function mergeModify(obj, newObj, editor, name) {
+    var newkeys = [];
+    for (const key of Object.keys(newObj)) {
         if (key in obj) {
             obj[name + '-' + key] = newObj[key];
+            newkeys.push(name + '-' + key);
         } else {
             obj[key] = newObj[key];
+            newkeys.push(key);
         }
-    });
+    }
+
+    for (const key of newkeys) {
+        await sleep(1000);
+        editor.ModuleHandlerChangeEvent({ target: { value: key } }, false);
+    }
+}
+
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 
