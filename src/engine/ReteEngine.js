@@ -328,6 +328,10 @@ class SaveLoadComponent extends React.Component {
 
         return (
             <div>
+                <br />
+                <hr style={{borderColor: "#e3f2fd"}}/>
+                <h3 className="dock-message">Saving</h3>
+                <br />
                 <BlueButton variant="contained" color="primary" onClick={this.handleSave}>Export Data</BlueButton>
                 <input type="file" hidden id="std-file-button" onChange={this.handleFileLoad} />
                 <label htmlFor="std-file-button">
@@ -337,6 +341,10 @@ class SaveLoadComponent extends React.Component {
                 <label htmlFor="merge-file-button">
                     <BlueButton variant="contained" component="span" color="primary">Load and Merge Data</BlueButton>
                 </label>
+                <br />
+                <hr style={{borderColor: "#e3f2fd",marginTop: "1em",}}/>
+                <h3 className="dock-message">Editor Controls</h3>
+                <br />
                 <BlueButton variant="contained" color="primary" onClick={this.handleClear}>Clear Editor</BlueButton>
                 <BlueButton variant="contained" color="primary" onClick={this.handleZoom}>Reset Zoom</BlueButton>
                 <ModuleHandler editor={this.mainEditor.editor} engine={this.mainEditor.engine}/>
