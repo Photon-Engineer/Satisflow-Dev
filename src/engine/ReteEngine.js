@@ -34,7 +34,7 @@ class Editor extends Component {
         window.rete_editor = this.editor;
         this.editor.use(ConnectionPlugin);
         this.editor.use(ReactRenderPlugin);
-        
+
         /*
         this.editor.use(ConnectionPathPlugin, {
             type: ConnectionPathPlugin.DEFAULT, // DEFAULT or LINEAR transformer
@@ -44,21 +44,21 @@ class Editor extends Component {
             //arrow: { color: 'steelblue', marker: 'M-5,-10 L-5,10 L20,0 z' }
         });
         */
-        
+
 
         //this.editor.use(ConnectionReroutePlugin); // this is not working.. not sure what is preventing it. 
 
         // Modules
-        var defaultData = () => ({id: key, nodes: {}});
-        var modules = {"Main View": {data: defaultData()}};
+        var defaultData = () => ({ id: key, nodes: {} });
+        var modules = { "Main View": { data: defaultData() } };
         this.editor.modules = modules;
-        this.editor.use(ModulePlugin,{engine:this.engine, modules:this.editor.modules})
+        this.editor.use(ModulePlugin, { engine: this.engine, modules: this.editor.modules })
         //this.engine.use(ModulePlugin, {engine:this.engine, modules:this.editor.modules});
-            // Needs -> Module component, input node, output node, HTML area for creating/loading/adding modules
-            // Thoughts -> Module component cannot be rotated. Input/output nodes will have a dropdown to select socket type.
-            //             When a module is created, the user is asked to provide a name for it. 
-            //             Consider changing the dock into an accordian, which can be used to group entries, material-ui already has one -> https://material-ui.com/components/accordion/
-        
+        // Needs -> Module component, input node, output node, HTML area for creating/loading/adding modules
+        // Thoughts -> Module component cannot be rotated. Input/output nodes will have a dropdown to select socket type.
+        //             When a module is created, the user is asked to provide a name for it. 
+        //             Consider changing the dock into an accordian, which can be used to group entries, material-ui already has one -> https://material-ui.com/components/accordion/
+
         this.editor.currentModule = "Main View";
         // Context Menu
         this.editor.use(ContextMenuPlugin, {
@@ -71,9 +71,9 @@ class Editor extends Component {
         const background = document.createElement('div');
         background.classList = 'background';
         //
-        this.editor.use(AreaPlugin, { background: background, snap: {size: 8, dynamic: true} });
+        this.editor.use(AreaPlugin, { background: background, snap: { size: 8, dynamic: true } });
 
-        this.editor.use(CommentPlugin,{
+        this.editor.use(CommentPlugin, {
             //frameCommentKeys: { code: 'KeyC', shiftKey: false, ctrlKey: false, altKey: true },
             //inlineCommentKeys: { code: 'KeyC', shiftKey: true, ctrlKey: false, altKey: false },
             //deleteCommentKeys: { code: 'Delete', shiftKey: false, ctrlKey: false, altKey: false }
@@ -102,32 +102,32 @@ class Editor extends Component {
 
         this.editor.on("multiselectnode", (args) => args.accumulate = args.e.ctrlKey || args.e.metaKey);
 
-        this.editor.on('connectionpath',(data)=>{
+        this.editor.on('connectionpath', (data) => {
             const {
                 points, // array of numbers, e.g. [x1, y1, x2, y2]
                 connection, // Rete.Connection instance
                 d // string, d attribute of <path>
             } = data;
-            if(connection!==undefined){
+            if (connection !== undefined) {
                 const outKey = connection.output.key;
                 const inKey = connection.input.key;
                 const inNode = connection.input.node;
                 const outNode = connection.output.node;
                 const outType = outNode.outputs.get(outKey).socket.name;
                 const [x1, y1, x2, y2] = points;
-                if(outType==="number"){
+                if (outType === "number") {
                     const hx1 = x1 + Math.abs(x2 - x1) * 0.3;
                     const hx2 = x2 - Math.abs(x2 - x1) * 0.3;
                     data.d = `M ${x1} ${y1} C ${hx1} ${y1} ${hx2} ${y2} ${x2} ${y2} `;
                     //data.d = `M ${x1} ${y1} C ${x2} ${y1} ${x1} ${y2} ${x2} ${y2}`;
                 } else {
                     var svgstr = `M ${x1} ${y1} C `;
-                    if(socketIsHorizontal(outNode,outKey)){
+                    if (socketIsHorizontal(outNode, outKey)) {
                         svgstr = svgstr + `${x2} ${y1} `;
-                    }else{
+                    } else {
                         svgstr = svgstr + `${x1} ${y2} `;
                     }
-                    if(socketIsHorizontal(inNode,inKey)){
+                    if (socketIsHorizontal(inNode, inKey)) {
                         svgstr = svgstr + ` ${x1} ${y2} ${x2} ${y2}`;
                     } else {
                         svgstr = svgstr + ` ${x2} ${y1} ${x2} ${y2}`;
@@ -200,6 +200,7 @@ class SaveLoadComponent extends React.Component {
         this.handleClear = this.handleClear.bind(this);
         this.handleSave = this.handleSave.bind(this);
         this.handleFileLoad = this.handleFileLoad.bind(this);
+        this.handleMergeFileLoad = this.handleMergeFileLoad.bind(this);
         this.abort = this.abort.bind(this);
     }
 
@@ -257,58 +258,79 @@ class SaveLoadComponent extends React.Component {
         var thisJson = this.mainEditor.editor.toJSON();
         thisJson.nodes = {}
         this.mainEditor.editor.fromJSON(thisJson);
-        this.mainEditor.editor.trigger('removecomment',{type:"frame"});
-        this.mainEditor.editor.trigger('removecomment',{type:"inline"});
+        this.mainEditor.editor.trigger('removecomment', { type: "frame" });
+        this.mainEditor.editor.trigger('removecomment', { type: "inline" });
     }
 
-    handleSave(){
+    handleSave() {
         this.mainEditor.editor.modules[this.mainEditor.editor.currentModule].data = this.mainEditor.editor.toJSON();
         const text = JSON.stringify(this.mainEditor.editor.modules);
-        const filename = 'Satisflow_Data.JSON';
-
-        var element = document.createElement('a');
-        element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
-        element.setAttribute('download', filename);
-        element.style.display = 'none';
-        document.body.appendChild(element);
-        element.click();
-        document.body.removeChild(element);
+        var filename = prompt("Please enter a filename:", "Satisflow_Data");
+        if (filename === null) {
+            filename = 'Satisflow_Data.JSON';
+        } else {
+            filename = filename + '.JSON';
+        }
+        try {
+            var element = document.createElement('a');
+            element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+            element.setAttribute('download', filename);
+            element.style.display = 'none';
+            document.body.appendChild(element);
+            element.click();
+            document.body.removeChild(element);
+        } catch {
+            alert('Unable to save file. Try a different filename.')
+        }
     }
 
     handleFileLoad(event) {
+        const isconfirmed = window.confirm('This will overwrite all the current data, continue?');
+        if (isconfirmed) {
+            var file = event.target.files;
+            console.log(file);
+            const reader = new FileReader();
+            reader.onloadend = (e) => {
+                var json = JSON.parse(e.target.result);
+                modify(this.mainEditor.editor.modules, json);
+                var event = { target: { value: "Main View" } };
+                this.mainEditor.editor.ModuleHandlerChangeEvent(event, false);
+            }
+            if (file.length > 0) {
+                reader.readAsText(file[0]);
+            }
+        }
+    }
+
+    handleMergeFileLoad(event) {
+        this.mainEditor.editor.modules[this.mainEditor.editor.currentModule].data = this.mainEditor.editor.toJSON();
         var file = event.target.files;
         console.log(file);
         const reader = new FileReader();
         reader.onloadend = (e) => {
             var json = JSON.parse(e.target.result);
-            modify(this.mainEditor.editor.modules,json);
-            //this.mainEditor.editor.modules = json;
-            var event = {target: {value: "Main View"}};
-            //this.mainEditor.editor.use(ModulePlugin,{engine:this.engine, modules:this.mainEditor.editor.modules})
-            this.mainEditor.editor.ModuleHandlerChangeEvent(event,false);
-            //this.mainEditor.editor.currentModule = "Main View";
-            //this.mainEditor.editor.fromJSON(json["Main View"].data);
+            mergeModify(this.mainEditor.editor.modules, json, this.mainEditor.editor, file[0].name.slice(0, -5));
+            //this.mainEditor.editor.ModuleHandlerChangeEvent({ target: { value: "Main View" } }, false);
         }
-        if(file.length>0){
+
+        if (file.length > 0) {
             reader.readAsText(file[0]);
         }
-        
     }
 
     render() {
 
         return (
-            //<button className = "slider" onClick={this.handleStore}>Export Data</button>
-
-            //<textarea rows="4" columns="50" style={{ width: "200px", height: "600px" }} value={this.state.currentEditorState} onChange={this.handleChange} />
-            //<BlueButton variant="contained" color="primary" onClick={this.handleLoad}>Restore Data</BlueButton>
-            //<input type="file" onChange={this.handleFileLoad} id="test" key="test" />
             <div>
                 <BlueButton variant="contained" color="primary" onClick={this.handleSave}>Export Data</BlueButton>
-                <input type="file" hidden id="blue-file-button" onChange={this.handleFileLoad}/>
-                <label htmlFor="blue-file-button">
+                <input type="file" hidden id="std-file-button" onChange={this.handleFileLoad} />
+                <label htmlFor="std-file-button">
                     <BlueButton variant="contained" component="span" color="primary">Load Data</BlueButton>
-                </label> 
+                </label>
+                <input type="file" hidden id="merge-file-button" onChange={this.handleMergeFileLoad} />
+                <label htmlFor="merge-file-button">
+                    <BlueButton variant="contained" component="span" color="primary">Load and Merge Data</BlueButton>
+                </label>
                 <BlueButton variant="contained" color="primary" onClick={this.handleClear}>Clear Editor</BlueButton>
             </div>
         )
@@ -317,39 +339,61 @@ class SaveLoadComponent extends React.Component {
 
 function modify(obj, newObj) {
 
-    Object.keys(obj).forEach(function(key) {
-      delete obj[key];
+    Object.keys(obj).forEach(function (key) {
+        delete obj[key];
     });
-  
-    Object.keys(newObj).forEach(function(key) {
-      obj[key] = newObj[key];
+
+    Object.keys(newObj).forEach(function (key) {
+        obj[key] = newObj[key];
     });
-    
-  }
+
+}
+
+async function mergeModify(obj, newObj, editor, name) {
+    var newkeys = [];
+    for (const key of Object.keys(newObj)) {
+        if (key in obj) {
+            obj[name + '-' + key] = newObj[key];
+            newkeys.push(name + '-' + key);
+        } else {
+            obj[key] = newObj[key];
+            newkeys.push(key);
+        }
+    }
+    alert('Please wait for all modules to load before continuing.')
+    for (const key of newkeys) {
+        await sleep(1000);
+        editor.ModuleHandlerChangeEvent({ target: { value: key } }, false);
+    }
+}
+
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
 
 
-  function socketIsHorizontal(node,key) {
+function socketIsHorizontal(node, key) {
     let rot = node.data["rotationState"];
     let type = node["name"];
-    
-    const rot02 = rot === 0 || rot ===2 || rot === undefined; // check if rotation state is 0 or 2 (horizontal states)
-    const sCheck = type==="Splitter" && !(key==="i1" || key==="o2"); // Check for vertical socket on splitter node
-    const mCheck = type==="Merger" && !(key==="o1" || key==="i2"); // Check for vertical socket on merger node
+
+    const rot02 = rot === 0 || rot === 2 || rot === undefined; // check if rotation state is 0 or 2 (horizontal states)
+    const sCheck = type === "Splitter" && !(key === "i1" || key === "o2"); // Check for vertical socket on splitter node
+    const mCheck = type === "Merger" && !(key === "o1" || key === "i2"); // Check for vertical socket on merger node
     const smCheck = sCheck || mCheck; //check for non-splitter/ merger bldg
-    const noSM = type!=="Splitter" && type !=="Merger";
+    const noSM = type !== "Splitter" && type !== "Merger";
 
     var isHorSocket = true;
 
-    if(rot02 && smCheck) {
+    if (rot02 && smCheck) {
         isHorSocket = false;
     }
-    if(!rot02 && !smCheck) {
+    if (!rot02 && !smCheck) {
         isHorSocket = false;
     }
-    if(!rot02 && noSM){
+    if (!rot02 && noSM) {
         isHorSocket = false;
     }
-    
+
     return isHorSocket;
 
-  }
+}
