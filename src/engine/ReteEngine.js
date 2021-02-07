@@ -310,10 +310,6 @@ class SaveLoadComponent extends React.Component {
         reader.onloadend = (e) => {
             var json = JSON.parse(e.target.result);
             mergeModify(this.mainEditor.editor.modules, json, this.mainEditor.editor, file[0].name.slice(0, -5));
-            //const keyArray = Object.keys(this.mainEditor.editor.modules);
-            //for(var i = keyArray.length-1;i>-0;i--){
-            //    await this.mainEditor.editor.ModuleHandlerChangeEvent({ target: { value: keyArray[i]} }, false);
-            //}
             //this.mainEditor.editor.ModuleHandlerChangeEvent({ target: { value: "Main View" } }, false);
         }
 
@@ -364,7 +360,7 @@ async function mergeModify(obj, newObj, editor, name) {
             newkeys.push(key);
         }
     }
-
+    alert('Please wait for all modules to load before continuing.')
     for (const key of newkeys) {
         await sleep(1000);
         editor.ModuleHandlerChangeEvent({ target: { value: key } }, false);
