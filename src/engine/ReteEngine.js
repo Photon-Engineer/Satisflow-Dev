@@ -200,6 +200,7 @@ class SaveLoadComponent extends React.Component {
         this.handleClear = this.handleClear.bind(this);
         this.handleSave = this.handleSave.bind(this);
         this.handleFileLoad = this.handleFileLoad.bind(this);
+        this.handleMergeFileLoad = this.handleMergeFileLoad.bind(this);
         this.abort = this.abort.bind(this);
     }
 
@@ -290,32 +291,46 @@ class SaveLoadComponent extends React.Component {
         reader.onloadend = (e) => {
             var json = JSON.parse(e.target.result);
             modify(this.mainEditor.editor.modules, json);
-            //this.mainEditor.editor.modules = json;
             var event = { target: { value: "Main View" } };
-            //this.mainEditor.editor.use(ModulePlugin,{engine:this.engine, modules:this.mainEditor.editor.modules})
             this.mainEditor.editor.ModuleHandlerChangeEvent(event, false);
-            //this.mainEditor.editor.currentModule = "Main View";
-            //this.mainEditor.editor.fromJSON(json["Main View"].data);
         }
         if (file.length > 0) {
             reader.readAsText(file[0]);
         }
+    }
 
+    handleMergeFileLoad(event) {
+        this.mainEditor.editor.modules[this.mainEditor.editor.currentModule].data = this.mainEditor.editor.toJSON();
+        var file = event.target.files;
+        console.log(file);
+        const reader = new FileReader();
+        reader.onloadend = (e) => {
+            var json = JSON.parse(e.target.result);
+            mergeModify(this.mainEditor.editor.modules, json, file[0].name.slice(0, -5));
+            const keyArray = Object.keys(this.mainEditor.editor.modules);
+            //for(var i = keyArray.length-1;i>-0;i--){
+            //    await this.mainEditor.editor.ModuleHandlerChangeEvent({ target: { value: keyArray[i]} }, false);
+            //}
+            this.mainEditor.editor.ModuleHandlerChangeEvent({ target: { value: "Main View"} }, false);
+        }
+
+        if (file.length > 0) {
+            reader.readAsText(file[0]);
+        }
     }
 
     render() {
 
         return (
-            //<button className = "slider" onClick={this.handleStore}>Export Data</button>
-
-            //<textarea rows="4" columns="50" style={{ width: "200px", height: "600px" }} value={this.state.currentEditorState} onChange={this.handleChange} />
-            //<BlueButton variant="contained" color="primary" onClick={this.handleLoad}>Restore Data</BlueButton>
-            //<input type="file" onChange={this.handleFileLoad} id="test" key="test" />
             <div>
                 <BlueButton variant="contained" color="primary" onClick={this.handleSave}>Export Data</BlueButton>
-                <input type="file" hidden id="blue-file-button" onChange={this.handleFileLoad} />
-                <label htmlFor="blue-file-button">
+                <input type="file" hidden id="std-file-button" onChange={this.handleFileLoad} />
+                <label htmlFor="std-file-button">
                     <BlueButton variant="contained" component="span" color="primary">Load Data</BlueButton>
+                </label>
+                <input type="file" hidden id="merge-file-button" onChange={this.handleMergeFileLoad} />
+                <label htmlFor="merge-file-button">
+                    <BlueButton variant="contained" component="span" color="primary">Load and Merge Data</BlueButton>
                 </label>
                 <BlueButton variant="contained" color="primary" onClick={this.handleClear}>Clear Editor</BlueButton>
             </div>
@@ -333,6 +348,16 @@ function modify(obj, newObj) {
         obj[key] = newObj[key];
     });
 
+}
+
+function mergeModify(obj, newObj, name) {
+    Object.keys(newObj).forEach(function (key) {
+        if (key in obj) {
+            obj[name + '-' + key] = newObj[key];
+        } else {
+            obj[key] = newObj[key];
+        }
+    });
 }
 
 
