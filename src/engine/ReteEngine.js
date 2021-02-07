@@ -17,7 +17,8 @@ import { initialize } from './ComponentStage';
 import '../backgroundStyle.sass';
 // Material UI
 import { BlueButton } from './material-ui-components'
-
+import MenuItem from '@material-ui/core/MenuItem';
+import {ItemSelect} from '../engine/material-ui-components'
 
 class Editor extends Component {
     constructor(props) {
@@ -200,6 +201,7 @@ class SaveLoadComponent extends React.Component {
         this.handleClear = this.handleClear.bind(this);
         this.handleSave = this.handleSave.bind(this);
         this.handleFileLoad = this.handleFileLoad.bind(this);
+        this.handleZoom = this.handleZoom.bind(this);
         this.abort = this.abort.bind(this);
     }
 
@@ -295,6 +297,10 @@ class SaveLoadComponent extends React.Component {
         
     }
 
+    handleZoom(event) {
+        AreaPlugin.zoomAt(this.mainEditor.editor);
+    }
+
     render() {
 
         return (
@@ -310,6 +316,8 @@ class SaveLoadComponent extends React.Component {
                     <BlueButton variant="contained" component="span" color="primary">Load Data</BlueButton>
                 </label> 
                 <BlueButton variant="contained" color="primary" onClick={this.handleClear}>Clear Editor</BlueButton>
+                <BlueButton variant="contained" color="primary" onClick={this.handleZoom}>Reset Zoom</BlueButton>
+                <ModuleHandler editor={this.mainEditor.editor} engine={this.mainEditor.engine}/>
             </div>
         )
     }
@@ -353,3 +361,95 @@ function modify(obj, newObj) {
     return isHorSocket;
 
   }
+
+  class ModuleHandler extends React.Component {
+    constructor(props) {
+        super(props)
+        this.state = { 
+            value: "Main View",
+        };
+        this.props.editor.ModuleHandlerChangeEvent = this.handleChange.bind(this);
+    }
+    emptyData = {id: "satisflow@0.5.0", nodes: {}};
+
+    handleChange = (event,doSave = true) => {
+        if(doSave){
+            var modData = this.props.editor.modules;
+            modData[this.state.value].data = this.props.editor.toJSON();
+        }
+        let selectedValue = event.target.value;
+        //let idx = this.state.modulenames.findIndex(i => i === selectedValue);
+        //this.props.onSelectChange(this.props.listItems[idx]);
+        this.props.editor.currentModule = selectedValue;
+        this.setState({ value: selectedValue});
+    }
+
+    createNewModule = (event) => {
+        var modName = window.prompt("Enter a unique name for the module:","My Module "+Object.keys(this.props.editor.modules).length);
+        if(modName===null) return;
+        if(Object.keys(this.props.editor.modules).indexOf(modName)==-1){
+            this.props.editor.modules[this.state.value].data = this.props.editor.toJSON();
+            //modData = modData.concat(this.emptyData);
+            this.props.editor.modules[modName] = {data: this.emptyData};
+            this.setState({value: modName});
+        } else {
+            window.alert('That name is already taken!')
+        }
+    }
+
+    async componentDidUpdate() {
+        var data = this.props.editor.modules[this.state.value].data;
+        await this.props.editor.fromJSON(data);
+        this.props.editor.currentModule = this.state.value;
+        //if(Object.keys(data.nodes).length === 0 && data.nodes.constructor === Object) {
+        //    return;
+        //}
+        AreaPlugin.zoomAt(this.props.editor);
+    }
+
+    renameModule = (event) => {
+        if(this.state.value==="Main View") {
+            alert("Main View is not a module and cannot be renamed.");
+            return;
+        }
+        var modName = window.prompt("Enter a new unique name for this module:",this.state.value);
+        //var idx = this.state.modulenames.findIndex(i => i === this.state.value);
+        // TODO add uniqueness check like above
+        //var m = this.state.modulenames;
+        //m[idx] = modName;
+        this.props.editor.modules[modName] = {data: this.props.editor.toJSON()};
+        delete this.props.editor.modules[this.state.value];
+        this.setState({value: modName})
+    }
+
+    deleteModule = (event) => {
+        if(this.state.value==="Main View") {
+            alert("Main View is not a module and cannot be deleted.");
+            return;
+        }
+        if(Object.keys(this.props.editor.modules).length > 1){
+            delete this.props.editor.modules[this.state.value];
+            this.setState({value: Object.keys(this.props.editor.modules)[0]})
+        }else{
+            alert('Cannot delete only module.');
+        }
+    }
+
+    render() {
+        return (
+            <div>
+                <br />
+                <hr style={{borderColor: "#e3f2fd"}}/>
+                <h3 className="dock-message">Modules</h3>
+                <br />
+                <ItemSelect className="item-select" value={this.state.value} autoWidth={true} onChange={this.handleChange}>
+                    {Object.keys(this.props.editor.modules).map(mod => <MenuItem key={mod} value={mod}>{mod}</MenuItem>)}
+                </ItemSelect>
+                <br />
+                <BlueButton variant="contained" color="primary" onClick={this.createNewModule}>Create New</BlueButton>
+                <BlueButton variant="contained" color="primary" onClick={this.renameModule}>Rename</BlueButton>
+                <BlueButton variant="contained" color="primary" onClick={this.deleteModule}>Delete</BlueButton>
+            </div>
+        )
+    }
+}
