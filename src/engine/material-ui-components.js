@@ -12,6 +12,7 @@ export const BlueButton = withStyles((theme) => ({
             backgroundColor: blue[500],
             color: theme.palette.getContrastText(blue[500]),
         },
+        width: "180px",
     },
 }))(Button);
 
@@ -22,6 +23,8 @@ export const ItemSelect = withStyles((theme) => ({
         padding: "0px 5px",
         borderRadius: "6px",
         transition: "all 0.3s ease",
+        width: "150px",
+        height: "20px",
         '&:focus': {
             backgroundColor:"white",
             borderRadius: "6px",
